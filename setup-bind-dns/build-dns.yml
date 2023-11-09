@@ -11,6 +11,10 @@
     - ansible_distribution_major_version != '8'
     - ansible_distribution_major_version != '9'
 
+  - fail:
+      msg: "domain is empty"
+    when: domain is not defined
+
   - name: Install related pkgs
     yum:
       name: "{{ item }}"
