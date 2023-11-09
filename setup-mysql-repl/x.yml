@@ -1,6 +1,0 @@
----
-- hosts: all
-  tasks:
-    - debug:
-        msg: "{{ hostvars[item].ansible_all_ipv4_addresses }}"
-      loop: "{{ groups['all'] }}"

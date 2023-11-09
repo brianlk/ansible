@@ -20,7 +20,7 @@
 - name: Add firewall rules
   shell: |
     z=$(firewall-cmd --get-active-zones | head -1)
-    firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address={{ item }} port protocol="tcp" port="3306" accept'
+    firewall-cmd --permanent --add-rich-rule='rule family="ipv4" port protocol="tcp" port="3306" accept'
     firewall-cmd --reload
   loop: "{{ groups['all'] }}"
 
