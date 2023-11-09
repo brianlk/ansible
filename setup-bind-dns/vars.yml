@@ -1,1 +1,2 @@
 domain: "td.test2"
+# allow_query_net: "10.1.0.0/16"

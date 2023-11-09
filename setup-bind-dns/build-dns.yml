@@ -60,7 +60,7 @@
     lineinfile:
       path: /etc/named.conf
       regexp: '(\s+allow-query\s+{ localhost)'
-      line: '\1; {{ ansible_default_ipv4.network }}/16; };'
+      line: '\1; {{ allow_query_net | default("any") }}; };'
       backrefs: yes
       validate: named-checkconf %s
 
@@ -78,5 +78,5 @@
     command: firewall-cmd --permanent --add-port=53/udp --add-port=53/tcp
 
   - name: Reload firewalld
-  - command: firewall-cmd --reload
+    command: firewall-cmd --reload
   
