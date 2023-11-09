@@ -4,6 +4,8 @@
     - disk_map: []
     - new_dev: []
     - disk1: "624a937075362d08f5bc46ca00014d59"
+
+
   tasks:
     - shell: |
         parted -j /dev/sdd print 2>/dev/null
@@ -43,3 +45,5 @@
 
     # - debug:
     #     msg: "{{ count }}"
+- name: xxxxxx
+  import_playbook: checknewdisks.yml
