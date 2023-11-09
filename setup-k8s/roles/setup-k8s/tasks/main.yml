@@ -17,26 +17,6 @@
   include_tasks: init_k8s.yml
   when: ansible_hostname is match(".*master1")
 
-# Use hostvars instead of scp cmd.txt to clients
-# - name: read cmd from remote
-#   fetch:
-#     src: /tmp/cmd.txt
-#     dest: /tmp/yyy
-#     flat: yes
-#   when: ansible_hostname is match(".*master1")
-
-# - name: copy cmd to remote client
-#   copy:
-#     src: /tmp/yyy
-#     dest: /tmp/cmd.txt
-#   when: ansible_hostname is match(".*worker[0-9]")
-
-# - name: read cmd in remote client
-#   slurp:
-#     src: /tmp/cmd.txt
-#   register: xxxx
-#   when: ansible_hostname is match(".*worker[0-9]")
-
 - name: run join command in clients
   # command: "{{ xxxx['content']|b64decode }}"
   command: "{{ hostvars['10.1.23.130']['client_join_cmd'].stdout }}"

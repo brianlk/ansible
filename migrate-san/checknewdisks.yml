@@ -38,4 +38,6 @@
   any_errors_fatal: true
 
 - debug:
-    msg: "{{ new_lunids }}"
+    msg: 
+      - "New LUNs:"
+      - "{{ new_lunids }}"
