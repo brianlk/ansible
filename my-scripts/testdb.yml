@@ -1,0 +1,13 @@
+- hosts: localhost
+  roles:
+    - role: mahdi22.mariadb_install
+      become: yes
+      vars:
+        mariadb_version: "10.5"
+        deny_remote_connections: true
+        mysql_root_password: "azerty"
+        create_database: true
+        database: database_test
+        create_db_user: true
+        db_user_name: user_database
+        db_user_password: password

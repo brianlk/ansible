@@ -1,0 +1,22 @@
+---
+- name: Check if there is existing partiton
+  shell: |
+    parted -j {{ item }} print 2>/dev/null
+  register: xxx
+
+- set_fact:
+    aaa: "{{ xxx.stdout | from_json }}"
+  
+- name: Fail the playbook when partition exists in new devices
+  fail:
+    msg: "{{ aaa.disk }}"
+  when: aaa.disk.label != "" and (aaa.disk.partitions|length) > 0 
+  any_errors_fatal: true
+
+- name: Create partition on new device
+  parted:
+    device: "{{ item }}"
+    number: 1
+    flags: [ lvm ]
+    state: present
+  any_errors_fatal: true

@@ -1,0 +1,13 @@
+---
+- hosts: master
+  tasks:
+    - set_fact:
+        xxx: "a|b|c"
+    - set_fact:
+        yyy: xxx.split("|")
+    - block:
+        - raw: |
+            ls -
+      rescue:
+        - debug:
+            msg: "aaaaaaaaa"

@@ -1,0 +1,24 @@
+---
+- name: install containerd
+  yum:
+    name: 'containerd'
+    state: present
+    
+- name: containerd config
+  shell: |
+    mkdir -p /etc/containerd
+    containerd config default | tee /etc/containerd/config.toml
+        
+- name: edit containerd file
+  lineinfile:
+    path: "/etc/containerd/config.toml"
+    regexp: '^(\s+SystemdCgroup = )false'
+    line:  '\1true'
+    backrefs: yes
+
+- name: restart containerd
+  service:
+    name: containerd
+    state: restarted
+    enabled: true
+

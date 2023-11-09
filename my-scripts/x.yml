@@ -1,0 +1,15 @@
+---
+- hosts: k8snodes
+  tasks:
+    - debug:
+        msg: "{{  hostvars[item]['inventory_hostname'] }} {{  hostvars[item]['ansible_hostname'] }}"
+      loop: "{{ groups['k8snodes'] }}"
+    - name: "Example1: Validate if a String or line is present in the file"
+      lineinfile:
+        path: "/tmp/abc.txt"
+        line: "{{  hostvars[item]['inventory_hostname'] }} {{  hostvars[item]['ansible_hostname'] }}"
+        state: present
+        backup: yes
+        create: true
+      loop: "{{ groups['k8snodes'] }}"
+# test 1234

@@ -1,0 +1,39 @@
+---
+- hosts: all
+  vars_files:
+    - vars/users.yml
+    - vars/one.yml
+  tasks:
+    - name: print users
+      debug:
+        msg: "i am {{ one.name }} at {{ one.age }}"
+    - name: add users
+      user:
+        name: "{{ item.user }}"
+        home: "{{ item.home }}"
+        create_home: true
+      loop: "{{ users }}"
+
+- hosts: localhost
+  tasks:
+    - name: run uri
+      uri:
+        url: "http://www.google.com"
+        status_code: 200
+      register: uri_out
+    - name: print debug
+      debug:
+        msg: "i am {{ uri_out.status }}"
+
+- hosts: localhost
+  tasks:
+    - name: print host variables
+      shell: |
+        touch /tmp/123.txt
+      notify:
+        - touch something
+
+  handlers:
+    - name: touch something
+      shell: |
+        touch /tmp/abc.txt

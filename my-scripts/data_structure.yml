@@ -1,0 +1,48 @@
+---
+- hosts: all
+  remote_user: devops
+  become: yes
+  become_user: root
+  vars: 
+    list1: ["a", "b", "c"]
+  tasks:
+    - name: print variables
+      debug:
+        msg: "i am all {{ item }}"
+      loop: "{{ list1 }}"
+    - name: list something
+      shell: |
+          ls -l /root
+      register: out
+    - name: print output
+      debug:
+        msg: "output is {{ out.stdout }}"
+    - name: print var type
+      debug:
+        msg: "{{ list1 | type_debug }}"
+
+#- hosts: node
+#  vars: 
+#    dict1: [
+#      {name: brian, age: 23},
+#      {name: brian2, age: 12},
+#      {name: brian3, age: 13},
+#      {name: brian4, age: 123}
+#      ]
+#  tasks:
+#    - name: print variables in node 
+#      debug:
+#        msg: "i am node {{ item['name'] }} at age {{ item['age'] }}"
+#      loop: "{{ dict1 }}"
+#
+#- hosts: node
+#  vars: 
+#    dict1: [
+#      {name: brian, age: 23},
+#      ]
+#    key: name
+#  tasks:
+#    - name: print variables in node 
+#      debug:
+#        msg: "i am node {{ item[key] }}"
+#      loop: "{{ dict1 }}"

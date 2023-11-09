@@ -1,0 +1,8 @@
+---
+- hosts: all
+  vars:
+    xxx: "Asia/Hong_Kong"
+  tasks:
+    - name: set timezone
+      timezone:
+        name: "{{ xxx }}"

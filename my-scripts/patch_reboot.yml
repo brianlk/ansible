@@ -1,0 +1,8 @@
+---
+- hosts: k8snodes
+  tasks:
+    - yum:
+        name: '*'
+        state: latest
+    - reboot:
+        reboot_timeout: 600

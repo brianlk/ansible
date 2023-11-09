@@ -1,0 +1,6 @@
+---
+  - name: backup "{{ my_cnf }}"
+    raw: |
+      d=$(date +"%Y%m%d-%H%M%S")
+      cp -p "{{ my_cnf }}" "{{ my_cnf }}".$d
+      mysqldump -u root --all-databases > /tmp/mysql-db.bak.$d

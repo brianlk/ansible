@@ -1,0 +1,97 @@
+---
+- hosts: master
+  vars_files:
+    - vars.yml
+  vars:
+    - sid: 1
+  gather_facts: false
+
+  pre_tasks:
+    - include_tasks: db-backup.yml
+
+  tasks:
+    - include_tasks: change-mycnf.yml
+    - include_tasks: restart-db.yml
+
+    - name: create repl user
+      raw: |
+        mysql -e "CREATE USER 'repl_user'@'%' IDENTIFIED BY 'password'"
+        mysql -e "GRANT REPLICATION SLAVE ON *.* TO 'repl_user'@'%'"
+
+    - name: show master status
+      raw: |
+        mysql -e "FLUSH TABLES WITH READ LOCK; show master status"
+      register: result
+
+    - include_tasks: stop-db.yml
+
+    - name: scp mysql data files into localhost
+      delegate_to: localhost
+      shell: |
+        scp -pr "{{ inventory_hostname }}":/var/lib/mysql .
+
+    - name: set fact for master log
+      set_fact:
+        log:  "{{ result.stdout_lines[-2] }}"
+
+    - name: set fact for all hosts
+      set_fact:
+        log: "{{ log }}"
+      delegate_to: "{{ item }}"
+      delegate_facts: true
+      with_items: "{{ groups['all'] }}"
+
+    - include_tasks: restart-db.yml
+
+
+
+- hosts: slave
+  gather_facts: false
+  vars_files:
+    - vars.yml
+  vars:
+    - sid: 2
+  pre_tasks:
+    - include_tasks: db-backup.yml
+
+  tasks:
+    - include_tasks: change-mycnf.yml
+    - include_tasks: stop-db.yml
+
+    - name: set variable
+      set_fact:
+        arr: "{{ log | split('|') }}"
+
+    - name: set variable
+      set_fact:
+        log_name: "{{ arr[1] | trim }}"
+
+    - name: set variable
+      set_fact:
+        log_pos: "{{ arr[2] | trim }}"
+
+    - name: delete files
+      raw: |
+        cd /var/lib/mysql; rm -rf *
+
+    - name: scp files to slave
+      delegate_to: localhost
+      raw: |
+        scp -pr mysql/* "{{ inventory_hostname }}":/var/lib/mysql/
+
+    - name: change file owner
+      raw: |
+        chown -R mysql:mysql /var/lib/mysql/*
+
+    - include_tasks: restart-db.yml
+
+    - name: change slave to master host
+      set_fact: 
+        cmd: >
+          change master to master_host='{{ groups["master"][0] }}', master_user='repl_user', 
+          MASTER_PASSWORD='password', MASTER_LOG_FILE='{{ log_name }}', 
+          MASTER_LOG_POS={{ log_pos }} ; start slave;
+
+    - name: change master
+      raw: |
+        mysql -e "{{ cmd }}"

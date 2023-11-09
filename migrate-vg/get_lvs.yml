@@ -1,0 +1,5 @@
+---
+- name: Get lvs
+  shell: |
+    lvs vg00 --noheadings | awk '{print $1}'
+  register: lvs

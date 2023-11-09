@@ -1,0 +1,34 @@
+---
+  - name: disable selinux
+    lineinfile:
+      path: "{{ sys_cfg.selinux }}"
+      regexp: '.*(SELINUX=).*$'
+      line: '\1disabled'
+      backrefs: yes
+
+  - name: load containerd module
+    lineinfile:
+      path: "{{ sys_cfg.containerd }}"
+      line: "{{ item }}"
+      create: true
+    loop: [ "overlay", "br_netfilter" ]
+
+  - name: add bridge in k8s
+    lineinfile:
+      path: "{{ sys_cfg.k8s_sysctl }}"
+      line: "{{ item }}"
+      create: true
+    loop:
+      - "net.bridge.bridge-nf-call-iptables = 1"
+      - "net.ipv4.ip_forward = 1"
+      - "net.bridge.bridge-nf-call-ip6tables = 1"
+
+  - name: remove swap
+    lineinfile:
+      path: "{{ sys_cfg.fstab }}"
+      regexp: 'swap'
+      state: absent
+
+  - name: add .repo
+    shell: |
+        dnf config-manager --add-repo="{{ sys_cfg.docker_repo }}"

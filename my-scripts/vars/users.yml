@@ -1,0 +1,3 @@
+users:
+  - {user: "joe", home: "/home/joe"}
+  - {user: "brian", home: "/home/brian"}

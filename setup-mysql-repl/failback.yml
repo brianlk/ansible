@@ -1,0 +1,99 @@
+---
+- hosts: all
+  vars_files:
+    - vars.yml
+  gather_facts: True
+
+  pre_tasks:
+    - name: check mysqld running
+      any_errors_fatal: true
+      shell: |
+        pgrep mysqld
+
+  tasks:
+    - name: Set slave to read_only
+      community.mysql.mysql_query:
+        login_user: "{{ db.login_user }}"
+        login_password: "{{ db.login_pass }}"
+        login_host: "{{ db.login_host }}"
+        login_port: "{{ db.login_port }}"
+        query: "SET @@GLOBAL.read_only = ON"
+      when: inventory_hostname in groups['slave']
+
+    - name: Tasks in master
+      block:
+        - include_tasks: change-mycnf.yml
+          vars:
+            my_cnf_settings:
+              log-slave-updates: "on"
+              relay-log: "mysql-relay-bin"
+
+        - name: Run query to define new master in previous master host and sync db back to previous master
+          community.mysql.mysql_query:
+            login_user: "{{ db.login_user }}"
+            login_password: "{{ db.login_pass }}"
+            login_host: "{{ db.login_host }}"
+            login_port: "{{ db.login_port }}"
+            query:
+              - reset master
+              - stop slave
+              - reset slave all
+              - >
+                change replication source to source_host='{{ groups["slave"][0] }}', 
+                  source_user='{{ db.repl_user }}', source_password='{{ db.repl_pass }}', 
+                  source_auto_position=1
+              - start replica
+
+        - name: Check Seconds_Behind_Master for db sync status
+          shell: >
+            mysql -u {{ db.login_user }} -h {{ db.login_host }} --password={{ db.login_pass }} 
+            -e 'show slave status\G'| grep Seconds_Behind_Master | awk -F':' '{print $2}' |sed -e 's/\s//g'
+          register: output
+          until: output.stdout == "0"
+          retries: 3600
+          delay: 1
+
+
+        - name: Remove the slave parameters in .cnf in previous master host after db is in sync
+          lineinfile:
+            path: "{{ my_cnf }}"
+            regexp: "{{ item }}"
+            state: absent
+          loop:
+            - "log-slave-updates"
+            - "relay-log"
+ 
+        - name: restart-mysql-db
+          service:
+            name: mysqld
+            state: restarted
+
+        - name: Run query to remove slave settings in previous master
+          community.mysql.mysql_query:
+            login_user: "{{ db.login_user }}"
+            login_password: "{{ db.login_pass }}"
+            login_host: "{{ db.login_host }}"
+            login_port: "{{ db.login_port }}"
+            query:
+              - stop slave
+              - reset slave all
+      when: inventory_hostname in groups['master']
+
+    - name: Run query to define master in real slave after master sync db from slave to itself
+      community.mysql.mysql_query:
+        login_user: "{{ db.login_user }}"
+        login_password: "{{ db.login_pass }}"
+        login_host: "{{ db.login_host }}"
+        login_port: "{{ db.login_port }}"
+        query:
+          - reset master
+          - stop slave
+          - reset slave all
+          - >
+            change replication source to source_host='{{ groups["master"][0] }}', 
+              source_user='{{ db.repl_user }}', source_password='{{ db.repl_pass }}', 
+              source_auto_position=1
+          - start replica
+      when: inventory_hostname in groups['slave']
+
+    

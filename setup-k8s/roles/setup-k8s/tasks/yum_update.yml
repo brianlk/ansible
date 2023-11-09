@@ -1,0 +1,10 @@
+---
+- name: yum update
+  yum:
+    update_cache: yes
+    name: '*'
+    state: latest
+    exclude: ["*kube*"]
+  async: 1800
+  poll: 10
+

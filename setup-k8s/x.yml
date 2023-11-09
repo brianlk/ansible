@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  tasks:
+  - name: add repository
+    yum_repository:
+      name: docker-ce
+      baseurl: "https://download.docker.com/linux/centos/"
+      file: "docker-ce.repo"
+      gpgcheck: no
+      description: "docker-ce.repo"
+      enabled: true

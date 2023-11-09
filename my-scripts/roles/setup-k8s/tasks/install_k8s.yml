@@ -1,0 +1,33 @@
+---
+- name: create k8s yum repo
+  copy:
+    src: k8s.repo
+    dest: "/etc/yum.repos.d/k8s.repo"
+
+- name: yum install kubelet kubeadm kubectl
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop: [ "kubelet", "kubeadm", "kubectl", "net-tools" ]
+
+- name: Update /etc/hosts
+  lineinfile:
+    path: "/etc/hosts"
+    line: "{{  hostvars[item]['inventory_hostname'] }} {{  hostvars[item]['ansible_hostname'] }}"
+    state: present
+    backup: yes
+  loop: "{{ groups['k8snodes'] }}"
+
+- name: start kubelet service
+  service:
+    name: kubelet
+    state: started
+    enabled: true
+
+- name: add env variable for kubectl
+  blockinfile:
+    path: "/etc/profile"
+    block: |
+        alias k=kubectl
+    state: present
+    backup: yes

@@ -1,0 +1,15 @@
+my_cnf: /etc/my.cnf.d/mysql-server.cnf
+datadir: /var/lib/mysql
+
+db:
+  repl_user: "repl"
+  repl_pass: "password"
+  login_user: "root"
+  login_pass: ""
+  login_host: "localhost"
+  login_port: 3306
+  dump_target: "/tmp/dump.sql.gz"
+
+prerequisite_pkgs: 
+  - "python36"
+  - "python3-PyMySQL"

@@ -1,0 +1,62 @@
+---
+- hosts: localhost
+  vars:
+    - pdc: "win2016pdc.TEST.LOC"
+    - pdcip: "10.1.23.151"
+    - ad_domain: "TEST.LOC"
+    - ad_admin: "administrator@TEST.LOC"
+    - ad_password: ""
+    - eth_conn: "ens32"
+
+  tasks:
+    - name: Check python version
+      shell: |
+        python3 --version 2>&1
+      register: ver
+    - name: Print version
+      set_fact:
+        py_ver: "{{ ver.stdout | regex_search('\\s[0-9].[0-9]') | trim | replace('.','') }}"
+
+    - name: Install python devel and krb5 pkgs
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - "gcc"
+        - "python{{ py_ver }}-devel"
+        - "krb5-devel"
+        - "krb5-libs"
+        - "krb5-workstation"
+
+    - name: Install pip
+      pip:
+        name: "{{ item }}"
+      loop:
+        - "pywinrm"
+        - "pywinrm[kerberos]"
+
+    - name: Fix KDC has no support for encryption type
+      # KDC has no support for encryption type in RHEL8 and above
+      # https://access.redhat.com/solutions/5728591
+      shell: |
+        update-crypto-policies --set DEFAULT:AD-SUPPORT
+
+    - name: Update DNS
+      shell: |
+        nmcli conn mod {{ eth_conn }} ipv4.dns {{ pdcip }}
+        nmcli networking off; nmcli networking on       
+
+    - name: Copy template to /etc/krb5.conf
+      template:
+        src: krb5.conf.j2
+        dest: /etc/krb5.conf
+        backup: yes
+
+    - name: Copy inventory template 
+      template:
+        src: hosts.ini.j2
+        dest: hosts.ini
+        backup: yes
+
+    - debug:
+        msg: "Try to run: 'ansible -m win_ping -i hosts.ini winhost' to verify the connection"

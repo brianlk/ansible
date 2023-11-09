@@ -1,0 +1,56 @@
+---
+- name: check distribution version
+  any_errors_fatal: true
+  fail:
+    msg: "Distribution version is not 8."
+  when: ansible_distribution_major_version != "8"
+
+- name: install related rpm
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ prerequisite_pkgs }}"
+  when: ansible_distribution == "OracleLinux" and ansible_distribution_major_version == "8"
+
+- name: check mysqld running
+  any_errors_fatal: true
+  shell: |
+    pgrep mysqld
+
+- name: Add firewall rules
+  shell: |
+    z=$(firewall-cmd --get-active-zones | head -1)
+    firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address={{ item }} port protocol="tcp" port="3306" accept'
+    firewall-cmd --reload
+  loop: "{{ groups['all'] }}"
+
+
+- name: check mysql info
+  any_errors_fatal: true
+  community.mysql.mysql_info:
+    login_user: "{{ db.login_user }}"
+    login_password: "{{ db.login_pass }}"
+    login_host: "{{ db.login_host }}"
+    login_port: "{{ db.login_port }}"
+    filter: version
+
+
+- name: backup "{{ my_cnf }}"
+  copy:
+    src: "{{ my_cnf }}"
+    dest: "{{ my_cnf }}.{{ ansible_date_time.iso8601_basic_short }}"
+    remote_src: true
+
+
+- community.mysql.mysql_variables:
+    login_user: "{{ db.login_user }}"
+    login_password: "{{ db.login_pass }}"
+    login_host: "{{ db.login_host }}"
+    login_port: "{{ db.login_port }}"
+    variable: 'log_bin'
+  register: var_out
+
+- name: ensure binary logging is enabled
+  any_errors_fatal: true
+  fail:
+  when: var_out.msg != "ON"

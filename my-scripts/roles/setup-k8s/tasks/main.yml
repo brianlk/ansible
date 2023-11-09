@@ -1,0 +1,35 @@
+#---
+## tasks file for setup-k8s
+#- include_tasks: yum_update.yml
+
+- include_tasks: add_config.yml
+- include_tasks: setup_containerd.yml
+- include_tasks: disable_fw.yml # rebooting vm in disable_fw.yml
+- include_tasks: install_k8s.yml
+
+- name: kubeadm init the cluster
+  include_tasks: init_k8s.yml
+  when: ansible_hostname.find('master') != -1
+
+- name: read cmd from remote client
+  fetch:
+    src: /tmp/cmd.txt
+    dest: /tmp/yyy
+    flat: yes
+  when: ansible_hostname.find('master') != -1
+
+- name: copy cmd to remote client
+  copy:
+    src: /tmp/yyy
+    dest: /tmp/cmd.txt
+  when: ansible_hostname.find('master') == -1
+
+- name: read cmd in remote client
+  slurp:
+    src: /tmp/cmd.txt
+  register: xxxx
+  when: ansible_hostname.find('master') == -1
+
+- name: run command
+  command: "{{ xxxx['content']|b64decode }}"
+  when: ansible_hostname.find('master') == -1

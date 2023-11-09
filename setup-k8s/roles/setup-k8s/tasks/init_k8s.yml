@@ -1,0 +1,47 @@
+---
+- name: kubeadm init the cluster
+  shell: |
+    kubeadm init --pod-network-cidr="{{ pod_cidr }}" --control-plane-endpoint="{{ ansible_default_ipv4.address }}:6443"
+  register: output
+
+- name: print kubeadm init output
+  debug:
+    msg: "kubeadm init output {{ output.stdout }}"
+
+- name: set kubeadm command variables for all hosts
+  set_fact:
+    client_cmd: "{{ output.stdout | regex_replace('(.|\n|\t)*(kubeadm join.*--token .*)\\s','\\2') | regex_replace('(\t|\n|\\\\)','') | trim }}"
+
+- name: set register for client running command
+  shell: |
+    echo "{{ client_cmd }}"
+  register: client_join_cmd
+
+- name: write cmd into a file
+  copy:
+    content: "{{ client_cmd }}"
+    dest: /tmp/cmd.txt
+    force: true
+
+- name: create .kube directory
+  file:
+    path: "/root/.kube"
+    state: directory
+
+- name: copy kube config
+  copy:
+    src: "{{ sys_cfg.k8s_admin_cfg }}"
+    dest: "/root/.kube/config"
+    remote_src: true
+
+- name: install pod network addon
+  command: "kubectl apply -f {{ pod_net_addon }}"
+
+- name: check master status
+  shell: |
+    kubectl get nodes| grep Ready |awk '{print $2}'
+  register: get_out
+  until: get_out.stdout == "Ready"
+  delay: 10
+  retries: 60
+

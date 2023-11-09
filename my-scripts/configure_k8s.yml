@@ -1,0 +1,106 @@
+---
+- hosts: k8snodes
+  tasks:
+    - name: yum update
+      yum:
+        update_cache: yes
+        name: '*'
+        state: latest
+        exclude: ["*kube*"]
+      async: 1800
+      poll: 10
+
+    - name: disable selinux
+      lineinfile:
+        path: "/etc/selinux/config"
+        regexp: '.*(SELINUX=).*$'
+        line: '\1disabled'
+        backrefs: yes
+
+    - name: reboot
+      reboot:
+        reboot_timeout: 600
+
+    - name: load containerd module
+      lineinfile:
+        path: "/etc/modules-load.d/containerd.conf"
+        line: "{{ item }}"
+        create: true
+      loop: [ "overlay", "br_netfilter" ]
+    - name: add bridge in k8s
+      lineinfile:
+        path: "/etc/sysctl.d/99-kubernetes-cri.conf"
+        line: "{{ item }}"
+        create: true
+      loop: 
+        - "net.bridge.bridge-nf-call-iptables = 1"
+        - "net.ipv4.ip_forward = 1"
+        - "net.bridge.bridge-nf-call-ip6tables = 1"
+    - name: remove swap
+      lineinfile:
+        path: "/etc/fstab"
+        regexp: 'swap'
+        state: absent
+    - name: add .repo
+      shell: |
+        dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+    - name: install containerd
+      yum:
+        name: 'containerd'
+        state: present
+    - name: containerd config
+      shell: |
+        mkdir -p /etc/containerd
+        containerd config default | tee /etc/containerd/config.toml
+    - name: edit containerd file
+      lineinfile:
+        path: "/etc/containerd/config.toml"
+        regexp: '^(\s+SystemdCgroup = )false'
+        line:  '\1true'
+        backrefs: yes
+    - name: restart containerd
+      service:
+        name: containerd
+        state: restarted
+        enabled: true
+    - name: disable FW
+      service:
+        name: firewalld
+        state: stopped
+        enabled: false
+
+    - name: reboot
+      reboot:
+        reboot_timeout: 600
+    - name: create k8s yum repo
+      copy:
+        src: k8s.repo
+        dest: "/etc/yum.repos.d/k8s.repo"
+    - name: yum install kubelet kubeadm kubectl
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop: [ "kubelet", "kubeadm", "kubectl", "net-tools" ]
+    - name: Update /etc/hosts
+      lineinfile:
+        path: "/etc/hosts"
+        line: "{{  hostvars[item]['inventory_hostname'] }} {{  hostvars[item]['ansible_hostname'] }}"
+        state: present
+        backup: yes
+      loop: "{{ groups['k8snodes'] }}"
+    - name: start kubelet service
+      service:
+        name: kubelet
+        state: started
+        enabled: true
+    - name: add env variable for kubectl
+      blockinfile:
+        path: "/etc/profile"
+        block: |
+          alias k=kubectl
+        state: present
+        backup: yes
+    - name: kubeadm init the cluster
+      include_tasks: init_k8s.yml
+      when: ansible_hostname.find('master') != -1
+

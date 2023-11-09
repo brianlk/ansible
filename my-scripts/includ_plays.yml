@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  tasks:
+    - name: include plays
+      include_tasks: inc.yml
+      vars:
+        pkg_name: httpd

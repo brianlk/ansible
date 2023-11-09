@@ -1,0 +1,29 @@
+variant: fcos
+version: 1.4.0
+passwd:
+  users:
+    - name: core
+      password_hash: $1$B68My2Z.$0laummRzw5dPf3dalNVFa.
+      ssh_authorized_keys:
+        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQD6hxOZFkVq0B6iv9xAjTLxLMOSpYi0L5DlEo8l9cACmSeu7M7wpXDrjyzXokiZgclXQwsBR4skgoSrYftX5l7RdFeaBkbXerQ7BuGMrf237qb4c7FSoQNIIE5BwJWWxzPH7J0yT+936k9/qAVvRIZ2MGuvZvXWPREDASWo/EOYDIheZle+qgstqaa7umRLEhAzE13WEpH00umAIO8pmvm88ByC2XvwDhG8dPMucDaO6UMtfJ6sRdS1Bgpt0HxthX3yDSzho/7ytMJJllPq/bTh1lHGKuokFRU2nWorx+SMRQ8qZ6HY48H3FX+2uQLmFYEEMd1fHZhHdp98BgK582LcBVK2FdeZUzn/rdamy9RlRLPArZyXDcu6fdblVzFiv0G7y9CzQVtdsFm5lNeMRL1RVnrS7MdUWjMNHAFYtzMCe7vn7+0pl4Q+q1XDiCa81whMiYNqbpKEMqzWIxGbWeyzCyTyf5Abz6pubjRAbgCbfjGSG4upP8fc+nMyKbqpz+U= AMER+T613720L@DPC22CJCJ
+        - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDPJGVtau1aAzAYH64gqiWKjwzhnfxMwSgWNKULUGqBuqfaA/uZhw23VDB4DZiu1f7iBo0r86woOgRR1UKCzd7g/4+Sfi8BACCvbpjPMzuQNeOs2N9DSCzDYzpE4R7H2+hlagrza4gPPz/vbW/ufIgb7pdWGtF0hE1yJ6BJKtYZ9Lv+Ri9KxoQrcldgSKJ9PYSmkfro9HNWBeJY1NhMhyzI9tki2IL8aHtfWF933KUtCWkk4j0sx+L0f02WNTAOGpPPVekcJHxcS5B6SnouRy712sZqWnHkm9Yf7fMeMPbBuqxTRKSLIbGGywj5NuRo9Lnj5rptG/iT+AKaBJOI7w63mzCNE0eMH/Z6OOrmo8L0SHJQFkIKceyZ9r3GJ1APNdwADAgl8up8pPG9xrkYvA49+4DjrBwx6zrZ+YcFQ3e0G/Ykbd0ssSM0hEPcjSzBIBSTnKBKmWpY2T4feCzNmvQ6VJahedxOaWTQW0HypT+MOrJ61P+4HQzFtR+S7706bKM= devops@brianleung-cert-auth
+storage:
+  files:
+    - path: /etc/hostname
+      mode: 0644
+      contents:
+        inline: coreos-38-1
+    - path: "/etc/NetworkManager/system-connections/Wired connection 1.nmconnection"
+      mode: 0644
+      contents:
+        inline: |
+          [connection]
+          id=Wired connection 1
+          type=ethernet
+          interface-name=ens32
+          [ipv4]
+          address1=10.1.23.120/16,10.1.1.1
+          dns=10.1.4.119;
+          dns-search=
+          may-fail=false
+          method=manual

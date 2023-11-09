@@ -1,0 +1,22 @@
+---
+- name: kubeadm init the cluster
+  shell: |
+    kubeadm init --pod-network-cidr=10.244.0.0/16
+  register: output
+- name: debug the kubeadm output
+  debug:
+    msg: "{{ output.stdout }}"
+  when: output is defined
+
+- name: create .kube directory
+  file:
+    path: "/root/.kube"
+    state: directory
+
+- name: copy kube config
+  copy:
+    src: "/etc/kubernetes/admin.conf"
+    dest: "/root/.kube/config"
+    remote_src: true
+- name: install pod network addon
+  command: "kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml"

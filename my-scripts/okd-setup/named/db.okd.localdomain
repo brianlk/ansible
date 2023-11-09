@@ -1,0 +1,20 @@
+$TTL   600
+$ORIGIN okd.localdomain.
+@       IN      SOA   ns1.okd.localdomain   contact.okd.localdomain (
+                10      ; Serial
+                1h      ; Refresh
+              86400     ; Retry
+            2419200     ; Expire
+             604800     ; Minimum
+)
+        		IN      NS      ns1.okd.localdomain.
+
+ns1			     IN      A       10.1.23.120
+*.apps		     IN      A       10.1.23.120
+api		     IN      A       10.1.23.120
+api-int			   IN      A       10.1.23.120
+bootstrap		IN	A	10.1.23.121
+master1		IN	A	10.1.23.122
+master2		IN	A	10.1.23.123
+master3		IN	A	10.1.23.124
+worker1		IN	A	10.1.23.125

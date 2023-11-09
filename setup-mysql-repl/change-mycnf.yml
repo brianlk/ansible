@@ -1,0 +1,18 @@
+---
+  # Reference: https://hevodata.com/learn/mysql-gtids-and-replication-set-up/
+  - name: Add parametes in "{{ my_cnf }}"
+    lineinfile:
+      path: /etc/my.cnf.d/mysql-server.cnf
+      regexp: "(?i)^{{ item.key }}"
+      state: present
+      insertafter: '^\[mysqld\]'
+      line: '{{ item.key }}={{ item.value }}'
+    with_dict: "{{ my_cnf_settings }}"
+
+  - name: restart-mysql-db
+    service:
+      name: mysqld
+      state: restarted
+
+
+  

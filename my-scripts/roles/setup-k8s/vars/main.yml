@@ -1,0 +1,9 @@
+---
+# vars file for setup-k8s
+sys_cfg:
+  selinux: "/etc/selinux/config"
+  containerd: "/etc/modules-load.d/containerd.conf"
+  k8s_sysctl: "/etc/sysctl.d/99-kubernetes-cri.conf"
+  k8s_admin_cfg: "/etc/kubernetes/admin.conf"
+  fstab: "/etc/fstab"
+  docker_repo: "https://download.docker.com/linux/centos/docker-ce.repo"

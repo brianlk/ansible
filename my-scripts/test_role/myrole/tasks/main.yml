@@ -1,0 +1,12 @@
+---
+# tasks file for myrole
+- name: print variable
+  debug:
+    msg: "i am variable {{ var1 }}"
+
+- name: print variable
+  debug:
+    msg: "i am variable2 {{ var2 }}"
+
+- name: run include task
+  include_tasks: inc.yml

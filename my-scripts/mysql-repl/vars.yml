@@ -1,0 +1,2 @@
+my_cnf: /etc/my.cnf
+datadir: /var/lib/mysql

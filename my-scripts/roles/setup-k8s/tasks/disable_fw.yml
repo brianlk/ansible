@@ -1,0 +1,10 @@
+---
+- name: disable FW
+  service:
+    name: firewalld
+    state: stopped
+    enabled: false
+
+- name: reboot vm
+  reboot:
+    reboot_timeout: 600

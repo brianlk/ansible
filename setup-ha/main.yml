@@ -1,0 +1,87 @@
+---
+- hosts: ha
+  vars_files:
+    - vars.yml
+
+  tasks:
+  - name: Concat hosts into str
+    set_fact:
+      all_hosts: "{{ groups['ha'] | join(' ') }}"
+
+  - name: check OS version
+    fail:
+    when: 
+    - ansible_distribution_major_version != '8'
+    - ansible_distribution_major_version != '9'
+
+  - name: update /etc/hosts
+    lineinfile:
+      path: /etc/hosts
+      regexp: '{{item }}\s+{{ hostvars[item]["ansible_hostname"] }}'
+      insertafter: "EOF"
+      line: "{{item }}      {{ hostvars[item]['ansible_hostname'] }}"
+    loop: "{{ groups['ha'] }}"
+
+  - name: Add yum-config-manager
+    yum:
+      name: yum-utils
+      state: present
+
+  - name: Check all repository
+    shell: |
+      yum repolist all | grep -E "^ha\s+"
+    register: result
+    failed_when:
+    - result.rc != 0
+    - result.rc != 1
+
+  - name: Set ha repo enabled if ha repo exists
+    ignore_errors: yes
+    shell: |
+      yum-config-manager --set-enabled ha
+    when: result.rc  == 0
+
+  - name: Copy ha.repo
+    copy:
+      src: ha.repo
+      dest: /etc/yum.repos.d/ha.repo
+      mode: '0644'
+    when: result.rc  == 1
+
+  - name: Install NTP
+    yum:
+      name: chrony
+      state: present
+
+  - name: Install pacemaker and HA rpms
+    yum:
+      name: "{{ item }}"
+      state: latest
+    loop:
+    - "pcs"
+    - "pacemaker"
+    - "fence-agents-all"
+
+  - name: Start services
+    service:
+      name: "{{ item }}"
+      state: started
+      enabled: true
+    loop:
+    - "pcsd"
+    - "chronyd"
+
+  - name: Set hacluster password
+    user:
+      name: hacluster
+      password: "{{ encrypted_password }}"
+      state: present
+
+  - name: Auth hosts in cluster
+    shell: |
+      pcs host auth {{ all_hosts }} -u hacluster -p password
+    register: auth_out
+    when: inventory_hostname == groups['ha'][0]
+
+  - debug:
+      msg: "{{ auth_out }}"

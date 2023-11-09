@@ -1,0 +1,4 @@
+---
+- name: print task
+  debug:
+    msg: "i am base {{ name }}"

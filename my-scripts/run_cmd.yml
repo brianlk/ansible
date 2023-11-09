@@ -1,0 +1,13 @@
+---
+- hosts: all
+  tasks:
+    - name: find files
+      find:
+        paths: /etc
+        patterns: "*e*"
+      register: out
+    - name: debug var
+      debug:
+        msg: "{{ item['path'] }}"
+      with_items:  "{{ out['files'] }}"
+

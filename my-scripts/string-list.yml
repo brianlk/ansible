@@ -1,0 +1,9 @@
+---
+- hosts: master
+  tasks:
+    - set_fact:
+        xxx: "a b c"
+    - set_fact:
+        yyy: "{{ xxx.split() }}"
+    - debug:
+        msg: "{{ yyy }}"

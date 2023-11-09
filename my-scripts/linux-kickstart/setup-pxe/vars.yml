@@ -1,0 +1,5 @@
+net_int: eth0
+int_gateway: 10.1.1.1
+dhcp_start: 10.1.23.100
+dhcp_end: 10.1.23.150
+netmask: 255.255.0.0

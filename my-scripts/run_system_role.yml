@@ -1,0 +1,4 @@
+---
+- hosts: localhost
+  roles:
+    - linux-system-roles.kdump

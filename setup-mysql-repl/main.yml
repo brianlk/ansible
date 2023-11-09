@@ -1,0 +1,150 @@
+---
+# Run the tasks in control node
+- hosts: all
+  vars_files:
+    - vars.yml
+  gather_facts: True
+
+  pre_tasks:
+    - include_tasks: pre-tasks.yml
+
+  tasks:
+    - name: Tasks in master
+      block:
+        - name: Freeze the write in master
+          community.mysql.mysql_query:
+            login_user: "{{ db.login_user }}"
+            login_password: "{{ db.login_pass }}"
+            login_host: "{{ db.login_host }}"
+            login_port: "{{ db.login_port }}"
+            query: "SET @@GLOBAL.read_only = ON"
+
+        - name: Add replication user in mysql
+          community.mysql.mysql_user:
+            name: "{{ db.repl_user }}"
+            host: '%'
+            password: "{{ db.repl_pass }}"
+            state: present
+            priv: "*.*:REPLICATION SLAVE"
+            login_user: "{{ db.login_user }}"
+            login_password: "{{ db.login_pass }}"
+            login_host: "{{ db.login_host }}"
+            login_port: "{{ db.login_port }}"
+
+        - name: Reset slave and master state in master host
+          community.mysql.mysql_query:
+            login_user: "{{ db.login_user }}"
+            login_password: "{{ db.login_pass }}"
+            login_host: "{{ db.login_host }}"
+            login_port: "{{ db.login_port }}"
+            query:
+              - reset master
+              - stop slave
+              - reset slave all
+
+        - name: Dump all db
+          any_errors_fatal: true
+          community.mysql.mysql_db:
+            state: dump
+            name: all
+            target: "{{ db.dump_target }}"
+            login_user: "{{ db.login_user }}"
+            login_password: "{{ db.login_pass }}"
+            login_host: "{{ db.login_host }}"
+            login_port: "{{ db.login_port }}"
+            dump_extra_args: >-
+              --flush-privileges --single-transaction --flush-logs --triggers --routines --events 
+              --hex-blob --set-gtid-purged=OFF
+
+        - name: Get dump.sql checksum
+          stat:
+            path: "{{ db.dump_target }}"
+          register: st
+
+        - set_fact:
+            dump_cksum: "{{ st.stat.checksum }}"
+
+        - name: Download the sql dump from mysql master to control node
+          fetch:
+            src: "{{ db.dump_target }}"
+            dest: /tmp/
+            flat: yes
+            validate_checksum: true
+
+        - include_tasks: change-mycnf.yml
+          vars:
+            my_cnf_settings:
+              server-id: 1
+              gtid-mode: "on"
+              enforce-gtid-consistency: "on"
+              log_bin: "log-bin"
+      when: inventory_hostname in groups['master']
+
+
+    - name: Tasks in slaves
+      block:
+        - name: Copy sql dump from control node to slave hosts
+          copy:
+            src: "{{ db.dump_target }}"
+            dest: /tmp/
+            checksum: "{{ hostvars[groups['master'][0]]['dump_cksum'] }}"
+
+        - name: Restore db in slave hosts
+          community.mysql.mysql_db:
+            name: all
+            state: import
+            target: "{{ db.dump_target }}"
+            login_user: "{{ db.login_user }}"
+            login_password: "{{ db.login_pass }}"
+            login_host: "{{ db.login_host }}"
+            login_port: "{{ db.login_port }}"
+
+        - name: Generate a random numner for server-id
+          shell: |
+            echo $((RANDOM % 100 + 10))
+          register: rand
+
+        # set a random int for server-id in slave
+        - include_tasks: change-mycnf.yml
+          vars:
+            my_cnf_settings:
+              server-id: "{{ rand.stdout | int }}"
+              gtid-mode: "on"
+              enforce-gtid-consistency: "on"
+              log_bin: "log-bin"
+              log-slave-updates: "on"
+              relay-log: "mysql-relay-bin"
+              read_only: 1
+
+        - name: Run query to define master in slave
+          community.mysql.mysql_query:
+            login_user: "{{ db.login_user }}"
+            login_password: "{{ db.login_pass }}"
+            login_host: "{{ db.login_host }}"
+            login_port: "{{ db.login_port }}"
+            query:
+              - reset master
+              - stop slave
+              - reset slave all
+              - >
+                change replication source to source_host='{{ groups["master"][0] }}', 
+                  source_user='{{ db.repl_user }}', source_password='{{ db.repl_pass }}', 
+                  source_auto_position=1
+              - start replica
+      when: inventory_hostname in groups['slave']
+
+    - name: Unfreeze the write in master
+      community.mysql.mysql_query:
+        login_user: "{{ db.login_user }}"
+        login_password: "{{ db.login_pass }}"
+        login_host: "{{ db.login_host }}"
+        login_port: "{{ db.login_port }}"
+        query: "SET @@GLOBAL.read_only = OFF"
+      when: inventory_hostname in groups['master']
+
+    - name: Remove dump.sql
+      file:
+        path: "{{ db.dump_target }}"
+        state: absent
+
+

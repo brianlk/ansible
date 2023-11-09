@@ -1,0 +1,6 @@
+---
+- hosts: all
+  tasks:
+    - name: list /root
+      shell: |
+        ls /root

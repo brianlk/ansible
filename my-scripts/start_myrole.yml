@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  vars:
+    var2: "i am ok too"
+  roles:
+    - myrole

@@ -1,0 +1,3 @@
+#openssl passwd -1 password 
+encrypted_password: "{{ '$1$rXslteHJ$kcLwC2bU9VsBPiuwc9ij//' }}"
+aaaa: ['abc', 'abc']

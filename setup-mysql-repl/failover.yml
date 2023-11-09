@@ -1,0 +1,50 @@
+---
+# Run the tasks in control node
+- hosts: all
+  vars_files:
+    - vars.yml
+  gather_facts: True
+
+  pre_tasks:
+    - name: check mysqld running
+      any_errors_fatal: true
+      shell: |
+        pgrep mysqld
+
+  tasks:
+    - name: stop mysqld
+      service:
+        name: mysqld
+        state: stopped
+        enabled: no
+      when: inventory_hostname in groups['master']
+
+    - name: Failover tasks in slave
+      block:
+        - name: Get master binlog
+          mysql_replication:
+            mode: getmaster
+            login_user: "{{ db.login_user }}"
+            login_password: "{{ db.login_pass }}"
+            login_host: "{{ db.login_host }}"
+            login_port: "{{ db.login_port }}"
+          #  login_unix_socket: "/var/lib/mysql/mysql.sock"
+          register: master_info
+
+        - name: Stop slave
+          community.mysql.mysql_query:
+            login_user: "{{ db.login_user }}"
+            login_password: "{{ db.login_pass }}"
+            login_host: "{{ db.login_host }}"
+            login_port: "{{ db.login_port }}"
+            query:
+              - stop replica
+              - reset replica all
+              - SET @@GLOBAL.read_only = OFF
+
+      when: inventory_hostname in groups['slave']
+
+    - name: print debug
+      debug:
+        msg: "{{ master_info }}"
+      when: inventory_hostname in groups['slave']

@@ -1,0 +1,4 @@
+---
+- hosts: localhost
+  roles:
+    - { role: myrole, var2: 111 }
