@@ -1,0 +1,9 @@
+---
+- hosts: all
+  vars: 
+  ignore_errors: true
+  roles:
+    - role: 'aix'
+      when: ansible_system == 'AIX'
+    - role: 'linux'
+      when: ansible_system == 'Linux'
