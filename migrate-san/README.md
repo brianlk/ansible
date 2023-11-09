@@ -1,6 +1,8 @@
 # Migrate data to new SAN devices by LVM
+## Check the new SAN devices
+Edit the variable luns in hosts.ini and put the new LUN id in it
 
-
+ansible-playbook -i hosts.ini check.yml
 
 ## Mirror the volumes to new SAN disks
 Edit the variable luns in hosts.ini and put the new LUN id in it
