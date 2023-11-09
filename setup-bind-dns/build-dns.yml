@@ -17,6 +17,7 @@
     loop:
       - "chrony"
       - "yum-utils"
+      - "net-tools"
 
   - name: Upgrade all packages, excluding kernel & foo related packages
     yum:
@@ -35,7 +36,7 @@
       test_command: "uptime"
     when: result.rc == 1
 
-  - name: Install bind
+  - name: Install Bind
     yum:
       name: "{{ item }}"
       state: present
