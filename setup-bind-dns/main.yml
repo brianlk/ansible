@@ -1,0 +1,74 @@
+---
+- hosts: bind
+  vars_files:
+    - vars.yml
+
+  tasks:
+  - name: check OS version
+    fail:
+    when: 
+    - ansible_distribution_major_version != '8'
+    - ansible_distribution_major_version != '9'
+
+  - name: Install related pkgs
+    yum:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - "chrony"
+      - "yum-utils"
+
+  - name: Upgrade all packages, excluding kernel & foo related packages
+    yum:
+      name: '*'
+      state: latest
+      exclude: kernel*
+
+  - name: check to see if we need a reboot
+    command: needs-restarting -r
+    register: result
+    ignore_errors: yes
+
+  - name: Reboot
+    reboot:
+      reboot_timeout: 600
+      test_command: "uptime"
+    when: result.rc == 1
+
+  - name: Install bind
+    yum:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - "bind"
+      - "bind-utils"
+
+  - name: Config listen interface
+    lineinfile:
+      path: /etc/named.conf
+      regexp: '(\s+listen-on\s+port 53\s+{\s+127.0.0.1)'
+      line: '\1; any; };'
+      backrefs: yes
+      validate: named-checkconf %s
+
+  - debug:
+      msg: "{{ ansible_default_ipv4.network }}"
+
+  - name: Config allow query
+    lineinfile:
+      path: /etc/named.conf
+      regexp: '(\s+allow-query\s+{ localhost)'
+      line: '\1; {{ ansible_default_ipv4.network }}/16; };'
+      backrefs: yes
+      validate: named-checkconf %s
+
+  - name: Add forwarders
+    lineinfile:
+      path: /etc/named.conf
+      search_string: '\s+recursion yes;'
+      insertbefore: 'recursion yes;'
+      line: "\tforwarders { 8.8.8.8; 8.8.4.4; };"
+      validate: named-checkconf %s
+
+  - include_tasks: addzone.yml
+

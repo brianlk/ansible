@@ -1,0 +1,13 @@
+---
+- hosts: bind
+  tasks:
+
+    - name: Add zone
+      lineinfile:
+        path: /etc/named/db.{{ domain }}
+        line: "{{ alias }}  IN  A {{ ip }}"
+
+    - name: Reload named
+      service:
+        name: named
+        state: reloaded

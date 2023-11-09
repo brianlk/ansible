@@ -1,0 +1,20 @@
+---
+- name: Copy template to /etc/named
+  template:
+    src: db.j2
+    dest: /etc/named/db.{{ domain }}
+    mode: '0644'
+
+- name: Add zone
+  lineinfile:
+    path: /etc/named.conf
+    insertafter: "EOF"
+    line: "\nzone \"{{ domain }}\" {\n
+        \ttype master;\n
+        \tfile \"/etc/named/db.{{ domain }}\";\n
+      };"
+
+- name: Reload named
+  service:
+    name: named
+    state: reloaded
