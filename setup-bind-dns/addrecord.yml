@@ -5,7 +5,7 @@
     - name: Add zone
       lineinfile:
         path: /etc/named/db.{{ domain }}
-        line: "{{ alias }}  IN  A {{ ip }}"
+        line: "{{ alias }}\t\tIN\t\tA\t\t{{ ip }}"
 
     - name: Reload named
       service:

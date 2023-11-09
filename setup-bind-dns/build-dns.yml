@@ -74,3 +74,9 @@
 
   - include_tasks: addzone.yml
 
+  - name: Add firewall rule
+    command: firewall-cmd --permanent --add-port=53/udp --add-port=53/tcp
+
+  - name: Reload firewalld
+  - command: firewall-cmd --reload
+  
