@@ -4,39 +4,6 @@
     disk_map: []
 
   tasks:
-    # - name: Check vgname
-    #   shell: |
-    #     vgdisplay {{ vgname }}
-    #   any_errors_fatal: true
-
-    # # Backup the vg config
-    # - include_tasks: backupvg.yml
-
-    # - name: Execute scsi rescan
-    #   shell: |
-    #     cd /sys/class/scsi_host
-    #     for s in `ls`
-    #     do
-    #       echo "- - -" > $s/scan
-    #     done
-
-    # - name: List lsscsi
-    #   shell: |
-    #     lsscsi -u
-    #   register: scsi
-    
-    # # Create array disk_map [{'lunid': 'xxx', 'dev': 'yyy'}] for all disks
-    # - name: Create a map disk_map
-    #   include_tasks: disk_map.yml
-    #   loop: "{{ scsi.stdout_lines }}"
-
-    # # Extract /dev/sdx of new device from nested loop
-    # - set_fact:
-    #     new_dev: "{{ new_dev | default([])  + [item.1.dev] }}"
-    #   with_nested:
-    #     - "{{ new_luns }}"
-    #     - "{{ disk_map }}"
-    #   when: (item.0|lower) in (item.1.lunid|lower)
     - include_tasks: checknewdisks.yml
 
     - include_tasks: partition.yml
@@ -54,7 +21,7 @@
 
     - name: Mirror the LV
       shell: |
-        lvconvert -y -m 1 /dev/{{ vgname }}/{{ item }} /dev/sdc1
+        lvconvert -y -m 1 /dev/{{ vgname }}/{{ item }} {{ new_dev | join(' ') }}
       loop: "{{ lvs.stdout_lines }}"
 
     - name: Generate lvs report
