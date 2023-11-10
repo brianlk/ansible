@@ -12,11 +12,8 @@
   any_errors_fatal: true
 
 - name: Create partition on new device
-  parted:
-    device: "{{ item }}"
-    number: 1
-    flags: [ lvm ]
-    state: present
+  shell: |
+    (echo n; echo p; echo 1; echo ; echo ; echo t; echo 8e; echo w) | fdisk {{ item }}
   any_errors_fatal: true
 
 - name: Create PVs
