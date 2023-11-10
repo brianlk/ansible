@@ -20,4 +20,4 @@
   any_errors_fatal: true
 
 - name: Create PVs
-  command: pvcreate {{ item }}1
+  command: pvcreate --zero y {{ item }}1
