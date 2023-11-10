@@ -5,10 +5,6 @@
   register: part
   ignore_errors: true
 
-- name: Check xfs signature
-  command: wipefs {{ item }}1
-  register: wipe
-
 - name: Fail the playbook when partition exists in new devices
   fail:
     msg: "Fail the playbook when partition exists in new devices"
