@@ -1,18 +1,14 @@
 ---
 - name: Check if there is existing partiton
   shell: |
-    # parted -j {{ item }} print 2>/dev/null
     lsblk {{ item }} | grep part
   register: part
   ignore_errors: true
 
-- set_fact:
-    pj: "{{ part.stdout | from_json }}"
-  
 - name: Fail the playbook when partition exists in new devices
   fail:
-    msg: "{{ pj.disk }}"
-  when: pj.disk.label != "" and pj.disk.partitions is defined
+    msg: "Fail the playbook when partition exists in new devices"
+  when: part.rc == 0
   any_errors_fatal: true
 
 - name: Create partition on new device
