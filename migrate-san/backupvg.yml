@@ -5,6 +5,6 @@
     vgcfgbackup -f /var/tmp/vgcfg.backup.$D
     lsblk > /var/tmp/lsblk.backup.$D
     cp /etc/fstab /var/tmp/fstab.backup.$D
-    lsscsi -u > /var/tmp/lsscsi.backup.$D
+    {{ lsscsi[ansible_distribution_file_variety] }} > /var/tmp/lsscsi.backup.$D
     pvs --noheadings | awk '$2 == "{{ vgname }}" {print $1}' > /var/tmp/old-disk
     cp /var/tmp/old-disk /var/tmp/old-disk.$D

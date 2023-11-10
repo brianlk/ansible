@@ -34,7 +34,7 @@
 - name: Check number of new luns
   fail:
     msg: "Cannot find all new luns. Please check {{ ansible_inventory_sources }}"
-  when: ( new_dev | length ) != num_new_luns
+  when: ( new_dev | length ) != ( new_luns | length )
   any_errors_fatal: true
 
 - debug:
