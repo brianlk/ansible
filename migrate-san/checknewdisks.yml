@@ -16,6 +16,13 @@
   shell: |
     lsscsi -u
   register: scsi
+  ignore_errors: true
+
+- name: List lsscsi
+  shell: |
+    lsscsi -w
+  register: scsi
+  when: scsi.rc == 1
 
 # Create array disk_map [{'lunid': 'xxx', 'dev': 'yyy'}] for all disks
 - name: Create a map disk_map
