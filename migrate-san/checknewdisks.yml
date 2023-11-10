@@ -1,8 +1,8 @@
 ---
-# - name: Check vgname
-#   shell: |
-#     vgdisplay {{ vgname }}
-#   any_errors_fatal: true
+- name: Check vgname
+  shell: |
+    vgdisplay {{ vgname }}
+  any_errors_fatal: true
 
 - name: Execute scsi rescan
   shell: |
@@ -13,8 +13,8 @@
     done
 
 - name: List lsscsi
-  shell: |
-    {{ lsscsi[ansible_distribution_file_variety] }}
+  # Different distribution may have lsscsi with different options
+  command: "{{ lsscsi[ansible_distribution_file_variety] }}"
   register: scsi
 
 # Create array disk_map [{'lunid': 'xxx', 'dev': 'yyy'}] for all disks
