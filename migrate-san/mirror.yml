@@ -54,7 +54,7 @@
 
     - name: Mirror the LV
       shell: |
-        lvconvert -y -m 1 /dev/{{ vgname }}/{{ item }} {{ new_dev | join(' ') }}
+        lvconvert -y -m 1 /dev/{{ vgname }}/{{ item }} /dev/sdc1
       loop: "{{ lvs.stdout_lines }}"
 
     - name: Generate lvs report
