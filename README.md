@@ -11,4 +11,4 @@
 
 ### Setup MySQL replication, failover and failback
 
-### Setup Ansible control node for Windows AD env
+### Setup Ansible control node for Windows
