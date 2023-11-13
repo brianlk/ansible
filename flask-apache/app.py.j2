@@ -32,7 +32,7 @@ lang en_US.UTF-8
 network  --bootproto=static --device=ens32 --gateway=10.1.1.1 --ip=10.1.23.101 --nameserver=8.8.8.8 --netmask=255.255.0.0 --ipv6=auto --activate
 network  --hostname=mytest.local
 # Root password
-sshkey --username=root "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDPJGVtau1aAzAYH64gqiWKjwzhnfxMwSgWNKULUGqBuqfaA/uZhw23VDB4DZiu1f7iBo0r86woOgRR1UKCzd7g/4+Sfi8BACCvbpjPMzuQNeOs2N9DSCzDYzpE4R7H2+hlagrza4gPPz/vbW/ufIgb7pdWGtF0hE1yJ6BJKtYZ9Lv+Ri9KxoQrcldgSKJ9PYSmkfro9HNWBeJY1NhMhyzI9tki2IL8aHtfWF933KUtCWkk4j0sx+L0f02WNTAOGpPPVekcJHxcS5B6SnouRy712sZqWnHkm9Yf7fMeMPbBuqxTRKSLIbGGywj5NuRo9Lnj5rptG/iT+AKaBJOI7w63mzCNE0eMH/Z6OOrmo8L0SHJQFkIKceyZ9r3GJ1APNdwADAgl8up8pPG9xrkYvA49+4DjrBwx6zrZ+YcFQ3e0G/Ykbd0ssSM0hEPcjSzBIBSTnKBKmWpY2T4feCzNmvQ6VJahedxOaWTQW0HypT+MOrJ61P+4HQzFtR+S7706bKM= devops@brianleung-cert-auth"
+sshkey --username=root "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC7zr5e/UqtSF+Uka6LveF9HBq0874SAIAWUmIcJBmfGcF4q7o7CTAMFwgY2NQxvEPe1FDTcSKYcwAQGndSj5CwZfqoEcFyjvPdYOVCW5jwkpE94qqZVoAJeXHZbJyAXDCPnfu+GRMwS3c3q+UcV1v/l6MlHFz/hJMIhSaPNZ5ZGLxBfvO0+1Y2dMVUvAkPIOzVts1kJDwTSh/ztf+nQ4PQzQxOwfh6AyahnBs80j9c+kOPlGOF1Sw+miSUqofHX+4KfkdXi8oah2W5N0pBWzCVkoLECo7xuz7AUP051LGKl+kRgmhpuckXXD/y95k8u8PD7HnGihGyfk08jHLusHeZewY4OGB2coKiLNreXQBljt+PX9b8XR1ppEnSFcOqH1JimKpTNC5AAFceIKkA449E50DKuVDkTy3xza1SFMtiYFICZiOALSpaAy4XU3rpHbyNHMcQk9qTRyjovh7CSRFiwws2ROV/grkEYWbr5421e8zRaAvAOA7FQoKNTnAsHy0= root@ctrl.example.com"
 rootpw --iscrypted $6$jMMs4Nv.1BA8D74c$jHOC.koxhNO1VAIMbwm/QAd/iNSKwxKeetFgBDzPd42p2bcRknqD8O/0awUmnmBN2PMxyu3.eGF9WLsn3oSTx0
 # Run the Setup Agent on first boot
 firstboot --enable
