@@ -39,6 +39,13 @@
         owner: apache
         group: apache
 
+    - name: copy test files
+      copy:
+        src: test
+        dest: /var/www/html/flask
+        owner: apache
+        group: apache
+
     - name: copy apache config
       copy:
         src: "flask.conf"

@@ -1,10 +1,11 @@
 from flask import Flask, render_template, send_from_directory
+from test.test1 import abc
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return 'Hello World xyz'
+    return f'Hello World {abc()}'
 
 @app.route('/hi')
 def xxx():
