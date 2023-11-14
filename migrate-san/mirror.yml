@@ -4,6 +4,8 @@
     disk_map: []
 
   tasks:
+    - include_tasks: backupvg.yml
+    
     - include_tasks: checknewdisks.yml
 
     - include_tasks: partition.yml
@@ -24,14 +26,7 @@
         lvconvert -y -m 1 /dev/{{ vgname }}/{{ item }} {{ new_dev | join(' ') }}
       loop: "{{ lvs.stdout_lines }}"
 
-    - name: Generate lvs report
-      shell: |
-        lvs {{ vgname }} --reportformat json
-      register: report
-
-    - name: Convert from json
-      set_fact:
-        jsondata: "{{ report.stdout | from_json }}"
+    - include_tasks: lvreport.yml
 
     - debug:
         msg: "{{ item.lv_name }} => {{ item.copy_percent }}"
