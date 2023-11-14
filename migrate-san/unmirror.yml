@@ -13,10 +13,13 @@
 
     - include_tasks: get_lvs.yml
 
-    - shell: |
-        lvconvert -y -m 0 /dev/{{ vgname }}/{{ item }} {{ old_disks }}
-      loop: "{{ lvs.stdout_lines }}"
+    - debug:
+        msg: "{{ lvs }}"
 
-    - shell: |
-        vgreduce {{ vgname }} {{ old_disks }}
+    # - shell: |
+    #     lvconvert -y -m 0 /dev/{{ vgname }}/{{ item }} {{ old_disks }}
+    #   loop: "{{ lvs.stdout_lines }}"
+
+    # - shell: |
+    #     vgreduce {{ vgname }} {{ old_disks }}
 
