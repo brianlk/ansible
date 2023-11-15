@@ -17,13 +17,12 @@
 
     - fail:
         msg: "{{ item.copy_percent }}" 
-      when: (item.copy_percent | int) == 100
+      when: (item.copy_percent | int) != 100
       loop: "{{ jsondata.report[0].lv }}"
+      any_errors_fatal: true
 
-    # - shell: |
-    #     lvconvert -y -m 0 /dev/{{ vgname }}/{{ item }} {{ old_disks }}
-    #   loop: "{{ lvs.stdout_lines }}"
+    - command: "lvconvert -y -m 0 /dev/{{ vgname }}/{{ item }} {{ old_disks }}"
+      loop: "{{ lvs.stdout_lines }}"
 
-    # - shell: |
-    #     vgreduce {{ vgname }} {{ old_disks }}
+    - command: "vgreduce {{ vgname }} {{ old_disks }}"
 

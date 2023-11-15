@@ -16,14 +16,12 @@
         new_dev: "{{ new_dev | map('regex_replace', '$', '1') | list }}"
 
     - name: Extend volume group
-      shell: |
-        vgextend {{ vgname }} {{ new_dev | join(' ') }}
+      command: "vgextend {{ vgname }} {{ new_dev | join(' ') }}"
 
     - include_tasks: get_lvs.yml
 
     - name: Mirror the LV
-      shell: |
-        lvconvert -y -m 1 /dev/{{ vgname }}/{{ item }} {{ new_dev | join(' ') }}
+      command: "lvconvert -y -m 1 /dev/{{ vgname }}/{{ item }} {{ new_dev | join(' ') }}"
       loop: "{{ lvs.stdout_lines }}"
 
     - include_tasks: lvreport.yml

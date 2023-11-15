@@ -1,7 +1,6 @@
 ---
 - name: Generate lvs report
-  shell: |
-    lvs {{ vgname }} --reportformat json
+  command: "lvs {{ vgname }} --reportformat json"
   register: report
 
 - name: Convert from json
