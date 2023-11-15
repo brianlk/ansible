@@ -7,8 +7,8 @@ app = Flask(__name__)
 def index():
     return f'Hello World {abc()}'
 
-@app.route('/hi')
-def xxx():
+@app.route('/ks/<os>')
+def ks(os):
     abc="""
 #version=RHEL8
 ignoredisk --only-use=sda
@@ -22,7 +22,7 @@ clearpart --all --initlabel
 text
 # Use CDROM installation media
 #cdrom
-url --url https://download.rockylinux.org/pub/rocky/9/BaseOS/x86_64/os/
+url --url https://download.rockylinux.org/pub/rocky/{os}/BaseOS/x86_64/os/
 # Keyboard layouts
 keyboard --vckeymap=us --xlayouts='us'
 # System language
