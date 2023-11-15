@@ -15,8 +15,10 @@
 
     - include_tasks: get_lvs.yml
 
-    - debug:
-        msg: "{{ jsondata.report[0].lv }}"
+    - fail:
+        msg: "{{ item.copy_percent }}" 
+      when: (item.copy_percent | int) == 100
+      loop: "{{ jsondata.report[0].lv }}"
 
     # - shell: |
     #     lvconvert -y -m 0 /dev/{{ vgname }}/{{ item }} {{ old_disks }}
