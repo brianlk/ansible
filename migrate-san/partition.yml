@@ -17,7 +17,5 @@
   any_errors_fatal: true
 
 - name: Create PVs
-  debug:
-    msg: "pvcreate --zero y {{ item | replace('$', '1') }}"
+  command: "pvcreate --zero y {{ item | regex_replace('$', '1') }}"
 
-- fail:
