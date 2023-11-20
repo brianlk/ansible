@@ -2,7 +2,7 @@
 - hosts: all
   tasks:
     # - debug:
-    #     msg: "{{ groups }}"
+    #     msg: "{{ group_names }}"
 
     # - fail:
 
