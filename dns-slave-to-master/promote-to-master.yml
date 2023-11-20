@@ -19,9 +19,15 @@
         cd /var/named
         cp -pfr data standby
 
+    - name: Replace type to master
+      replace:
+        path:  /etc/named.conf.promote-master
+        regexp: '(^\s+type\s+)slave(.*)'
+        replace: '\1master\2'
+
     - name: Replace data folder to standby
       replace:
-        path: /etc/named.conf
+        path:  /etc/named.conf.promote-master
         regexp: '(\s+file\s")data(.*)'
         replace: '\1standby\2'
 
