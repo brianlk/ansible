@@ -34,7 +34,7 @@
     - name: xxx
       lineinfile:
         path: /etc/named.conf
-        regexp: '^\s+masters\s+\{\s*\n.*\;'
+        regexp: '^\s+masters'
         line: xxxxx
 
 
