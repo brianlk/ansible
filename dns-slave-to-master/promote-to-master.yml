@@ -35,7 +35,7 @@
     - name: 
       replace:
         path: /etc/named.conf.promote-master
-        regexp: '^\s+masters\_.};'
+        regexp: '^\s+masters\s{(.|\n)*?};'
         replace: ''
-        validate: /usr/sbin/named-checkconf %s
+
 
