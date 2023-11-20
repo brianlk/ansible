@@ -22,7 +22,7 @@
     - name: Replace data folder to standby
       replace:
         path: /etc/named.conf
-        regexp: 'zone.*file.*}'
-        replace: 'adad'
+        regexp: '(\s+file\s")data(.*)'
+        replace: '\1standby\2'
 
 
