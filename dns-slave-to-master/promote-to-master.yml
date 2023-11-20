@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: promoted-master
   tasks:
     - name: Check the named in all hosts
       shell: "ps -ef | grep named | grep -v grep"
