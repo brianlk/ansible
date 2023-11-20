@@ -16,13 +16,21 @@
     - name: Copy /etc/named.conf
       shell: |
         alias cp=cp
-        mkdir /var/name/standby-master
-        cp -pr /var/named/data/* /var/name/standby-master
+        mkdir /var/tmp/standby
+        cd /var/named/
+        cp -pfr data /var/tmp/standby/
 
-    - name: Update /etc/named.conf
+    - name: Update slave to master
       replace:
         path: /etc/named.conf.promote-master
         regexp: '(.*type.*)slave(.*)'
         replace: '\1master\2'
+
+    - name: Update data directory
+      lineinfile:
+        path: /etc/named.conf.promote-master
+        regexp: '(directory).*'
+        line: '\1\"/var/tmp/standby\";'
+        backrefs: yes
 
 
