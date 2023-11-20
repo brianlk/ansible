@@ -32,11 +32,10 @@
         regexp: '(\s+file\s")data(.*)'
         replace: '\1standby\2'
 
-    - name: xxxxxx
-      lineinfile:
+    - name: 
+      replace:
         path: /etc/named.conf.promote-master
         regexp: '^\s+masters.*};'
-        state: absent
-
-
+        replace: ''
+        validate: /usr/sbin/named-checkconf %s
 
