@@ -1,0 +1,33 @@
+---
+- name: Copy template to /etc/named
+  template:
+    src: db.j2
+    dest: /var/named/data/db.{{ domain }}
+    mode: '0644'
+  when: group_names[0] == "master"
+
+- name: Add zone
+  lineinfile:
+    path: /etc/named.conf
+    insertafter: "EOF"
+    line: "\nzone \"{{ domain }}\" {\n
+        \ttype master;\n
+        \tfile \"data/db.{{ domain }}\";\n
+      };"
+  when: group_names[0] == "master"
+
+- name: Add zone
+  lineinfile:
+    path: /etc/named.conf
+    insertafter: "EOF"
+    line: "\nzone \"{{ domain }}\" {\n
+        \ttype slave;\n
+        \tfile \"data/db.{{ domain }}\";\n
+        \tmasters { {{ groups.master[0] }}; };\n
+      };"
+  when: group_names[0] == "slave"
+
+- name: Reload named
+  service:
+    name: named
+    state: reloaded

@@ -1,0 +1,14 @@
+$TTL    60
+@       IN      SOA     ns1.{{ domain }}. admin.{{ domain }}. (
+                              3         ; Serial
+                             60         ; Refresh
+                             60         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+; name servers - NS records
+            IN      NS      ns1.{{ domain }}.
+
+$ORIGIN {{ domain }}.
+; name servers - A records
+ns1         IN      A       {{ ansible_default_ipv4.address }}
