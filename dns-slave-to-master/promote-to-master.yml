@@ -1,18 +1,18 @@
 ---
-- hosts: promoted-master
+- hosts: promotedmaster
   tasks:
     - name: Check the named in all hosts
       shell: "ps -ef | grep named | grep -v grep"
 
-    - name: Backup the named.conf
+    - name: Copy /etc/named.conf
       copy:
         src: /etc/named.conf
-        dest: "/var/tmp/named.conf.{{ ansible_date_time.iso8601_basic_short }}"
-        remote_src: yes
-        validate: /usr/sbin/named-checkconf %s
+        dest: /etc/named.conf.slave.{{ ansible_date_time.iso8601_basic_short }}
+        remote_src: true
 
-    - name: xxxx
-      lineinfile:
-        path: /etc/named.conf
-        regexp: 'type\s+slave'
-        state: absent
+    - name: Copy /etc/named.conf
+      copy:
+        src: /var/named/data/
+        dest: /var/tmp/
+        remote_src: true
+
