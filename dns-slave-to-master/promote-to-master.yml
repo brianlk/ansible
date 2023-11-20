@@ -4,15 +4,23 @@
     - name: Check the named in all hosts
       shell: "ps -ef | grep named | grep -v grep"
 
-    - name: Copy /etc/named.conf
-      copy:
-        src: /etc/named.conf
-        dest: /etc/named.conf.slave.{{ ansible_date_time.iso8601_basic_short }}
-        remote_src: true
+    # - name: Copy /etc/named.conf
+    #   copy:
+    #     src: /etc/named.conf
+    #     dest: "{{ item }}"
+    #     remote_src: true
+    #   loop:
+    #     - "/etc/named.conf.slave.{{ ansible_date_time.iso8601_basic_short }}"
+    #     - /etc/named.conf.promote-master
 
-    - name: Copy /etc/named.conf
-      copy:
-        src: /var/named/data/
-        dest: /var/tmp/
-        remote_src: true
+    # - name: Copy /etc/named.conf
+    #   command: "cp -pr /var/named/data /var/tmp/"
+
+    - name: Update /etc/named.conf
+      lineinfile:
+        path: /etc/named.conf.promote-master
+        regexp: '(.*type) slave'
+        line: '\1 master'
+        backrefs: yes
+
 
