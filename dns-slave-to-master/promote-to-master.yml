@@ -29,8 +29,8 @@
     - name: Update data directory
       lineinfile:
         path: /etc/named.conf.promote-master
-        regexp: '(directory).*'
-        line: '\1\"/var/tmp/standby\";'
+        regexp: '(^\s+directory\s+)(\S+)'
+        line: '\1 "/var/tmp/standby";'
         backrefs: yes
 
 
