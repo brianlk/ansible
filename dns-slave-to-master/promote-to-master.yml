@@ -7,9 +7,6 @@
     
     - name: Configure new master
       block:
-        - debug:
-            msg: "{{ ansible_default_ipv4.address }}"
-
         - name: Copy /etc/named.conf
           copy:
             src: /etc/named.conf
@@ -50,8 +47,6 @@
 
     - name: Configure slaves for new masters
       block:
-        - debug:
-            msg: "{{ groups.promotedmaster[0] }}"
         - name: 
           replace:
             path: /etc/named.conf
