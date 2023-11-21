@@ -25,7 +25,9 @@
         \tfile \"data/db.{{ domain }}\";\n
         \tmasters { {{ groups.master[0] }}; };\n
       };"
-  when: group_names[0] == "slave"
+  when: group_names[0] == "slaves"
+  tags:
+    - slave-named-conf
 
 - name: Reload named
   service:
