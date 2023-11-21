@@ -26,16 +26,19 @@
         path:  /etc/named.conf.promote-master
         regexp: '(^\s+type\s+)slave(.*)'
         replace: '\1master\2'
+        validate: /usr/sbin/named-checkconf %s
 
     - name: Replace data folder to standby
       replace:
         path:  /etc/named.conf.promote-master
         regexp: '(\s+file\s")data(.*)'
         replace: '\1standby\2'
+        validate: /usr/sbin/named-checkconf %s
 
     - name: 
       replace:
         path: /etc/named.conf.promote-master
         regexp: '^\s+masters\s{(.|\n)*?};'
         replace: ''
+        validate: /usr/sbin/named-checkconf %s
 
