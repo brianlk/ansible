@@ -52,11 +52,11 @@
       block:
         - debug:
             msg: "{{ groups.promotedmaster[0] }}"
-        # - name: 
-        #   replace:
-        #     path: /etc/named.conf
-        #     regexp: '^\s+masters\s{(.|\n)*?};'
-        #     replace: ''
+        - name: 
+          replace:
+            path: /etc/named.conf
+            regexp: '(^\s+masters\s){(.|\n)*?};'
+            replace: '\1{ {{ groups.promotedmaster[0] }}; };'
       when: '"slaves" in group_names'
       
 
