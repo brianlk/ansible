@@ -1,49 +1,54 @@
 ---
-- hosts: promotedmaster
+- hosts: all
+  vars:
+    xxx: ["abc"]
   tasks:
 
     # - name: Check the named in all hosts
     #   shell: "ps -ef | grep named | grep -v grep"
-    - debug:
-        msg: "{{ ansible_default_ipv4.address }}"
+    - name: Configure new master
+      block:
+        - debug:
+            msg: "{{ ansible_default_ipv4.address }}"
 
-    # - name: Copy /etc/named.conf
-    #   copy:
-    #     src: /etc/named.conf
-    #     dest: "{{ item }}"
-    #     remote_src: true
-    #   loop:
-    #     - "/etc/named.conf.slave.{{ ansible_date_time.iso8601_basic_short }}"
-    #     - /etc/named.conf.promote-master
+        - name: Copy /etc/named.conf
+          copy:
+            src: /etc/named.conf
+            dest: "{{ item }}"
+            remote_src: true
+          loop:
+            - "/etc/named.conf.slave.{{ ansible_date_time.iso8601_basic_short }}"
+            - /etc/named.conf.promote-master
 
-    # - name: Copy /etc/named.conf
-    #   shell: |
-    #     alias cp=cp
-    #     cd /var/named
-    #     mkdir standby
-    #     cp -pfr data/* standby/
+        - name: Copy /etc/named.conf
+          shell: |
+            alias cp=cp
+            cd /var/named
+            mkdir standby
+            cp -pfr data/* standby/
 
-    # - name: Replace type to master
-    #   replace:
-    #     path:  /etc/named.conf.promote-master
-    #     regexp: '(^\s+type\s+)slave(.*)'
-    #     replace: '\1master\2'
-    #     validate: /usr/sbin/named-checkconf %s
+        - name: Replace type to master
+          replace:
+            path:  /etc/named.conf.promote-master
+            regexp: '(^\s+type\s+)slave(.*)'
+            replace: '\1master\2'
+            validate: /usr/sbin/named-checkconf %s
 
-    # - name: Replace data folder to standby
-    #   replace:
-    #     path:  /etc/named.conf.promote-master
-    #     regexp: '(\s+file\s")data(.*)'
-    #     replace: '\1standby\2'
-    #     validate: /usr/sbin/named-checkconf %s
+        - name: Replace data folder to standby
+          replace:
+            path:  /etc/named.conf.promote-master
+            regexp: '(\s+file\s")data(.*)'
+            replace: '\1standby\2'
+            validate: /usr/sbin/named-checkconf %s
 
-    # - name: 
-    #   replace:
-    #     path: /etc/named.conf.promote-master
-    #     regexp: '^\s+masters\s{(.|\n)*?};'
-    #     replace: ''
-    #     validate: /usr/sbin/named-checkconf %s
+        - name: 
+          replace:
+            path: /etc/named.conf.promote-master
+            regexp: '^\s+masters\s{(.|\n)*?};'
+            replace: ''
+            validate: /usr/sbin/named-checkconf %s
 
-    - debug:
-        msg: "{{ hostsvar['10.1.23.154'] }}"
+        - debug:
+            msg: "{{ groups.promotedmaster[0] }} {{ group_names}}"
+      when: "abc" in  group_names
 
