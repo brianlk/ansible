@@ -1,8 +1,9 @@
 ---
 - hosts: promotedmaster
   tasks:
-    - name: Check the named in all hosts
-      shell: "ps -ef | grep named | grep -v grep"
+
+    # - name: Check the named in all hosts
+    #   shell: "ps -ef | grep named | grep -v grep"
 
     - name: Copy /etc/named.conf
       copy:
@@ -37,5 +38,4 @@
         path: /etc/named.conf.promote-master
         regexp: '^\s+masters\s{(.|\n)*?};'
         replace: ''
-
 
