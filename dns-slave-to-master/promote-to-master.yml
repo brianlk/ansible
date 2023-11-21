@@ -1,11 +1,10 @@
 ---
 - hosts: all
   vars:
-    xxx: ["abc"]
   tasks:
-
-    # - name: Check the named in all hosts
-    #   shell: "ps -ef | grep named | grep -v grep"
+    - name: Check the named in all hosts
+      shell: "ps -ef | grep named | grep -v grep"
+    
     - name: Configure new master
       block:
         - debug:
@@ -50,5 +49,12 @@
 
         - debug:
             msg: "{{ groups.promotedmaster[0] }} {{ group_names}}"
-      when: "abc" in  group_names
+      when: '"promotedmaster" in group_names'
+
+    - name: Configure slaves for new masters
+      block:
+        - debug:
+            msg: "xxxxxx"
+      when: '"slaves" in group_names'
+      
 
