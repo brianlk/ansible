@@ -23,7 +23,7 @@ while True:
         time.sleep(300)
         count += 1 
     except Exception as e:
-        print(f"Time: {str(time.time())}: {str(e)}")
+        print(f"Time: {str(time.time())}: Exception {str(e)}")
     finally:
         sys.stdout.flush()
         
