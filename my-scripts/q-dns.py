@@ -20,7 +20,7 @@ while True:
         answer = resolver.resolve(fqdn, "CNAME")
         print(answer.response)
         print("\n")
-        time.sleep(10)
+        time.sleep(300)
         count += 1 
     except Exception as e:
         print(f"Time: {str(time.time())}: {str(e)}")
