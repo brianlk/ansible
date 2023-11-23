@@ -13,9 +13,15 @@ function ResetLog() {
 function ChangeIP() {
     LogToFile
     ip addr
-    nmcli conn show
+    nmcli -t conn show
     ResetLog
+    echo -n "IP:"
     read masterip
+    uuid=$(nmcli -t conn show|awk -F: '{print $2}')
+    nmcli conn mod $uuid ipv4.addresses $masterip
+    nmcli networking off; nmcli networking on
+    DEFAULT_ROUTE=$(ip route show default | awk '/default/ {print $3}')
+    ping -c 1 $DEFAULT_ROUTE
 }
 
 function ConvertToMaster() {
