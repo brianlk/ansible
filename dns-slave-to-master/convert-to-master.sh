@@ -22,6 +22,10 @@ function ChangeIP() {
     nmcli networking off; nmcli networking on
     DEFAULT_ROUTE=$(ip route show default | awk '/default/ {print $3}')
     ping -c 1 $DEFAULT_ROUTE
+    if [ $? -ne 0 ]; then
+        echo "ERROR: Cannot ping gateway."
+        exit
+    fi
 }
 
 function ConvertToMaster() {
