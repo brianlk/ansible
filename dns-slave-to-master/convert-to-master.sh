@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#
+# Run the script in standby node
+#
+
 function LogToFile() {
     exec 1>out.log 2>&1 
     date
@@ -23,18 +27,22 @@ function ChangeIP() {
     DEFAULT_ROUTE=$(ip route show default | awk '/default/ {print $3}')
     ping -c 1 $DEFAULT_ROUTE
     if [ $? -ne 0 ]; then
-        echo "ERROR: Cannot ping gateway."
+        echo "ERROR: Cannot ping gateway. Exit!"
         exit
     fi
 }
 
 function ConvertToMaster() {
-    echo "bbbbbbbbbb"
+    mv /var/named/data /var/named/data.$D
+    cd /var/named
+    ln -s standby data
+    systemctl restart named
 }
 
 
 function main() {
     clear
+    D=$(date +"%Y%m%d-%H%M%S")
     printf "\t\t\tMenu\n\n"
     printf "\t\t\t1. Change current IP to master IP\n\n"
     printf "\t\t\t2. Convert standby to master\n\n"
@@ -43,7 +51,6 @@ function main() {
     case $c in
             1)
                 ChangeIP
-                ls -l
                 ;;
             2)
                 ConvertToMaster
