@@ -1,14 +1,16 @@
 #!/bin/bash
 
+exec 1>>convert-to-master.log
+exec 2>>convert-to-master.err
+
 function ChangeIP() {
-    echo "aaaa"
+    exec 1>>convert-to-master.log
+    ip addr
 }
 
 function ConvertToMaster() {
     echo "bbbbbbbbbb"
 }
-
-
 
 
 function main() {
