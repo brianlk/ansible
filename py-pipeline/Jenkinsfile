@@ -4,7 +4,7 @@ pipeline {
 	image 'python:3.12.0-alpine3.18'
 //	args '-u root --privileged' */
 	label 'docker'
-	customWorkspace  '/var/tmp/jenkins'
+	// customWorkspace  '/var/tmp/jenkins'
 	 } 
 	}
     stages {
@@ -17,9 +17,9 @@ pipeline {
         stage('Build') {
             steps {
 		sh """
-			python -m venv venv
+            python -m venv venv
           	source venv/bin/activate
-          	pip install redis
+          	pip install -r requirements.txt
 		  """
             }
         }
