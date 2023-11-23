@@ -34,11 +34,12 @@ function ChangeIP() {
 
 function ConvertToMaster() {
     mv /var/named/data /var/named/data.$D
+    mv /etc/named.conf /etc/named.conf.$D
     cd /var/named
     ln -s standby data
+    ln -s standby/named.conf /etc/named.conf
     systemctl restart named
 }
-
 
 function main() {
     clear
