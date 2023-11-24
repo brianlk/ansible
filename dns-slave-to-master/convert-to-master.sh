@@ -3,6 +3,18 @@
 #
 # Run the script in standby node
 #
+function CheckIPFormat() {
+    ip=$1
+    regexp="^([0-9]{1,3}.){3}[0-9]{1,3}\/[0-9]{1,2}$"
+    if [[ $ip =~ $regexp ]]; then
+            echo "ok"
+            exit 
+    else
+        echo "Error: IP format error."
+        exit 1
+    fi
+}
+
 
 function LogToFile() {
     exec 1>out.log 2>&1 
@@ -21,6 +33,7 @@ function ChangeIP() {
     ResetLog
     echo -n "IP:"
     read masterip
+    CheckIPFormat $masterip
     uuid=$(nmcli -t conn show|awk -F: '{print $2}')
     nmcli conn mod $uuid ipv4.addresses $masterip
     nmcli networking off; nmcli networking on
