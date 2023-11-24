@@ -56,6 +56,7 @@ function convertToMaster() {
     systemctl restart named
     [[ $? -eq 0 ]] || { echo "Error: named start failed."; exit 1; }
     echo "Success: named started."
+    chmod -x /etc/rc.local
 }
 
 function convertToStandby() {
