@@ -61,14 +61,8 @@ function convertToMaster() {
 
 function convertToStandby() {
     systemctl stop named
-    mv /var/named/data /var/named/data.$D
-    mv /etc/named.conf /etc/named.conf.$D
     cd /var/named
-    cp -pr standby data
-    cp -pr /var/named/standby/named.conf /etc/named.conf
-    systemctl restart named
-    [[ $? -eq 0 ]] || { echo "Error: named start failed."; exit 1; }
-    echo "Success: named started."
+    diff -q data standby
 }
 
 function checkTTY() {
