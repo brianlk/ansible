@@ -3,7 +3,7 @@
 #
 # Run the script in standby node
 #
-trap "rm -rf /tmp/scpxxx.lock" SIGINT SIGKILL SIGTERM
+trap "rm -rf /tmp/scpxxx.lock; exit 1" SIGINT SIGKILL SIGTERM
 
 function Lock() {
     exec 200>/tmp/scpxxx.lock
@@ -11,7 +11,7 @@ function Lock() {
 }
 
 function main() {
-    Lock
+
     #exec 1>>/tmp/scp-from-master.log
     #exec 2>&1
 
@@ -30,10 +30,10 @@ if [ $# -ne 1 ]; then
     echo "ERROR: No master ip is provided."
     exit 1
 fi
+Lock
 
-main
-# while true
-# do
-#     main
-#     sleep 60
-# done
+while true
+do
+    main $1
+    sleep 60
+done
