@@ -40,7 +40,7 @@ pipeline {
             }
             steps {
                 sh """
-                    pwd
+                    docker build -t xxx .
                 """
             }
         }
