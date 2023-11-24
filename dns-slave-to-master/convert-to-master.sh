@@ -39,6 +39,11 @@ function ChangeIP() {
     nmcli networking off; nmcli networking on
     sleep 3
     ip addr
+    echo ""
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo "!!!!! Please check the IP addresses !!!!!"
+    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    echo ""
 }
 
 function ConvertToMaster() {
