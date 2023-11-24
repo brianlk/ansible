@@ -20,3 +20,4 @@ date
 scp -pr $MIP:/var/named/data/* $DEST && echo success!
 scp -pr $MIP:/etc/named.conf $DEST/named.conf && echo success!
 chown -R named:named $DEST
+chown root:named $DEST/named.conf
