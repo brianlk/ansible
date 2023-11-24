@@ -14,10 +14,10 @@ function ResetLog() {
 }
 
 function Lock() {
-    exec 200>/tmp/ctm.lock
+    exec 200>/tmp/$0.lock
     flock -n 200
     if [[ $? -ne 0 ]]; then
-        echo "Error: anthoer convert-to-master.sh is running."
+        echo "Error: anthoer $0 is running."
         exit 1
     fi
 }

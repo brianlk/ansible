@@ -3,11 +3,14 @@
 #
 # Run the script in standby node
 #
+
+trap "flock --unlock 200; rm -rf /tmp/$0.lock" SIGINT SIGTERM
+
 function Lock() {
-    exec 200>/tmp/ctm.lock
+    exec 200>/tmp/$0.lock
     flock -n 200
     if [[ $? -ne 0 ]]; then
-        echo "Error: anthoer convert-to-master.sh is running."
+        echo "Error: anthoer $0 is running."
         exit 1
     fi
 }
@@ -30,3 +33,4 @@ scp -pr $MIP:/var/named/data/* $DEST && echo success!
 scp -pr $MIP:/etc/named.conf $DEST/named.conf && echo success!
 chown -R named:named $DEST
 chown root:named $DEST/named.conf
+tail 
