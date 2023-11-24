@@ -14,8 +14,12 @@ function ResetLog() {
 }
 
 function Lock() {
-    exec 3 > /tmp/ctm.$$.lock || exit 1
-    flock -n 3 || exit 1
+    exec 200>/tmp/ctm.lock
+    flock -n 200
+    if [[ $? -ne 0 ]]; then
+        echo "Error: anthoer convert-to-master.sh is running."
+        exit 1
+    fi
 }
 
 function CheckIPFormat() {
