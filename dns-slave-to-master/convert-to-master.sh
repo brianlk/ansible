@@ -37,12 +37,8 @@ function ChangeIP() {
     uuid=$(nmcli -t conn show|awk -F: '{print $2}')
     nmcli conn mod $uuid ipv4.addresses $masterip
     nmcli networking off; nmcli networking on
-    DEFAULT_ROUTE=$(ip route show default | awk '/default/ {print $3}')
-    ping -c 1 $DEFAULT_ROUTE
-    if [ $? -ne 0 ]; then
-        echo "ERROR: Cannot ping gateway. Exit!"
-        exit
-    fi
+    sleep 3
+    ip addr
 }
 
 function ConvertToMaster() {
