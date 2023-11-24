@@ -18,7 +18,7 @@ function CheckIPFormat() {
     regexp="^([0-9]{1,3}.){3}[0-9]{1,3}\/[0-9]{1,2}$"
     if [[ $ip =~ $regexp ]]; then
         LogToFile
-        echo "IP input: ${ip}"
+        echo "Master IP input: ${ip}"
         ResetLog
     else
         echo "Error: IP format error."
@@ -47,11 +47,15 @@ function ChangeIP() {
 }
 
 function ConvertToMaster() {
+    systemctl stop named
     mv /var/named/data /var/named/data.$D
     mv /etc/named.conf /etc/named.conf.$D
-    ln -s /var/named/standby data
-    ln -s /var/named/standby/named.conf /etc/named.conf
+    cd /var/named
+    cp -pr standby data
+    cp /var/named/standby/named.conf /etc/named.conf
     systemctl restart named
+    echo "/var/named/data.$D" > /var/tmp/cm.txt
+    echo "/etc/named.conf.$D" >> /var/tmp/cm.txt
 }
 
 function main() {
