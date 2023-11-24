@@ -3,27 +3,27 @@
 #
 # Run the script in standby node
 #
-function CheckIPFormat() {
-    ip=$1
-    regexp="^([0-9]{1,3}.){3}[0-9]{1,3}\/[0-9]{1,2}$"
-    if [[ $ip =~ $regexp ]]; then
-            echo "ok"
-            exit 
-    else
-        echo "Error: IP format error."
-        exit 1
-    fi
-}
-
-
 function LogToFile() {
-    exec 1>out.log 2>&1 
+    exec 1>>out.log 2>&1 
     date
     echo 
 }
 
 function ResetLog() {
     exec 1>$(tty) 2>&1 
+}
+
+function CheckIPFormat() {
+    ip=$1
+    regexp="^([0-9]{1,3}.){3}[0-9]{1,3}\/[0-9]{1,2}$"
+    if [[ $ip =~ $regexp ]]; then
+        LogToFile
+        echo "IP input: ${ip}"
+        ResetLog
+    else
+        echo "Error: IP format error."
+        exit 1
+    fi
 }
 
 function ChangeIP() {
