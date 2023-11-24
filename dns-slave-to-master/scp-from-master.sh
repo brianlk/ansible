@@ -4,7 +4,7 @@
 # Run the script in standby node
 #
 
-trap "flock --unlock 200; rm -rf /tmp/$0.lock" SIGINT SIGTERM
+trap "flock --unlock 200; rm -rf /tmp/$0.lock" EXIT
 
 function Lock() {
     exec 200>/tmp/$0.lock
