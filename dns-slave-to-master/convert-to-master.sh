@@ -58,7 +58,16 @@ function ConvertToMaster() {
     echo "/etc/named.conf.$D" >> /var/tmp/cm.txt
 }
 
+function CheckTTY() {
+    t=$(ps -q $$ | awk '{print $2}' | tail -1)
+    if [[ ! $t =~ "tty" ]]; then
+        echo "Error: it is not console."
+        exit 1
+    fi
+}
+
 function main() {
+    CheckTTY
     clear
 	touch /tmp/convert-to-master.$$
     D=$(date +"%Y%m%d-%H%M%S")
