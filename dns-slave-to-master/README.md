@@ -1,7 +1,10 @@
 # dns-slave-to-master
 
 ## Method 1
-TODO
+On standby host,
+1. Login as root in console
+2. Execute convert-to-master.sh
+
 
 ## Method 2
 ### Promote 1 of slaves to master. Configure other slaves to use new master

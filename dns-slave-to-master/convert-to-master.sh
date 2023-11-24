@@ -60,6 +60,7 @@ function ConvertToMaster() {
 
 function main() {
     clear
+	touch /tmp/convert-to-master.$$
     D=$(date +"%Y%m%d-%H%M%S")
     printf "\t\t\tMenu\n\n"
     printf "\t\t\t1. Change current IP to master IP\n\n"
