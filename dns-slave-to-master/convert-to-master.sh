@@ -31,7 +31,7 @@ function ChangeIP() {
     ip addr
     nmcli -t conn show
     ResetLog
-    echo -n "Master DNS IP: "
+    echo -n "Master DNS IP (e.g. 10.1.23.100/16): "
     read masterip
     CheckIPFormat $masterip
     uuid=$(nmcli -t conn show|awk -F: '{print $2}')
@@ -52,10 +52,10 @@ function ConvertToMaster() {
     mv /etc/named.conf /etc/named.conf.$D
     cd /var/named
     cp -pr standby data
-    cp /var/named/standby/named.conf /etc/named.conf
+    cp -pr /var/named/standby/named.conf /etc/named.conf
     systemctl restart named
-    echo "/var/named/data.$D" > /var/tmp/cm.txt
-    echo "/etc/named.conf.$D" >> /var/tmp/cm.txt
+    [[ $? -eq 0 ]] || { echo "Error: named start failed."; exit 1; }
+    echo "Success: named started."
 }
 
 function CheckTTY() {
