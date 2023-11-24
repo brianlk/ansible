@@ -13,6 +13,11 @@ function ResetLog() {
     exec 1>$(tty) 2>&1 
 }
 
+function Lock() {
+    exec 3 > /tmp/ctm.$$.lock || exit 1
+    flock -n 3 || exit 1
+}
+
 function CheckIPFormat() {
     ip=$1
     regexp="^([0-9]{1,3}.){3}[0-9]{1,3}\/[0-9]{1,2}$"
@@ -60,16 +65,16 @@ function ConvertToMaster() {
 
 function CheckTTY() {
     t=$(ps -q $$ | awk '{print $2}' | tail -1)
-    if [[ ! $t =~ "tty" ]]; then
+    if [[ $t =~ "pts" ]]; then
         echo "Error: it is not console."
         exit 1
     fi
 }
 
 function main() {
-    CheckTTY
+    # CheckTTY
+    Lock
     clear
-	touch /tmp/convert-to-master.$$
     D=$(date +"%Y%m%d-%H%M%S")
     printf "\t\t\tMenu\n\n"
     printf "\t\t\t1. Change current IP to master IP\n\n"
