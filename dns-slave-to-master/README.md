@@ -2,7 +2,7 @@
 
 ## Method 1
 On standby host,
-1. Login as root in console
+1. Login as root in VM console
 2. Execute convert-to-master.sh
 
 

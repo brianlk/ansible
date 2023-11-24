@@ -13,15 +13,6 @@ function ResetLog() {
     exec 1>$(tty) 2>&1 
 }
 
-function Lock() {
-    exec 200>/tmp/$0.lock
-    flock -n 200
-    if [[ $? -ne 0 ]]; then
-        echo "Error: anthoer $0 is running."
-        exit 1
-    fi
-}
-
 function CheckIPFormat() {
     ip=$1
     regexp="^([0-9]{1,3}.){3}[0-9]{1,3}\/[0-9]{1,2}$"
@@ -40,7 +31,7 @@ function ChangeIP() {
     ip addr
     nmcli -t conn show
     ResetLog
-    echo -n "IP:"
+    echo -n "Master DNS IP: "
     read masterip
     CheckIPFormat $masterip
     uuid=$(nmcli -t conn show|awk -F: '{print $2}')
@@ -76,13 +67,18 @@ function CheckTTY() {
 }
 
 function main() {
-    # CheckTTY
-    Lock
+    CheckTTY
+    trap "rm -rf /tmp/ctmxxx.lock; exit 1" SIGINT SIGKILL SIGTERM
+
+    exec 200>/tmp/ctmxxx.lock
+    flock -n 200 || { echo "Error: anthoer $0 is running."; exit 1; }
+
     clear
     D=$(date +"%Y%m%d-%H%M%S")
     printf "\t\t\tMenu\n\n"
-    printf "\t\t\t1. Change current IP to master IP\n\n"
-    printf "\t\t\t2. Convert standby to master\n\n"
+    printf "\t\t\t1) Change current IP to master IP\n\n"
+    printf "\t\t\t2) Convert standby to master\n\n"
+    printf "\t\t\tq) Exit\n\n"
     echo -n "Choice? "
     read c
     case $c in
@@ -91,6 +87,9 @@ function main() {
                 ;;
             2)
                 ConvertToMaster
+                ;;
+            q)
+                exit 1
                 ;;
             *)
                 echo "Wrong option!"
