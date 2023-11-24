@@ -3,37 +3,37 @@
 #
 # Run the script in standby node
 #
-function LogToFile() {
+function logToFile() {
     exec 1>>out.log 2>&1 
     date
     echo 
 }
 
-function ResetLog() {
+function resetLog() {
     exec 1>$(tty) 2>&1 
 }
 
-function CheckIPFormat() {
+function checkIPFormat() {
     ip=$1
     regexp="^([0-9]{1,3}.){3}[0-9]{1,3}\/[0-9]{1,2}$"
     if [[ $ip =~ $regexp ]]; then
-        LogToFile
+        logToFile
         echo "Master IP input: ${ip}"
-        ResetLog
+        resetLog
     else
         echo "Error: IP format error."
         exit 1
     fi
 }
 
-function ChangeIP() {
-    LogToFile
+function changeIP() {
+    logToFile
     ip addr
     nmcli -t conn show
-    ResetLog
+    resetLog
     echo -n "Master DNS IP (e.g. 10.1.23.100/16): "
     read masterip
-    CheckIPFormat $masterip
+    checkIPFormat $masterip
     uuid=$(nmcli -t conn show|awk -F: '{print $2}')
     nmcli conn mod $uuid ipv4.addresses $masterip
     nmcli networking off; nmcli networking on
@@ -46,7 +46,7 @@ function ChangeIP() {
     echo ""
 }
 
-function ConvertToMaster() {
+function convertToMaster() {
     systemctl stop named
     mv /var/named/data /var/named/data.$D
     mv /etc/named.conf /etc/named.conf.$D
@@ -58,7 +58,7 @@ function ConvertToMaster() {
     echo "Success: named started."
 }
 
-function ConvertToStandby() {
+function convertToStandby() {
     systemctl stop named
     mv /var/named/data /var/named/data.$D
     mv /etc/named.conf /etc/named.conf.$D
@@ -70,7 +70,7 @@ function ConvertToStandby() {
     echo "Success: named started."
 }
 
-function CheckTTY() {
+function checkTTY() {
     t=$(ps -q $$ | awk '{print $2}' | tail -1)
     if [[ $t =~ "pts" ]]; then
         echo "Error: it is not console."
@@ -79,7 +79,7 @@ function CheckTTY() {
 }
 
 function main() {
-    CheckTTY
+    checkTTY
     trap "rm -rf /tmp/ctmxxx.lock; exit 1" SIGINT SIGKILL SIGTERM
 
     exec 200>/tmp/ctmxxx.lock
@@ -95,10 +95,10 @@ function main() {
     read c
     case $c in
             1)
-                ChangeIP
+                changeIP
                 ;;
             2)
-                ConvertToMaster
+                convertToMaster
                 ;;
             q)
                 exit 1
