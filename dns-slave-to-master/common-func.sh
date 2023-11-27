@@ -42,3 +42,11 @@ function changeIP {
     echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     echo ""
 }
+
+function checkTTY {
+    t=$(ps -q $$ | awk '{print $2}' | tail -1)
+    if [[ $t =~ "pts" ]]; then
+        echo "Error: it is not console."
+        exit 1
+    fi
+}
