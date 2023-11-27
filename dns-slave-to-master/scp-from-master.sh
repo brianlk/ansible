@@ -22,16 +22,14 @@ function checkIPFormat() {
 }
 
 function addCron() {
-    echo $@
-    cronitem="*/30 * * * * $@"
-    # rootcron="/var/spool/cron/root"
-    # grep $0 $rootcron
-    # if [[ $? -ne 0 ]]; then
-    #     echo "$cronitem" >> $rootcron
-    #     systemctl restart crond
-    # fi
-    echo "$cronitem"
-    exit
+    cronitem='*/30 * * * * '$@' >>/tmp/scpfm.log 2>&1'
+    rootcron="/var/spool/cron/root"
+    grep $0 $rootcron
+    # if no cron job is found, add it
+    if [[ $? -ne 0 ]]; then
+        echo "$cronitem" >> $rootcron
+        systemctl restart crond
+    fi
 }
 
 function main() {
