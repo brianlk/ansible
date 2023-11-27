@@ -11,13 +11,18 @@ function Lock {
     flock -n 200 || { echo "Error: anthoer $0 is running."; exit 1; }
 }
 
-function checkIPFormat {
+function check {
     ip=$1
     regexp="^([0-9]{1,3}.){3}[0-9]{1,3}$"
     if [[ $ip =~ $regexp ]]; then
         echo "Master IP input: ${ip}"
     else
         echo "Error: IP format error."
+        exit 1
+    fi
+    rpm -qa | grep bind-9
+    if [[ $? -ne 0 ]]; then
+        echo "Error: no bind-9 installed."
         exit 1
     fi
 }
