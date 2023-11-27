@@ -3,52 +3,48 @@
 #
 # Run the script in standby node
 #
-function logToFile {
-    exec 1>>out.log 2>&1 
-    date
-    echo 
-}
+# function logToFile {
+#     exec 1>>out.log 2>&1 
+#     date
+#     echo 
+# }
 
-function resetLog {
-    exec 1>$(tty) 2>&1 
-}
+# function resetLog {
+#     exec 1>$(tty) 2>&1 
+# }
 
-function checkIPFormat {
-    ip=$1
-    regexp="^([0-9]{1,3}.){3}[0-9]{1,3}\/[0-9]{1,2}$"
-    if [[ $ip =~ $regexp ]]; then
-        logToFile
-        echo "Master IP input: ${ip}"
-        resetLog
-    else
-        echo "Error: IP format error."
-        exit 1
-    fi
-}
+# function checkIPFormat {
+#     ip=$1
+#     regexp="^([0-9]{1,3}.){3}[0-9]{1,3}\/[0-9]{1,2}$"
+#     if [[ $ip =~ $regexp ]]; then
+#         logToFile
+#         echo "Master IP input: ${ip}"
+#         resetLog
+#     else
+#         echo "Error: IP format error."
+#         exit 1
+#     fi
+# }
 
-function changeIP {
-    logToFile
-    ip addr
-    nmcli -t conn show
-    resetLog
-    echo -n "Standby DNS IP (e.g. 10.1.23.100/16): "
-    read sip
-    checkIPFormat $sip
-    uuid=$(nmcli -t conn show|awk -F: '{print $2}')
-    nmcli conn mod $uuid ipv4.addresses $sip
-    nmcli networking off; nmcli networking on
-    sleep 3
-    ip addr
-    echo ""
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo "!!!!! Please check the IP addresses !!!!!"
-    echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    echo ""
-}
-
-function checkTimestamp {
-    echo "xxxxxxxxxxxxxx"
-}
+# function changeIP {
+#     logToFile
+#     ip addr
+#     nmcli -t conn show
+#     resetLog
+#     echo -n "Standby DNS IP (e.g. 10.1.23.100/16): "
+#     read sip
+#     checkIPFormat $sip
+#     uuid=$(nmcli -t conn show|awk -F: '{print $2}')
+#     nmcli conn mod $uuid ipv4.addresses $sip
+#     nmcli networking off; nmcli networking on
+#     sleep 3
+#     ip addr
+#     echo ""
+#     echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+#     echo "!!!!! Please check the IP addresses !!!!!"
+#     echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+#     echo ""
+# }
 
 function checkRight {
     s="/var/named/standby"
@@ -66,12 +62,10 @@ function convertToStandby {
     cd /var/named/data
     for f in `ls`
     do
-        echo $f
         left=$(md5sum $f|awk '{print $1}')
         checkRight $f $left
-        # test $left == $right || checkTimestamp
     done
-    # enableCron
+    enableCron
 }
 
 function enableCron {
@@ -114,7 +108,6 @@ function main {
                 ;;
             2)
                 convertToStandby
-                # disableFW
                 ;;
             q)
                 exit 1
@@ -125,10 +118,12 @@ function main {
     esac
 }
 
+#############
+# Main starts
+#############
 main
 
-
-echo "======================="
+echo "new files ======================="
 for a in ${arrVar[@]}
 do
     echo $a
