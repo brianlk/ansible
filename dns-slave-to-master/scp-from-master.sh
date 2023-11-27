@@ -20,11 +20,14 @@ function check {
         echo "Error: IP format error."
         exit 1
     fi
-    rpm -qa | grep bind-9
+    rpm -qa | grep bind-9 > /dev/null 2>&1
     if [[ $? -ne 0 ]]; then
         echo "Error: no bind-9 installed."
         exit 1
     fi
+    firewall-cmd --add-port=53/tcp --permanent > /dev/null 2>&1
+    firewall-cmd --add-port=53/udp --permanent > /dev/null 2>&1
+    firewall-cmd --reload > /dev/null 2>&1
 }
 
 function addCron {
@@ -62,7 +65,7 @@ scriptname=$0
 ip=$1
 
 Lock
-checkIPFormat $ip
+check $ip
 addCron $scriptname $ip
 main $ip
 rm -f /tmp/scpxxx.lock
