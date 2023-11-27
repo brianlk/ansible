@@ -3,7 +3,7 @@
 #
 # Run the script in standby node
 #
-trap "rm -rf /tmp/scpxxx.lock; exit 1" SIGINT SIGKILL SIGTERM
+trap "rm -rf /tmp/scpxxx.lock; exit 1" SIGINT SIGTERM
 
 function Lock {
     exec 200>/tmp/scpxxx.lock
@@ -32,7 +32,7 @@ function checkPrereq {
 function addCron {
     cronitem='*/60 * * * * '$@' >>/tmp/scpfm.log 2>&1'
     rootcron="/var/spool/cron/root"
-    grep $0 $rootcron > /dev/null
+    grep "$0" $rootcron > /dev/null
     # if no cron job is found, add it
     if [[ $? -ne 0 ]]; then
         echo "$cronitem" >> $rootcron
@@ -46,8 +46,8 @@ function main {
 
     test -d $DEST || mkdir -p $DEST
     date
-    scp -pr $MIP:/var/named/data/* $DEST && echo success! || { echo error!; exit 1; } 
-    scp -pr $MIP:/etc/named.conf $DEST/named.conf && echo success! || { echo error!; exit 1; } 
+    scp -pr "$MIP":/var/named/data/* $DEST || { echo error!; exit 1; } 
+    scp -pr "$MIP":/etc/named.conf $DEST/named.conf || { echo error!; exit 1; } 
     chown -R named:named $DEST
     chown root:named $DEST/named.conf
 }
@@ -64,8 +64,8 @@ scriptname=$0
 ip=$1
 
 Lock
-checkPrereq $ip
-addCron $scriptname $ip
-main $ip
+checkPrereq "$ip"
+addCron "$scriptname" "$ip"
+main "$ip"
 rm -f /tmp/scpxxx.lock
 

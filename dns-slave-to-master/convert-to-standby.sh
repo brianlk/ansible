@@ -45,7 +45,7 @@ function main {
     flock -n 200 || { echo "Error: anthoer $0 is running."; exit 1; }
 
     clear
-    D=$(date +"%Y%m%d-%H%M%S")
+
     printf "\t\t\tMenu\n\n"
     printf "\t\t\t1) Change current IP to standby IP\n\n"
     printf "\t\t\t2) Convert master to standby\n\n"
