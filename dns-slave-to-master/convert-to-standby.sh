@@ -63,7 +63,7 @@ function convertToStandby {
     systemctl stop named
     cd /var/named
     diff -q data standby
-    enableCron
+    # enableCron
 }
 
 function enableCron {
@@ -104,7 +104,7 @@ function main {
                 changeIP
                 ;;
             2)
-                convertTostandby
+                convertToStandby
                 # disableFW
                 ;;
             q)
