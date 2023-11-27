@@ -10,11 +10,18 @@ function Lock() {
     flock -n 200 || { echo "Error: anthoer $0 is running."; exit 1; }
 }
 
+function checkIPFormat() {
+    ip=$1
+    regexp="^([0-9]{1,3}.){3}[0-9]{1,3}\/[0-9]{1,2}$"
+    if [[ $ip =~ $regexp ]]; then
+        echo "Master IP input: ${ip}"
+    else
+        echo "Error: IP format error."
+        exit 1
+    fi
+}
+
 function main() {
-
-    #exec 1>>/tmp/scp-from-master.log
-    #exec 2>&1
-
     DEST="/var/named/standby"
     MIP=$1
 
@@ -26,14 +33,14 @@ function main() {
     chown root:named $DEST/named.conf
 }
 
+## Main start
+
 if [ $# -ne 1 ]; then
     echo "ERROR: No master ip is provided."
+    echo "Usage: scp-from-master.sh x.x.x.x"
     exit 1
 fi
-Lock
 
-while true
-do
-    main $1
-    sleep 60
-done
+Lock
+checkIPFormat $1
+main $1
