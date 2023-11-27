@@ -46,28 +46,24 @@ function changeIP {
     echo ""
 }
 
-# function convertToMaster {
-#     systemctl stop named
-#     mv /var/named/data /var/named/data.$D
-#     mv /etc/named.conf /etc/named.conf.$D
-#     cd /var/named
-#     cp -pr standby data
-#     cp -pr /var/named/standby/named.conf /etc/named.conf
-#     systemctl restart named
-#     [[ $? -eq 0 ]] || { echo "Error: named start failed."; exit 1; }
-#     echo "Success: named started."
-#     chmod -x /etc/rc.local
-# }
+function checkTimestamp {
+    echo "xxxxxxxxxxxxxx"
+}
+
+function checkRight {
+    echo $1
+}
 
 function convertToStandby {
     systemctl stop named
     s="/var/named/standby"
+    # Compare files before copy to original master
     cd /var/named/data
     for f in `ls`
     do
-        left=$(md5sum $x|awk '{print $1}')
-        right=$(md5sum $s/$x|awk '{print $1}')
-        test $left == $right
+        left=$(md5sum $f|awk '{print $1}')
+        right=`checkRight "$s/$f"`
+        # test $left == $right || checkTimestamp
     done
     # enableCron
 }
@@ -91,7 +87,7 @@ function checkTTY {
 }
 
 function main {
-    # checkTTY
+    checkTTY
     trap "rm -rf /tmp/ctmxxx.lock; exit 1" SIGINT SIGKILL SIGTERM
 
     exec 200>/tmp/ctmxxx.lock
