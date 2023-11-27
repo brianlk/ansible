@@ -22,14 +22,13 @@ function checkIPFormat() {
 }
 
 function addCron() {
-    cronitem="$0 $@"
+    cronitem="*/30 * * * * $0 $@"
     rootcron="/var/spool/cron/root"
-    echo grep $cronitem $rootcron
-    exit 1
-    # if [[ $? -ne 0 ]]; then
-    #     echo $cronitem >> $rootcron
-    #     systemctl restart crond
-    # fi
+    grep \'$cronitem\' $rootcron
+    if [[ $? -ne 0 ]]; then
+        echo \'$cronitem\' >> $rootcron
+        systemctl restart crond
+    fi
 }
 
 function main() {
