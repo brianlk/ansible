@@ -61,9 +61,14 @@ function changeIP {
 
 function convertToStandby {
     systemctl stop named
-    cd /var/named
-    md5sum data/* | sort -k2 > /var/tmp/data.txt
-    md5sum standby/* | sort -k2 > /var/tmp/standby.txt
+    s="/var/named/standby"
+    cd /var/named/data
+    for f in `ls`
+    do
+        left=$(md5sum $x|awk '{print $1}')
+        right=$(md5sum $s/$x|awk '{print $1}')
+        test $left == $right
+    done
     # enableCron
 }
 
