@@ -69,6 +69,12 @@ function disableCron {
     sed -i '/scp-from-master\.sh/s/^/#/' /var/spool/cron/root
     systemctl restart crond
 }
+
+function disableFW {
+    firewall-cmd --add-port=53/tcp --permanent
+    firewall-cmd --add-port=53/udp --permanent
+    firewall-cmd --reload
+}
  
 function checkTTY {
     t=$(ps -q $$ | awk '{print $2}' | tail -1)
@@ -100,6 +106,7 @@ function main {
                 ;;
             2)
                 convertToMaster
+                disableFW
                 ;;
             q)
                 exit 1
