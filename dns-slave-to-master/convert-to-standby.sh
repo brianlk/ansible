@@ -51,7 +51,12 @@ function checkTimestamp {
 }
 
 function checkRight {
-    echo $1
+    s="/var/named/standby"
+    # if file is not in standby, it is a new file
+    test -e $s/$1 || { arrVar+=($1); return; }
+
+    rmd5=$(md5sum $s/$1|awk '{print $1}')
+    test $rmd5 == $2 || arrVar+=($1)
 }
 
 function convertToStandby {
@@ -61,8 +66,9 @@ function convertToStandby {
     cd /var/named/data
     for f in `ls`
     do
+        echo $f
         left=$(md5sum $f|awk '{print $1}')
-        right=`checkRight "$s/$f"`
+        checkRight $f $left
         # test $left == $right || checkTimestamp
     done
     # enableCron
@@ -87,6 +93,7 @@ function checkTTY {
 }
 
 function main {
+    arrVar=()
     checkTTY
     trap "rm -rf /tmp/ctmxxx.lock; exit 1" SIGINT SIGKILL SIGTERM
 
@@ -119,3 +126,10 @@ function main {
 }
 
 main
+
+
+echo "======================="
+for a in ${arrVar[@]}
+do
+    echo $a
+done
