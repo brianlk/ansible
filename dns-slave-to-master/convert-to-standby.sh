@@ -7,21 +7,21 @@
 function checkRight {
     s="/var/named/standby"
     # if file is not in standby, it is a new file
-    test -e $s/$1 || { arrVar+=($1); return; }
+    test -e "$s/$1" || { arrVar+=("$1"); return; }
 
-    rmd5=$(md5sum $s/$1|awk '{print $1}')
-    test $rmd5 == $2 || arrVar+=($1)
+    rmd5=$(md5sum "$s/$1"|awk '{print $1}')
+    test "$rmd5" == "$2" || arrVar+=("$1")
 }
 
 function convertToStandby {
     systemctl stop named
     s="/var/named/standby"
     # Compare files before copy to original master
-    cd /var/named/data
-    for f in `ls`
+    cd /var/named/data || { echo "Error: /var/named errors."; exit; }
+    for f in *
     do
-        left=$(md5sum $f|awk '{print $1}')
-        checkRight $f $left
+        left=$(md5sum "$f"|awk '{print $1}')
+        checkRight "$f" "$left"
     done
     enableCron
 }
@@ -39,7 +39,7 @@ function disableFW {
 function main {
     arrVar=()
     checkTTY
-    trap "rm -rf /tmp/ctmxxx.lock; exit 1" SIGINT SIGKILL SIGTERM
+    trap "rm -rf /tmp/ctmxxx.lock; exit 1" SIGINT SIGTERM
 
     exec 200>/tmp/ctmxxx.lock
     flock -n 200 || { echo "Error: anthoer $0 is running."; exit 1; }
@@ -75,7 +75,7 @@ source ./common-func.sh
 main
 
 echo "new files ======================="
-for a in ${arrVar[@]}
+for a in "${arrVar[@]}"
 do
-    echo $a
+    echo "$a"
 done

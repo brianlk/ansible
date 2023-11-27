@@ -7,9 +7,9 @@
 function convertToMaster {
     disableCron
     systemctl stop named
-    mv /var/named/data /var/named/data.$D
-    mv /etc/named.conf /etc/named.conf.$D
-    cd /var/named
+    mv /var/named/data "/var/named/data.$D"
+    mv /etc/named.conf "/etc/named.conf.$D"
+    cd /var/named || { echo "Error: /var/named errors."; exit; }
     cp -pr standby data
     cp -pr /var/named/standby/named.conf /etc/named.conf
     systemctl restart named
@@ -20,7 +20,7 @@ function convertToMaster {
 
 function convertToStandby {
     systemctl stop named
-    cd /var/named
+    cd /var/named || { echo "Error: /var/named errors."; exit; }
     diff -q data standby
 }
 
@@ -36,7 +36,7 @@ function disableFW {
  
 function main {
     checkTTY
-    trap "rm -rf /tmp/ctmxxx.lock; exit 1" SIGINT SIGKILL SIGTERM
+    trap "rm -rf /tmp/ctmxxx.lock; exit 1" SIGINT SIGTERM
 
     exec 200>/tmp/ctmxxx.lock
     flock -n 200 || { echo "Error: anthoer $0 is running."; exit 1; }
