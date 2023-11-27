@@ -21,6 +21,17 @@ function checkIPFormat() {
     fi
 }
 
+function addCron() {
+    cronitem="$0 $@"
+    rootcron="/var/spool/cron/root"
+    echo grep $cronitem $rootcron
+    exit 1
+    # if [[ $? -ne 0 ]]; then
+    #     echo $cronitem >> $rootcron
+    #     systemctl restart crond
+    # fi
+}
+
 function main() {
     DEST="/var/named/standby"
     MIP=$1
@@ -43,4 +54,5 @@ fi
 
 Lock
 checkIPFormat $1
+addCron $1
 main $1
