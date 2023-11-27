@@ -22,13 +22,16 @@ function checkIPFormat() {
 }
 
 function addCron() {
-    cronitem="*/30 * * * * $0 $@"
-    rootcron="/var/spool/cron/root"
-    grep \'$cronitem\' $rootcron
-    if [[ $? -ne 0 ]]; then
-        echo \'$cronitem\' >> $rootcron
-        systemctl restart crond
-    fi
+    echo $@
+    cronitem="*/30 * * * * $@"
+    # rootcron="/var/spool/cron/root"
+    # grep $0 $rootcron
+    # if [[ $? -ne 0 ]]; then
+    #     echo "$cronitem" >> $rootcron
+    #     systemctl restart crond
+    # fi
+    echo "$cronitem"
+    exit
 }
 
 function main() {
@@ -51,7 +54,10 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
+scriptname=$0
+ip=$1
+
 Lock
-checkIPFormat $1
-addCron $1
-main $1
+checkIPFormat $ip
+addCron $scriptname $ip
+main $ip
