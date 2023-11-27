@@ -12,7 +12,7 @@ function Lock() {
 
 function checkIPFormat() {
     ip=$1
-    regexp="^([0-9]{1,3}.){3}[0-9]{1,3}\/[0-9]{1,2}$"
+    regexp="^([0-9]{1,3}.){3}[0-9]{1,3}$"
     if [[ $ip =~ $regexp ]]; then
         echo "Master IP input: ${ip}"
     else
@@ -27,8 +27,8 @@ function main() {
 
     test -d $DEST || mkdir -p $DEST
     date
-    scp -pr $MIP:/var/named/data/* $DEST && echo success!
-    scp -pr $MIP:/etc/named.conf $DEST/named.conf && echo success!
+    scp -pr $MIP:/var/named/data/* $DEST && echo success! || { echo error!; exit 1; } 
+    scp -pr $MIP:/etc/named.conf $DEST/named.conf && echo success! || { echo error!; exit 1; } 
     chown -R named:named $DEST
     chown root:named $DEST/named.conf
 }
