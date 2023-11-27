@@ -85,7 +85,7 @@ function checkTTY {
 }
 
 function main {
-    checkTTY
+    # checkTTY
     trap "rm -rf /tmp/ctmxxx.lock; exit 1" SIGINT SIGKILL SIGTERM
 
     exec 200>/tmp/ctmxxx.lock
