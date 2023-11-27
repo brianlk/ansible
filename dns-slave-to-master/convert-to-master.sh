@@ -47,6 +47,7 @@ function changeIP {
 }
 
 function convertToMaster {
+    disableCron
     systemctl stop named
     mv /var/named/data /var/named/data.$D
     mv /etc/named.conf /etc/named.conf.$D
@@ -89,7 +90,6 @@ function main {
 
     exec 200>/tmp/ctmxxx.lock
     flock -n 200 || { echo "Error: anthoer $0 is running."; exit 1; }
-    disableCron
 
     clear
     D=$(date +"%Y%m%d-%H%M%S")

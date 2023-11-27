@@ -31,11 +31,11 @@ function changeIP {
     ip addr
     nmcli -t conn show
     resetLog
-    echo -n "Master DNS IP (e.g. 10.1.23.100/16): "
-    read masterip
-    checkIPFormat $masterip
+    echo -n "Standby DNS IP (e.g. 10.1.23.100/16): "
+    read sip
+    checkIPFormat $sip
     uuid=$(nmcli -t conn show|awk -F: '{print $2}')
-    nmcli conn mod $uuid ipv4.addresses $masterip
+    nmcli conn mod $uuid ipv4.addresses $sip
     nmcli networking off; nmcli networking on
     sleep 3
     ip addr
@@ -46,27 +46,28 @@ function changeIP {
     echo ""
 }
 
-function convertToMaster {
-    systemctl stop named
-    mv /var/named/data /var/named/data.$D
-    mv /etc/named.conf /etc/named.conf.$D
-    cd /var/named
-    cp -pr standby data
-    cp -pr /var/named/standby/named.conf /etc/named.conf
-    systemctl restart named
-    [[ $? -eq 0 ]] || { echo "Error: named start failed."; exit 1; }
-    echo "Success: named started."
-    chmod -x /etc/rc.local
-}
+# function convertToMaster {
+#     systemctl stop named
+#     mv /var/named/data /var/named/data.$D
+#     mv /etc/named.conf /etc/named.conf.$D
+#     cd /var/named
+#     cp -pr standby data
+#     cp -pr /var/named/standby/named.conf /etc/named.conf
+#     systemctl restart named
+#     [[ $? -eq 0 ]] || { echo "Error: named start failed."; exit 1; }
+#     echo "Success: named started."
+#     chmod -x /etc/rc.local
+# }
 
 function convertToStandby {
     systemctl stop named
     cd /var/named
     diff -q data standby
+    enableCron
 }
 
-function disableCron {
-    sed -i '/scp-from-master\.sh/s/^/#/' /var/spool/cron/root
+function enableCron {
+    sed -i '/scp-from-master\.sh/s/^#//' /var/spool/cron/root
     systemctl restart crond
 }
 
@@ -89,13 +90,12 @@ function main {
 
     exec 200>/tmp/ctmxxx.lock
     flock -n 200 || { echo "Error: anthoer $0 is running."; exit 1; }
-    disableCron
 
     clear
     D=$(date +"%Y%m%d-%H%M%S")
     printf "\t\t\tMenu\n\n"
-    printf "\t\t\t1) Change current IP to master IP\n\n"
-    printf "\t\t\t2) Convert standby to master\n\n"
+    printf "\t\t\t1) Change current IP to standby IP\n\n"
+    printf "\t\t\t2) Convert master to standby\n\n"
     printf "\t\t\tq) Exit\n\n"
     echo -n "Choice? "
     read c
@@ -104,8 +104,8 @@ function main {
                 changeIP
                 ;;
             2)
-                convertToMaster
-                disableFW
+                convertTostandby
+                # disableFW
                 ;;
             q)
                 exit 1
