@@ -7,6 +7,7 @@ trap "rm -rf /tmp/scpxxx.lock; exit 1" SIGINT SIGKILL SIGTERM
 
 function Lock() {
     exec 200>/tmp/scpxxx.lock
+    echo $$ > /tmp/scpxxx.lock
     flock -n 200 || { echo "Error: anthoer $0 is running."; exit 1; }
 }
 
@@ -22,9 +23,9 @@ function checkIPFormat() {
 }
 
 function addCron() {
-    cronitem='*/30 * * * * '$@' >>/tmp/scpfm.log 2>&1'
+    cronitem='*/60 * * * * '$@' >>/tmp/scpfm.log 2>&1'
     rootcron="/var/spool/cron/root"
-    grep $0 $rootcron
+    grep $0 $rootcron > /dev/null
     # if no cron job is found, add it
     if [[ $? -ne 0 ]]; then
         echo "$cronitem" >> $rootcron
@@ -59,3 +60,5 @@ Lock
 checkIPFormat $ip
 addCron $scriptname $ip
 main $ip
+rm -f /tmp/scpxxx.lock
+
