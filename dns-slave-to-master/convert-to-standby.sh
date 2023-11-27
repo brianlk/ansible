@@ -62,7 +62,8 @@ function changeIP {
 function convertToStandby {
     systemctl stop named
     cd /var/named
-    diff -q data standby
+    md5sum data/* | sort -k2 > /var/tmp/data.txt
+    md5sum standby/* | sort -k2 > /var/tmp/standby.txt
     # enableCron
 }
 
