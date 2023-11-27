@@ -2,13 +2,11 @@
 
 ## Appoach 1
 On standby host,
-1. start background job
-    
-    chmod +x /etc/rc.local
-    
-    cd /root
-    
-    nohup ./scp-from-master.sh 10.1.23.4 > /tmp/xxx.log 2>&1 &
+1. start the job and add cronjob
+   
+   /root/scp-from-master.sh 10.1.23.4  >>/tmp/scpfm.log 2>&1
+
+    crontab -l
 
 
 1. Login as root in VM console

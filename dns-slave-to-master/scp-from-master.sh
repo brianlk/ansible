@@ -5,13 +5,13 @@
 #
 trap "rm -rf /tmp/scpxxx.lock; exit 1" SIGINT SIGKILL SIGTERM
 
-function Lock() {
+function Lock {
     exec 200>/tmp/scpxxx.lock
     echo $$ > /tmp/scpxxx.lock
     flock -n 200 || { echo "Error: anthoer $0 is running."; exit 1; }
 }
 
-function checkIPFormat() {
+function checkIPFormat {
     ip=$1
     regexp="^([0-9]{1,3}.){3}[0-9]{1,3}$"
     if [[ $ip =~ $regexp ]]; then
@@ -22,7 +22,7 @@ function checkIPFormat() {
     fi
 }
 
-function addCron() {
+function addCron {
     cronitem='*/60 * * * * '$@' >>/tmp/scpfm.log 2>&1'
     rootcron="/var/spool/cron/root"
     grep $0 $rootcron > /dev/null
@@ -33,7 +33,7 @@ function addCron() {
     fi
 }
 
-function main() {
+function main {
     DEST="/var/named/standby"
     MIP=$1
 

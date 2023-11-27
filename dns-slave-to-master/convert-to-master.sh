@@ -3,17 +3,17 @@
 #
 # Run the script in standby node
 #
-function logToFile() {
+function logToFile {
     exec 1>>out.log 2>&1 
     date
     echo 
 }
 
-function resetLog() {
+function resetLog {
     exec 1>$(tty) 2>&1 
 }
 
-function checkIPFormat() {
+function checkIPFormat {
     ip=$1
     regexp="^([0-9]{1,3}.){3}[0-9]{1,3}\/[0-9]{1,2}$"
     if [[ $ip =~ $regexp ]]; then
@@ -26,7 +26,7 @@ function checkIPFormat() {
     fi
 }
 
-function changeIP() {
+function changeIP {
     logToFile
     ip addr
     nmcli -t conn show
@@ -46,7 +46,7 @@ function changeIP() {
     echo ""
 }
 
-function convertToMaster() {
+function convertToMaster {
     systemctl stop named
     mv /var/named/data /var/named/data.$D
     mv /etc/named.conf /etc/named.conf.$D
@@ -59,13 +59,18 @@ function convertToMaster() {
     chmod -x /etc/rc.local
 }
 
-function convertToStandby() {
+function convertToStandby {
     systemctl stop named
     cd /var/named
     diff -q data standby
 }
 
-function checkTTY() {
+function disableCron {
+    sed -i '/scp-from-master\.sh/s/^/#/' /var/spool/cron/root
+    systemctl restart crond
+}
+ 
+function checkTTY {
     t=$(ps -q $$ | awk '{print $2}' | tail -1)
     if [[ $t =~ "pts" ]]; then
         echo "Error: it is not console."
@@ -73,12 +78,13 @@ function checkTTY() {
     fi
 }
 
-function main() {
+function main {
     checkTTY
     trap "rm -rf /tmp/ctmxxx.lock; exit 1" SIGINT SIGKILL SIGTERM
 
     exec 200>/tmp/ctmxxx.lock
     flock -n 200 || { echo "Error: anthoer $0 is running."; exit 1; }
+    disableCron
 
     clear
     D=$(date +"%Y%m%d-%H%M%S")
