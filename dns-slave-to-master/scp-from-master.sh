@@ -11,7 +11,7 @@ function Lock {
     flock -n 200 || { echo "Error: anthoer $0 is running."; exit 1; }
 }
 
-function check {
+function checkPrereq {
     ip=$1
     regexp="^([0-9]{1,3}.){3}[0-9]{1,3}$"
     if [[ $ip =~ $regexp ]]; then
@@ -25,8 +25,7 @@ function check {
         echo "Error: no bind-9 installed."
         exit 1
     fi
-    firewall-cmd --add-port=53/tcp --permanent > /dev/null 2>&1
-    firewall-cmd --add-port=53/udp --permanent > /dev/null 2>&1
+    firewall-cmd --add-port=53/tcp --add-port=53/udp --permanent >/dev/null 2>&1
     firewall-cmd --reload > /dev/null 2>&1
 }
 
@@ -65,7 +64,7 @@ scriptname=$0
 ip=$1
 
 Lock
-check $ip
+checkPrereq $ip
 addCron $scriptname $ip
 main $ip
 rm -f /tmp/scpxxx.lock
