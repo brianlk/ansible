@@ -42,6 +42,7 @@ function convertToStandby {
         compareNamedFiles "$f" "$left"
     done
     scpToOrigMaster "$(cat /var/tmp/scpxxx.lock)"
+    ssh "$(cat /var/tmp/scpxxx.lock)"  "systemctl restart named"
     enableCron
 }
 
