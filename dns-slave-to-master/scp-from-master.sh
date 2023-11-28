@@ -30,14 +30,15 @@ function checkPrereq {
 }
 
 function addCron {
-    cronitem='*/60 * * * * '$@' >>/tmp/scpfm.log 2>&1'
-    rootcron="/var/spool/cron/root"
-    grep "$0" $rootcron > /dev/null
-    # if no cron job is found, add it
-    if [[ $? -ne 0 ]]; then
-        echo "$cronitem" >> $rootcron
-        systemctl restart crond
-    fi
+    cronitem='*/60 * * * * '"$*"' >>/tmp/scpfm.log 2>&1'
+    echo "$cronitem"
+    # rootcron="/var/spool/cron/root"
+    # grep "$0" $rootcron > /dev/null
+    # # if no cron job is found, add it
+    # if [[ $? -ne 0 ]]; then
+    #     echo "$cronitem" >> $rootcron
+    #     systemctl restart crond
+    # fi
 }
 
 function main {

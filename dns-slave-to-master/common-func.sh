@@ -29,7 +29,7 @@ function changeIP {
     nmcli -t conn show
     resetLog
     echo -n "Master DNS IP (e.g. 10.1.23.100/16): "
-    read masterip
+    read -r masterip
     checkIPFormat "$masterip"
     uuid=$(nmcli -t conn show|awk -F: '{print $2}')
     nmcli conn mod "$uuid" ipv4.addresses "$masterip"
