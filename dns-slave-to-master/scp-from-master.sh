@@ -63,10 +63,10 @@ fi
 
 scriptname=$0
 ip=$1
-
+echo "$ip" > /tmp/scpxxx.lock
 Lock
 checkPrereq "$ip"
 addCron "$scriptname" "$ip"
 main "$ip"
-rm -f /tmp/scpxxx.lock
+
 

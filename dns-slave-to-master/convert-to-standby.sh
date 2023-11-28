@@ -17,7 +17,7 @@ function scpToOrigMaster {
     done
 }
 
-function checkRight {
+function compareNamedFiles {
     filename=$1
     leftMD5=$2
     s="/var/named/standby"
@@ -39,7 +39,7 @@ function convertToStandby {
     for f in * "/etc/named.conf"
     do
         left=$(md5sum "$f"|awk '{print $1}')
-        checkRight "$f" "$left"
+        compareNamedFiles "$f" "$left"
     done
     echo -n "master ip:"
     read -r masterip
