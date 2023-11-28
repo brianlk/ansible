@@ -6,10 +6,9 @@
 
 function checkRight {
     filename=$1
+    s="/var/named/standby"
     if [[ $filename == "/etc/named.conf" ]]; then
-        s="/var/named/standby"
-    else
-        s=""
+        filename=$(sed -e 's/^\/[a-z]*\///')
     fi
     # if file is not in standby, it is a new file
     test -e "$s/$filename" || { arrVar+=("$filename"); return; }
