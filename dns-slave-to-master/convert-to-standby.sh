@@ -5,12 +5,17 @@
 #
 
 function checkRight {
-    s="/var/named/standby"
+    filename=$1
+    if [[ $filename == "/etc/named.conf" ]]; then
+        s="/var/named/standby"
+    else
+        s=""
+    fi
     # if file is not in standby, it is a new file
-    test -e "$s/$1" || { arrVar+=("$1"); return; }
+    test -e "$s/$filename" || { arrVar+=("$filename"); return; }
 
-    rmd5=$(md5sum "$s/$1"|awk '{print $1}')
-    test "$rmd5" == "$2" || arrVar+=("$1")
+    rmd5=$(md5sum "$s/$filename"|awk '{print $1}')
+    test "$rmd5" == "$2" || arrVar+=("$filename")
 }
 
 function convertToStandby {
@@ -18,7 +23,7 @@ function convertToStandby {
     s="/var/named/standby"
     # Compare files before copy to original master
     cd /var/named/data || { echo "Error: /var/named errors."; exit; }
-    for f in *
+    for f in * "/etc/named.conf"
     do
         left=$(md5sum "$f"|awk '{print $1}')
         checkRight "$f" "$left"
