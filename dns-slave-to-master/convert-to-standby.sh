@@ -43,7 +43,6 @@ function convertToStandby {
     done
     echo -n "master ip:"
     read -r masterip
-    checkIPFormat "$masterip"
     scpToOrigMaster "$masterip"
     enableCron
 }
