@@ -6,7 +6,7 @@
 
 function scpToOrigMaster {
     ip=$1
-    echo "new files ======================="
+    echo "New files in standby are copied to master"
     for a in "${arrVar[@]}"
     do
         if [[ $a == "named.conf" ]]; then
