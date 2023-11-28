@@ -5,13 +5,14 @@
 #
 
 function scpToOrigMaster {
+    ip=$1
     echo "new files ======================="
     for a in "${arrVar[@]}"
     do
         if [[ $a == "named.conf" ]]; then
-            echo "scp /etc/named.conf 10.1.23.4:/etc/named.conf"
+            scp /etc/named.conf "$ip:/etc/named.conf"
         else
-            echo "scp $a 10.1.23.4:/var/named/data/$a"
+            scp "$a" "$ip:/var/named/data/$a"
         fi
     done
 }
@@ -40,7 +41,10 @@ function convertToStandby {
         left=$(md5sum "$f"|awk '{print $1}')
         checkRight "$f" "$left"
     done
-    scpToOrigMaster
+    echo -n "master ip:"
+    read -r masterip
+    checkIPFormat "$masterip"
+    scpToOrigMaster "$masterip"
     enableCron
 }
 
