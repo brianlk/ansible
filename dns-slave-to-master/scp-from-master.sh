@@ -7,7 +7,7 @@ trap "rm -rf /tmp/scpxxx.lock; exit 1" SIGINT SIGTERM
 
 function Lock {
     exec 200>/tmp/scpxxx.lock
-    echo $$ > /tmp/scpxxx.lock
+    echo "$1" >/tmp/scpxxx.lock
     flock -n 200 || { echo "Error: anthoer $0 is running."; exit 1; }
 }
 
@@ -37,7 +37,7 @@ function addCron {
     # if no cron job is found, add it
     if [[ $? -ne 0 ]]; then
         echo "$cronitem" >> $rootcron
-        systemctl restart crond
+        systemctl restart crond && echo "Cron job is added."
     fi
 }
 
@@ -63,8 +63,7 @@ fi
 
 scriptname=$0
 ip=$1
-echo "$ip" > /tmp/scpxxx.lock
-Lock
+Lock "$ip"
 checkPrereq "$ip"
 addCron "$scriptname" "$ip"
 main "$ip"

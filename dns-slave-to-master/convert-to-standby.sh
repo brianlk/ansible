@@ -41,9 +41,7 @@ function convertToStandby {
         left=$(md5sum "$f"|awk '{print $1}')
         compareNamedFiles "$f" "$left"
     done
-    echo -n "master ip:"
-    read -r masterip
-    scpToOrigMaster "$masterip"
+    scpToOrigMaster "$(cat /tmp/scpxxx.lock)"
     enableCron
 }
 
