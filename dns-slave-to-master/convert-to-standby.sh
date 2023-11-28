@@ -31,11 +31,6 @@ function enableCron {
     systemctl restart crond
 }
 
-function disableFW {
-    firewall-cmd --add-port=53/tcp --add-port=53/udp --permanent
-    firewall-cmd --reload
-}
- 
 function main {
     arrVar=()
     checkTTY
