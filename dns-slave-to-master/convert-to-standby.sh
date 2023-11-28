@@ -4,17 +4,30 @@
 # Run the script in standby node
 #
 
+function scpToOrigMaster {
+    echo "new files ======================="
+    for a in "${arrVar[@]}"
+    do
+        if [[ $a == "named.conf" ]]; then
+            echo "scp /etc/named.conf 10.1.23.4:/etc/named.conf"
+        else
+            echo "scp $a 10.1.23.4:/var/named/data/$a"
+        fi
+    done
+}
+
 function checkRight {
     filename=$1
+    leftMD5=$2
     s="/var/named/standby"
     if [[ $filename == "/etc/named.conf" ]]; then
-        filename=$(sed -e 's/^\/[a-z]*\///')
+        filename=$(echo "$filename"|sed -e 's/^\/[a-z]*\///')
     fi
     # if file is not in standby, it is a new file
     test -e "$s/$filename" || { arrVar+=("$filename"); return; }
 
-    rmd5=$(md5sum "$s/$filename"|awk '{print $1}')
-    test "$rmd5" == "$2" || arrVar+=("$filename")
+    rightMD5=$(md5sum "$s/$filename"|awk '{print $1}')
+    test "$rightMD5" == "$leftMD5" || arrVar+=("$filename")
 }
 
 function convertToStandby {
@@ -27,6 +40,7 @@ function convertToStandby {
         left=$(md5sum "$f"|awk '{print $1}')
         checkRight "$f" "$left"
     done
+    scpToOrigMaster
     enableCron
 }
 
@@ -73,8 +87,3 @@ function main {
 source ./common-func.sh
 main
 
-echo "new files ======================="
-for a in "${arrVar[@]}"
-do
-    echo "$a"
-done
