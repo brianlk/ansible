@@ -41,6 +41,7 @@ function changeIP {
     echo "!!!!! Please check the IP addresses !!!!!"
     echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
     echo ""
+    echo "master:$masterip" | sed -e 's/\/[0-9]{2}$//' > /var/tmp/"$0.txt"
 }
 
 function checkTTY {

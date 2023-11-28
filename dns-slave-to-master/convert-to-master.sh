@@ -54,7 +54,6 @@ function main {
             1)
                 changeIP
                 convertToMaster
-                echo "master:$masterip" > "/var/tmp/$0.txt"
                 disableFW
                 ;;
             q)
