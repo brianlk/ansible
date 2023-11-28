@@ -41,7 +41,7 @@ function convertToStandby {
         left=$(md5sum "$f"|awk '{print $1}')
         compareNamedFiles "$f" "$left"
     done
-    scpToOrigMaster "$(cat /tmp/scpxxx.lock)"
+    scpToOrigMaster "$(cat /var/tmp/scpxxx.lock)"
     enableCron
 }
 

@@ -3,11 +3,11 @@
 #
 # Run the script in standby node
 #
-trap "rm -rf /tmp/scpxxx.lock; exit 1" SIGINT SIGTERM
+trap "rm -rf /var/tmp/scpxxx.lock; exit 1" SIGINT SIGTERM
 
 function Lock {
-    exec 200>/tmp/scpxxx.lock
-    echo "$1" >/tmp/scpxxx.lock
+    exec 200>/var/tmp/scpxxx.lock
+    echo "$1" >/var/tmp/scpxxx.lock
     flock -n 200 || { echo "Error: anthoer $0 is running."; exit 1; }
 }
 
