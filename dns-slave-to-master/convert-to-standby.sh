@@ -41,8 +41,8 @@ function convertToStandby {
         left=$(md5sum "$f"|awk '{print $1}')
         compareNamedFiles "$f" "$left"
     done
-    scpToOrigMaster "$(cut -d: -f 2 /var/tmp/convert-to-master.txt)"
-    ssh "$(cut -d: -f 2 /var/tmp/convert-to-master.txt)"  "systemctl restart named"
+    scpToOrigMaster "$(cut -d: -f 2 /var/tmp/master-dns.txt)"
+    ssh "$(cut -d: -f 2 /var/tmp/master-dns.txt)"  "systemctl restart named"
     enableCron
 }
 
@@ -62,18 +62,19 @@ function main {
     clear
 
     printf "\t\t\tMenu\n\n"
-    printf "\t\t\t1) Change current IP to standby IP\n\n"
-    printf "\t\t\t2) Convert master to standby\n\n"
+    # printf "\t\t\t1) Change current IP to standby IP\n\n"
+    printf "\t\t\t1) Convert master to standby\n\n"
     printf "\t\t\tq) Exit\n\n"
     echo -n "Choice? "
     read c
     case $c in
             1)
                 changeIP
-                ;;
-            2)
                 convertToStandby
                 ;;
+            # 2)
+            #     convertToStandby
+            #     ;;
             q)
                 exit 1
                 ;;

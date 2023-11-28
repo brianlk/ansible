@@ -46,7 +46,7 @@ function main {
     printf "\t\t\t1) Convert standby to master\n\n"
     printf "\t\t\tq) Exit\n\n"
     echo -n "Choice? "
-    read c
+    read -r c
     case $c in
             # 1)
             #     changeIP
