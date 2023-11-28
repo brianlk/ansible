@@ -14,7 +14,6 @@ function convertToMaster {
     cp -pr /var/named/standby/named.conf /etc/named.conf
     systemctl restart named || { echo "Error: named start failed."; exit 1; }
     echo "Success: named started."
-    chmod -x /etc/rc.local
 }
 
 function convertToStandby {
