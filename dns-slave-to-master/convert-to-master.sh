@@ -12,8 +12,7 @@ function convertToMaster {
     cd /var/named || { echo "Error: /var/named errors."; exit; }
     cp -pr standby data
     cp -pr /var/named/standby/named.conf /etc/named.conf
-    systemctl restart named
-    [[ $? -eq 0 ]] || { echo "Error: named start failed."; exit 1; }
+    systemctl restart named || { echo "Error: named start failed."; exit 1; }
     echo "Success: named started."
     chmod -x /etc/rc.local
 }
