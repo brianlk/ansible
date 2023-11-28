@@ -32,13 +32,13 @@ function checkPrereq {
 function addCron {
     cronitem='*/60 * * * * '"$*"' >>/tmp/scpfm.log 2>&1'
     echo "$cronitem"
-    # rootcron="/var/spool/cron/root"
-    # grep "$0" $rootcron > /dev/null
-    # # if no cron job is found, add it
-    # if [[ $? -ne 0 ]]; then
-    #     echo "$cronitem" >> $rootcron
-    #     systemctl restart crond
-    # fi
+    rootcron="/var/spool/cron/root"
+    grep "$0" $rootcron > /dev/null
+    # if no cron job is found, add it
+    if [[ $? -ne 0 ]]; then
+        echo "$cronitem" >> $rootcron
+        systemctl restart crond
+    fi
 }
 
 function main {
@@ -47,8 +47,8 @@ function main {
 
     test -d $DEST || mkdir -p $DEST
     date
-    scp -pr "$MIP":/var/named/data/* $DEST || { echo error!; exit 1; } 
-    scp -pr "$MIP":/etc/named.conf $DEST/named.conf || { echo error!; exit 1; } 
+    scp -pr "$MIP":/var/named/data/* $DEST &&  echo success!  
+    scp -pr "$MIP":/etc/named.conf $DEST/named.conf && echo success! 
     chown -R named:named $DEST
     chown root:named $DEST/named.conf
 }
