@@ -64,7 +64,6 @@ scriptname=$0
 ip=$1
 Lock
 checkPrereq "$ip"
-echo "$ip" > /var/tmp/"$scriptname".txt
 addCron "$scriptname" "$ip"
 main "$ip"
 flock -u 200

@@ -42,17 +42,19 @@ function main {
     clear
     D=$(date +"%Y%m%d-%H%M%S")
     printf "\t\t\tMenu\n\n"
-    printf "\t\t\t1) Change current IP to master IP\n\n"
-    printf "\t\t\t2) Convert standby to master\n\n"
+    # printf "\t\t\t1) Change current IP to master IP\n\n"
+    printf "\t\t\t1) Convert standby to master\n\n"
     printf "\t\t\tq) Exit\n\n"
     echo -n "Choice? "
     read c
     case $c in
+            # 1)
+            #     changeIP
+            #     ;;
             1)
                 changeIP
-                ;;
-            2)
                 convertToMaster
+                echo "master:$masterip" > "/var/tmp/$0.txt"
                 disableFW
                 ;;
             q)
