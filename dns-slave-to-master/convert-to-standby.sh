@@ -41,8 +41,8 @@ function convertToStandby {
         left=$(md5sum "$f"|awk '{print $1}')
         compareNamedFiles "$f" "$left"
     done
-    scpToOrigMaster "$(cat /var/tmp/scpxxx.lock)"
-    ssh "$(cat /var/tmp/scpxxx.lock)"  "systemctl restart named"
+    scpToOrigMaster "$(cat /var/tmp/scp-from-master.txt)"
+    ssh "$(cat /var/tmp/scp-from-master.txt)"  "systemctl restart named"
     enableCron
 }
 
