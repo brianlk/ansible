@@ -1,6 +1,0 @@
----
-- hosts: localhost
-  tasks:
-    - name: print xxx
-      debug:
-        msg: "{{ ansible_architecture }}"

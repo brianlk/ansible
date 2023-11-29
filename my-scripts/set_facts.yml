@@ -1,9 +1,0 @@
----
-- hosts: localhost
-  tasks:
-    - name: test set fact
-      set_fact:
-        abc: "123"
-    - name: print value
-      debug:
-        msg: "i am {{ abc }}"

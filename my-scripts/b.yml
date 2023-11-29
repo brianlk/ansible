@@ -1,8 +1,0 @@
----
-- hosts: localhost
-  tasks:
-  - name: write
-    copy:
-      content: "aaaaaaaaaaaaaaaaaaaa"
-      dest: /tmp/xxx.txt
-      force: true

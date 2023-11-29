@@ -1,7 +1,0 @@
----
-- name: run php role
-  hosts: localhost
-  vars_files:
-    - vars/php.yml
-  roles:
-    - ansible-role-php

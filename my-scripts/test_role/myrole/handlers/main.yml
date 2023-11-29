@@ -1,5 +1,0 @@
----
-# handlers file for myrole
-- name: print handler
-  debug:
-    msg: "i start handler"

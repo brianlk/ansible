@@ -1,5 +1,0 @@
----
-- name: restart mysql db
-  raw: |
-    service mysqld restart
-

@@ -1,9 +1,0 @@
----
-- hosts: localhost
-  vars:
-    a: [1,2,3,4]
-  tasks:
-    - name: check array length
-      debug:
-        msg: "{{ (a | length) == 4 }}"
-

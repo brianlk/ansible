@@ -1,5 +1,0 @@
----
-# handlers file for setup-k8s
-- name: reboot vm
-  reboot:
-    reboot_timeout: 600

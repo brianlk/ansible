@@ -1,6 +1,0 @@
----
-- hosts: k8snodes
-  vars:
-  roles:
-    - { role: setup-k8s }
-

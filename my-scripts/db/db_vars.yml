@@ -1,7 +1,0 @@
-db:
-  packages:
-    - mariadb-server
-    - python3-PyMySQL
-  service: mariadb
-  resources_url: http://materials.example.com/labs/control-handlers
-  config_file_dst: /etc/my.cnf 

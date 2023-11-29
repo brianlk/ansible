@@ -1,5 +1,0 @@
----
-- name: list /root
-  command: "ls /root"
-  notify:
-    - print handler

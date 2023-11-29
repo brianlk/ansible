@@ -1,7 +1,0 @@
----
-- hosts: localhost
-  tasks:
-    - name: test
-      copy:
-        src: /etc/motd
-        dest: /tmp
