@@ -7,7 +7,10 @@
 # CMD python3 main.py
 # Failed docker images should be deleted.
 FROM python
-COPY . .
+WORKDIR /app
+COPY main.py .
+COPY tests .
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 CMD python main.py
 
