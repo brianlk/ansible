@@ -61,27 +61,24 @@ function main {
 
     clear
 
-    printf "\t\t\tMenu\n\n"
-    # printf "\t\t\t1) Change current IP to standby IP\n\n"
+    printf "\t\t\tMenu:\n\n"
     printf "\t\t\t1) Convert master to standby\n\n"
     printf "\t\t\tq) Exit\n\n"
     echo -n "Choice? "
     read c
     case $c in
-            1)
-                changeIP
-                convertToStandby
-                ;;
-            # 2)
-            #     convertToStandby
-            #     ;;
-            q)
-                exit 1
-                ;;
-            *)
-                echo "Wrong option!"
-                exit
+        1)
+            changeIP
+            convertToStandby
+            ;;
+        q)
+            exit 1
+            ;;
+        *)
+            echo "Wrong option!"
+            exit
     esac
+    rm -rf /var/tmp/master-dns.txt
 }
 
 #############

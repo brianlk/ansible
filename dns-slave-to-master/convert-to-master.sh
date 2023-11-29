@@ -34,6 +34,7 @@ function disableFW {
  
 function main {
     checkTTY
+    test -e /var/tmp/master-dns.txt || { echo "Error: it is already master DNS."; exit 1; }
     trap "rm -rf /tmp/ctmxxx.lock; exit 1" SIGINT SIGTERM
 
     exec 200>/tmp/ctmxxx.lock
@@ -41,27 +42,23 @@ function main {
 
     clear
     D=$(date +"%Y%m%d-%H%M%S")
-    printf "\t\t\tMenu\n\n"
-    # printf "\t\t\t1) Change current IP to master IP\n\n"
+    printf "\t\t\tMenu:\n\n"
     printf "\t\t\t1) Convert standby to master\n\n"
     printf "\t\t\tq) Exit\n\n"
     echo -n "Choice? "
     read -r c
     case $c in
-            # 1)
-            #     changeIP
-            #     ;;
-            1)
-                changeIP
-                convertToMaster
-                disableFW
-                ;;
-            q)
-                exit 1
-                ;;
-            *)
-                echo "Wrong option!"
-                exit
+        1)
+            changeIP
+            convertToMaster
+            disableFW
+            ;;
+        q)
+            exit 1
+            ;;
+        *)
+            echo "Wrong option!"
+            exit
     esac
 }
 
