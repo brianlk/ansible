@@ -34,7 +34,7 @@ function disableFW {
  
 function main {
     checkTTY
-    test -e /var/tmp/master-dns.txt || { echo "Error: it is already master DNS."; exit 1; }
+    test -e /var/tmp/master-dns.txt && { echo "Error: it is already master DNS."; exit 1; }
     trap "rm -rf /tmp/ctmxxx.lock; exit 1" SIGINT SIGTERM
 
     exec 200>/tmp/ctmxxx.lock
