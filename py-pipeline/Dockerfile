@@ -6,8 +6,11 @@
 # RUN /usr/bin/pip3 install -r requirements.txt
 # CMD python3 main.py
 # Failed docker images should be deleted.
-FROM python
-COPY . .
+FROM python:3.9
+WORKDIR /app
+COPY tests .
+COPY main.py .
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 CMD python main.py
 
