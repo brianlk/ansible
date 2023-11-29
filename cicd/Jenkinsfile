@@ -18,12 +18,14 @@ pipeline {
                 } 
             }            
             steps {
-                sh "ls -lt"
+                sh """
+                ls -lt
+                """
                 sh '''
-                    python -m venv venv
-                    source venv/bin/activate
-                    pip install -r requirements.txt
-                    pytest tests
+                python -m venv venv
+                source venv/bin/activate
+                pip install -r requirements.txt
+                pytest tests
                 '''
                 // cleanWs()
             }
@@ -36,7 +38,7 @@ pipeline {
             }
             steps {
                 sh """
-                    docker build -t xxx .
+                docker build -t xxx .
                 """
                 cleanWs()
             }
