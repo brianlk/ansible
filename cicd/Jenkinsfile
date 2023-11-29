@@ -2,7 +2,7 @@
 pipeline {
     agent none
     stages {
-        stage("Clone sources") {
+        stage("Checkout") {
             agent any
             steps {
                 checkout scm
@@ -28,7 +28,7 @@ pipeline {
                 // cleanWs()
             }
         }
-        stage('Test2') {
+        stage('Deploy') {
             agent {
                 node {
                     label 'docker'

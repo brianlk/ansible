@@ -1,3 +1,3 @@
 # py-pipeline
 
-Run the pipeline in 10.1.4.183
+Run the pipeline in jenkins 10.1.4.183
