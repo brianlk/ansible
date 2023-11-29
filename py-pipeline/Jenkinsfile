@@ -1,46 +1,44 @@
 /* Requires the Docker Pipeline plugin */
 pipeline {
-    agent { 
-        docker { 
-            image 'python:3.12.0-alpine3.18'
-            // label 'docker'
-        } 
-    }
+    agent none
     stages {
         stage("Clone sources") {
+            agent any
             steps {
                 checkout scm
             }
         }
-        stage('Build') {        
+        stage('Build and Test') {
+            agent { 
+                docker { 
+                    image 'python:3.12.0-alpine3.18'
+                    //args '-u root --privileged' */
+                    label 'docker'
+                    //customWorkspace  '/var/tmp/jenkins'
+                } 
+            }            
             steps {
+                sh "ls -lt"
                 sh '''
                     python -m venv venv
                     source venv/bin/activate
                     pip install -r requirements.txt
-                '''
-            }
-        }
-        stage('Test') {      
-            steps {
-                sh '''
-                    source venv/bin/activate
                     pytest tests
                 '''
             }
         }
-        stage('Deploy') {
-            agent {
-                node {
-                    label 'docker'
-                }
-            }
-            steps {
-                sh """
-                    docker build -t yyy .
-                """
-            }
-        }
+        // stage('Test2') {
+        //     agent {
+        //         node {
+        //             label 'docker'
+        //         }
+        //     }
+        //     steps {
+        //         sh """
+        //             docker build -t xxx .
+        //         """
+        //     }
+        // }
 
     }
 }
