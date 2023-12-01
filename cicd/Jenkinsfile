@@ -39,13 +39,8 @@ pipeline {
                 sh """
                 docker build -t xxx .
                 """
-                
+                cleanWs()
             }
-        }
-    }
-    post {
-        always {
-            cleanWs()
         }
     }
 }
