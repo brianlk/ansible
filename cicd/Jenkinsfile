@@ -27,7 +27,6 @@ pipeline {
                 pip install -r requirements.txt
                 pytest tests
                 '''
-                // cleanWs()
             }
         }
         stage('Deploy') {
@@ -40,9 +39,13 @@ pipeline {
                 sh """
                 docker build -t xxx .
                 """
-                cleanWs()
+                
             }
         }
-
+    }
+    post {
+        always {
+            cleanWs()
+        }
     }
 }
