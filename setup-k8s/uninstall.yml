@@ -1,6 +1,12 @@
 ---
 - hosts: all
+  ignore_errors: true
   tasks:
+    - name: service stop
+      service:
+        name: kubelet
+        state: stopped
+
     - name: uninstall k8s packages
       yum:
         name: "{{ item }}"
@@ -10,7 +16,7 @@
         - kubeadm
         - kubelet
 
+    - reboot:
+
     - name: remove files
       command: "rm -rf  /var/lib/etcd /var/lib/kubelet /etc/kubernetes"
-
-    - reboot:

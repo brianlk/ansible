@@ -8,4 +8,4 @@ sys_cfg:
   fstab: "/etc/fstab"
   docker_repo: "https://download.docker.com/linux/centos/docker-ce.repo"
 
-k8s_ver: "1.27.2"
+k8s_ver: "1.26.0"
