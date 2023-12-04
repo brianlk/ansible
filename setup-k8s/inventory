@@ -2,8 +2,8 @@
 10.1.23.130 ansible_node=10.1.23.130 ansible_user=root
 10.1.23.131 ansible_node=10.1.23.131 ansible_user=root
 10.1.23.132 ansible_node=10.1.23.132 ansible_user=root
-10.1.23.134 ansible_node=10.1.23.134 ansible_user=root
-10.1.23.133 ansible_node=10.1.23.133 ansible_user=root
+#10.1.23.134 ansible_node=10.1.23.134 ansible_user=root
+#10.1.23.133 ansible_node=10.1.23.133 ansible_user=root
 
 [first_master]
 10.1.23.130 ansible_node=10.1.23.130 ansible_user=root
