@@ -1,0 +1,16 @@
+---
+- hosts: all
+  tasks:
+    - name: uninstall k8s packages
+      yum:
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - kubectl
+        - kubeadm
+        - kubelet
+
+    - name: remove files
+      command: "rm -rf  /var/lib/etcd /var/lib/kubelet /etc/kubernetes"
+
+    - reboot:
