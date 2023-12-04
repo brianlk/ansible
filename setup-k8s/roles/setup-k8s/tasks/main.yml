@@ -22,7 +22,7 @@
 
 - name: run join command in clients
   # command: "{{ xxxx['content']|b64decode }}"
-  command: "{{ hostvars[{{ groups['first_master'][0] }}]['client_join_cmd'].stdout }}"
+  command: "{{ hostvars[groups['first_master'][0]]['client_join_cmd'].stdout }}"
   when: ansible_hostname is match(".*worker[0-9]")
 
 - name: master generate new certificate key
@@ -32,5 +32,5 @@
   when: ansible_hostname is match(".*master1")
 
 - name: run join command in other masters
-  command: "{{ hostvars[{{ groups['first_master'][0] }}]['client_join_cmd'].stdout }}  --control-plane --certificate-key {{ hostvars[{{ groups['first_master'][0] }}]['cert_key'].stdout }}"
+  command: "{{ hostvars[groups['first_master'][0]]['client_join_cmd'].stdout }}  --control-plane --certificate-key {{ hostvars[groups['first_master'][0]]['cert_key'].stdout }}"
   when: ansible_hostname is match(".*master[2-9]")
