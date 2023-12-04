@@ -7,3 +7,5 @@ sys_cfg:
   k8s_admin_cfg: "/etc/kubernetes/admin.conf"
   fstab: "/etc/fstab"
   docker_repo: "https://download.docker.com/linux/centos/docker-ce.repo"
+
+k8s_ver: "1.25.0"
