@@ -3,4 +3,5 @@
   tasks:
   - name: add repository
     debug:
-      msg: "{{ hostvars[groups['first_master'][0]]['ansible_nodename'] }}"
+      msg: "i am ok {{ inventory_hostname }}"
+    when: inventory_hostname == groups['masters'][0]

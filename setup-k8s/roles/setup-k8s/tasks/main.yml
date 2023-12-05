@@ -18,19 +18,22 @@
 
 - name: kubeadm init the cluster
   include_tasks: init_k8s.yml
-  when: ansible_hostname is match(".*master1")
+  # when: ansible_hostname is match(".*master1")
+  when: inventory_hostname == groups['masters'][0]
 
 - name: run join command in clients
   # command: "{{ xxxx['content']|b64decode }}"
-  command: "{{ hostvars[groups['first_master'][0]]['client_join_cmd'].stdout }}"
-  when: ansible_hostname is match(".*worker[0-9]")
+  command: "{{ hostvars[groups['masters'][0]]['client_join_cmd'].stdout }}"
+  # when: ansible_hostname is match(".*worker[0-9]")
+  when:  inventory_hostname in groups['workers']
 
 - name: master generate new certificate key
   shell: |
      kubeadm init phase upload-certs --upload-certs 2>/dev/null | tail -1
   register: cert_key
-  when: ansible_hostname is match(".*master1")
+  when: inventory_hostname == groups['masters'][0]
 
 - name: run join command in other masters
-  command: "{{ hostvars[groups['first_master'][0]]['client_join_cmd'].stdout }}  --control-plane --certificate-key {{ hostvars[groups['first_master'][0]]['cert_key'].stdout }}"
-  when: ansible_hostname is match(".*master[2-9]")
+  command: "{{ hostvars[groups['masters'][0]]['client_join_cmd'].stdout }}  --control-plane --certificate-key {{ hostvars[groups['masters'][0]]['cert_key'].stdout }}"
+  # when: ansible_hostname is match(".*master[2-9]")
+  when: inventory_hostname == groups['masters'][1-10]
