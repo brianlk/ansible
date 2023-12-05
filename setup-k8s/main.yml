@@ -1,5 +1,5 @@
 ---
-- hosts: k8snodes
+- hosts: nodes
   vars:
   roles:
     - { role: setup-k8s }

@@ -1,7 +1,7 @@
 Installation k8s:
 
 1. edit inventory  
-    [k8snodes]  
+    [nodes]  
     10.1.4.x  ansible_node=10.1.4.x ansible_user=root  
     10.1.4.x  ansible_node=10.1.4.x ansible_user=root  
     10.1.4.x  ansible_node=10.1.4.x ansible_user=root  

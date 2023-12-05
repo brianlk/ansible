@@ -21,7 +21,7 @@
     line: "{{  hostvars[item]['inventory_hostname'] }} {{  hostvars[item]['ansible_nodename'] }}"
     state: present
     backup: yes
-  loop: "{{ groups['k8snodes'] }}"
+  loop: "{{ groups['nodes'] }}"
 
 - name: start kubelet service
   service:

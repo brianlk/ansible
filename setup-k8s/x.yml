@@ -1,5 +1,5 @@
 ---
-- hosts: k8snodes
+- hosts: nodes
   tasks:
   - name: add repository
     debug:
