@@ -3,7 +3,7 @@
     lineinfile:
       path: "{{ sys_cfg.selinux }}"
       regexp: '.*(SELINUX=).*$'
-      line: '\1disabled'
+      line: '\1permissive'
       backrefs: yes
 
   - name: load containerd module
