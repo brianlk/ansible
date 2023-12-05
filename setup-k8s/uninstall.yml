@@ -19,4 +19,4 @@
     - reboot:
 
     - name: remove files
-      command: "rm -rf  /var/lib/etcd /var/lib/kubelet /etc/kubernetes"
+      command: "rm -rf  /var/lib/etcd /var/lib/kubelet /etc/kubernetes /etc/yum.repos.d/k8s.repo"
