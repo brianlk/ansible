@@ -1,12 +1,12 @@
 #---
 ## tasks file for setup-k8s
 #- include_tasks: yum_update.yml
-- fail:
-    msg: "hostname cannot be used in the playbook"
-  any_errors_fatal: true
-  when:
-    - ansible_hostname is not match(".*master[0-9]")
-    - ansible_hostname is not match(".*worker[0-9]")
+# - fail:
+#     msg: "hostname cannot be used in the playbook"
+#   any_errors_fatal: true
+#   when:
+#     - ansible_hostname is not match(".*master[0-9]")
+#     - ansible_hostname is not match(".*worker[0-9]")
 
 - include_tasks: add_config.yml
 
@@ -36,4 +36,4 @@
 - name: run join command in other masters
   command: "{{ hostvars[groups['masters'][0]]['client_join_cmd'].stdout }}  --control-plane --certificate-key {{ hostvars[groups['masters'][0]]['cert_key'].stdout }}"
   # when: ansible_hostname is match(".*master[2-9]")
-  when: inventory_hostname == groups['masters'][1-10]
+  when: inventory_hostname in groups['masters'] and inventory_hostname != groups['masters'][0]

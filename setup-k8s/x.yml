@@ -3,5 +3,5 @@
   tasks:
   - name: add repository
     debug:
-      msg: "i am ok {{ inventory_hostname }}"
-    when: inventory_hostname == groups['masters'][0]
+      msg: "i am ok {{ groups['masters'] }}"
+    when: inventory_hostname in groups['masters'] and inventory_hostname != groups['masters'][0]
