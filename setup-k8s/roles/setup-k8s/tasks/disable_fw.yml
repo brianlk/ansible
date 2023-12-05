@@ -1,9 +1,21 @@
 ---
-- name: disable FW
-  service:
-    name: firewalld
-    state: stopped
-    enabled: false
+# - name: disable FW
+#   service:
+#     name: firewalld
+#     state: stopped
+#     enabled: false
+- name: Open firewall ports
+  command: "firewall-cmd --add-port={{ item.port }}/tcp --permanent"
+  loop:
+    - ["6443", "2379-2380", "10250", "10259", "10257"]
+  when: invertory_hostname in groups['masters']
+
+- name: Open firewall ports
+  command: "firewall-cmd --add-port={{ item.port }}/tcp --permanent"
+  loop:
+    - ["10250", "30000-32767"]
+  when: invertory_hostname in groups['workers']
+
 
 - name: reboot vm
   reboot:
