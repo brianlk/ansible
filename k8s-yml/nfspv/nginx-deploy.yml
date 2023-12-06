@@ -27,6 +27,6 @@ spec:
       volumes:
         - name: pvc1
           persistentVolumeClaim:
-            claimName: pvc1
+            claimName: nfs-pvc1
         
 status: {}

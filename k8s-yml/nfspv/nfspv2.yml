@@ -7,7 +7,7 @@ spec:
   accessModes: 
     - ReadWriteMany
   capacity:
-    storage: 20Gi
+    storage: 10Gi
   nfs:
     path: /lv1
     server: 10.1.4.119
