@@ -9,5 +9,5 @@ spec:
   capacity:
     storage: 20Gi
   nfs:
-    path: /share1
-    server: 10.1.23.254
+    path: /lv1
+    server: 10.1.4.119
