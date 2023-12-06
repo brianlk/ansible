@@ -11,7 +11,7 @@
 
 - name: Open firewall ports
   command: "firewall-cmd --add-port={{ item }}/tcp --permanent"
-  loop: ["10250", "30000-32767"]
+  loop: ["10250", "30000-65535"]
   when: inventory_hostname in groups['workers']
 
 - command: "firewall-cmd --reload"
