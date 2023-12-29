@@ -1,0 +1,3 @@
+mock
+tox
+vcrpy==3.0.0
