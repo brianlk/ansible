@@ -16,6 +16,7 @@ import json
 
 def main():
     parser = cli.Parser()
+    parser.add_required_arguments(cli.Argument.MOUNT)
     args = parser.get_args()
     csv_uuids = {}
     # Read .csv to get datastores being unmounted
@@ -48,7 +49,9 @@ def main():
     count = 0
     for res in results:
         print(f"{res['host']} unmount datastore {res['name']} {res['uuid']}")
-        res['host'].configManager.storageSystem.UnmountVmfsVolume(vmfsUuid=res['uuid'])
+        if args.mount == 'n':
+            res['host'].configManager.storageSystem.UnmountVmfsVolume(vmfsUuid=res['uuid'])
+        res['host'].configManager.storageSystem.MountVmfsVolume(vmfsUuid=res['uuid'])
         count += 1
 
     print(f"\n{count} datastores are unmounted.")
