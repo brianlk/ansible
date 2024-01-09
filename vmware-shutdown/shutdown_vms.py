@@ -47,7 +47,7 @@ def main():
         for result in as_completed(results):
             if result._result:
                 count += 1
-    print(f"\n\n\n{count} VMs are powered off.")
+    print(f"\n\n{count} VMs are powered off.")
     
 
 if __name__ == '__main__':

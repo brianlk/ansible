@@ -26,6 +26,8 @@ def unregister(vm_name):
 
     if VM.runtime.powerState == "poweredOff":
         VM.UnregisterVM()
+        print(f"{vm_name} is unregistered.")
+        return True
 
 
 def main():
@@ -34,13 +36,13 @@ def main():
         file_content = file.read()
     vms = file_content.split('\n')
 
+    count = 0
     with ThreadPoolExecutor(max_workers=10) as executor:
         processes = [executor.submit(unregister, vm.strip()) for vm in vms if not vm.startswith('#')]
-    count = 0
-    for task in as_completed(processes):
-        if task.done() == True:
-            count += 1
-    print(f"\n\n\nUnregister process completed: {count}")
+        for result in as_completed(processes):
+            if result._result:
+                count += 1
+    print(f"\n\n{count} VMs are unregistered.")
     
 
 if __name__ == '__main__':
