@@ -42,7 +42,7 @@ def main():
         for result in as_completed(processes):
             if result._result:
                 count += 1
-    print(f"\n\n{count} VMs are unregistered.")
+    print(f"\n{count} VMs are unregistered.")
     
 
 if __name__ == '__main__':

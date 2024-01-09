@@ -34,6 +34,7 @@ Output:
     Shutting down: abc2
     abc1 is in poweredOff
     abc2 is in poweredOff
+    
     2 VMs are powered off.
 
 **_Unregister VMs in Vcenter_**
@@ -44,7 +45,6 @@ Output:
 
     abc2 is unregistered.
     abc1 is unregistered.
-
 
     2 VMs are unregistered.
 
