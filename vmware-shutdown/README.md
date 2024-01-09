@@ -28,6 +28,18 @@ Add the vm names into file vm_list
 
 ./shutdown_vms.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl
 
+Output:
+
+>Shutting down: abc1
+
+>Shutting down: abc2
+
+>abc1 is in poweredOff
+
+>abc2 is in poweredOff
+
+>2 VMs are powered off.
+
 **_Unregister VMs in Vcenter_**
 
 ./unregister_vms.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl

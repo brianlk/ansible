@@ -33,7 +33,7 @@ def shut_down(vm_name, ans = 'n'):
             print(f"Shutting down: {vm_name}")
             time.sleep(5)
     print(f"{vm_name} is in {VM.runtime.powerState}")
-    return "abcd"
+    return True
     
 
 def main():
@@ -41,11 +41,13 @@ def main():
     with open("vm_list", "r") as file:
         file_content = file.read()
     vms = file_content.split('\n')
-
+    count = 0
     with ThreadPoolExecutor(max_workers=10) as executor:
         results = [executor.submit(shut_down, vm.strip()) for vm in vms if not vm.startswith('#')]
         for result in as_completed(results):
-            print(dir(result))
+            if result._result:
+                count += 1
+    print(f"\n\n\n{count} VMs are powered off.")
     
 
 if __name__ == '__main__':
