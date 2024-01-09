@@ -66,6 +66,7 @@ def main():
     content = si.RetrieveContent()
     esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
     folder = si.RetrieveContent().searchIndex.FindByInventoryPath("/")
+    print(type(folder))
     task = folder.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", 
                                    name="abc1", asTemplate=False, pool=largest_rp, host=esx_host)
 
