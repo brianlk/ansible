@@ -1,4 +1,4 @@
-# vmware-shutdown
+# VMware DR scripts
 
 ## Requirements:
 
@@ -13,6 +13,8 @@ pip install pyvmomi
 **_Activate python virtual env_**
 
 source ~/venv/bin/activate
+
+## DR steps
 
 **_List all VMs_**
 
