@@ -48,13 +48,18 @@ def main():
     # Unmount the datastores
     count = 0
     for res in results:
-        print(f"{res['host']} unmount datastore {res['name']} {res['uuid']}")
+        
         if args.mount == 'n':
             res['host'].configManager.storageSystem.UnmountVmfsVolume(vmfsUuid=res['uuid'])
-        res['host'].configManager.storageSystem.MountVmfsVolume(vmfsUuid=res['uuid'])
+            state = "unmounted"
+        else:
+            res['host'].configManager.storageSystem.MountVmfsVolume(vmfsUuid=res['uuid'])
+            state = "mounted"
+        print(f"{res['host']} {state} datastore {res['name']} {res['uuid']}")
+
         count += 1
 
-    print(f"\n{count} datastores are unmounted.")
+    print(f"\n{count} datastores are {state}.")
 
 if __name__ == '__main__':
     main()

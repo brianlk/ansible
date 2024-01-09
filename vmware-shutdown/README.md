@@ -58,12 +58,12 @@ Add the datastores being umounted
 
 Output:
 
-    'vim.HostSystem:host-10' unmount datastore san-1 65976112-57b5c868-b7b1-005056af88ac
-    'vim.HostSystem:host-16' unmount datastore san-1 65976112-57b5c868-b7b1-005056af88ac
-    'vim.HostSystem:host-10' unmount datastore san-2 65976122-59d3f660-dded-005056af88ac
-    'vim.HostSystem:host-16' unmount datastore san-2 65976122-59d3f660-dded-005056af88ac
-    'vim.HostSystem:host-10' unmount datastore san-3 65976131-80086a28-d939-005056af88ac
-    'vim.HostSystem:host-16' unmount datastore san-3 65976131-80086a28-d939-005056af88ac
+    'vim.HostSystem:host-10' unmounted datastore san-1 65976112-57b5c868-b7b1-005056af88ac
+    'vim.HostSystem:host-16' unmounted datastore san-1 65976112-57b5c868-b7b1-005056af88ac
+    'vim.HostSystem:host-10' unmounted datastore san-2 65976122-59d3f660-dded-005056af88ac
+    'vim.HostSystem:host-16' unmounted datastore san-2 65976122-59d3f660-dded-005056af88ac
+    'vim.HostSystem:host-10' unmounted datastore san-3 65976131-80086a28-d939-005056af88ac
+    'vim.HostSystem:host-16' unmounted datastore san-3 65976131-80086a28-d939-005056af88ac
 
     6 datastores are unmounted.
 
@@ -73,11 +73,11 @@ Output:
 
 Output:
 
-    'vim.HostSystem:host-10' unmount datastore san-1 65976112-57b5c868-b7b1-005056af88ac
-    'vim.HostSystem:host-16' unmount datastore san-1 65976112-57b5c868-b7b1-005056af88ac
-    'vim.HostSystem:host-10' unmount datastore san-2 65976122-59d3f660-dded-005056af88ac
-    'vim.HostSystem:host-16' unmount datastore san-2 65976122-59d3f660-dded-005056af88ac
-    'vim.HostSystem:host-10' unmount datastore san-3 65976131-80086a28-d939-005056af88ac
-    'vim.HostSystem:host-16' unmount datastore san-3 65976131-80086a28-d939-005056af88ac
+    'vim.HostSystem:host-10' mounted datastore san-1 65976112-57b5c868-b7b1-005056af88ac
+    'vim.HostSystem:host-16' mounted datastore san-1 65976112-57b5c868-b7b1-005056af88ac
+    'vim.HostSystem:host-10' mounted datastore san-2 65976122-59d3f660-dded-005056af88ac
+    'vim.HostSystem:host-16' mounted datastore san-2 65976122-59d3f660-dded-005056af88ac
+    'vim.HostSystem:host-10' mounted datastore san-3 65976131-80086a28-d939-005056af88ac
+    'vim.HostSystem:host-16' mounted datastore san-3 65976131-80086a28-d939-005056af88ac
 
-    6 datastores are unmounted.
+    6 datastores are mounted.
