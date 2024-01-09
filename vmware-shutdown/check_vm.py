@@ -43,7 +43,7 @@ def main():
     args = parser.get_args()
     si = service_instance.connect(args)
     content = si.RetrieveContent()
-    esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
+    # esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
     # print(esx_host)
     # rp = pchelper.search_for_obj(content, [vim.ResourcePool], "resgroup-8")
     # folder = content.searchIndex.FindByInventoryPath("/")
@@ -51,27 +51,44 @@ def main():
     #                               name="new vm name", asTemplate=False, pool=rp, host=esx_host)
     # view = pchelper.get_container_view(si, obj_type=[vim.ResourcePool])
     # print(view.type)
-    datacenter = content.rootFolder.childEntity[0]
-    view_manager = content.viewManager
-    container_view = view_manager.CreateContainerView(datacenter, [vim.ResourcePool], True)
-    largest_rp = None
-    unreserved_for_vm = 0
-    try:
-        for resource_pool in container_view.view:
-            if resource_pool.runtime.memory.unreservedForVm > unreserved_for_vm:
-                largest_rp = resource_pool
-                unreserved_for_vm = resource_pool.runtime.memory.unreservedForVm
-    finally:
-        container_view.Destroy()
+    # datacenter = content.rootFolder.childEntity[0]
+    # view_manager = content.viewManager
+    # container_view = view_manager.CreateContainerView(datacenter, [vim.ResourcePool], True)
+    # largest_rp = None
+    # unreserved_for_vm = 0
+    # try:
+    #     for resource_pool in container_view.view:
+    #         if resource_pool.runtime.memory.unreservedForVm > unreserved_for_vm:
+    #             largest_rp = resource_pool
+    #             unreserved_for_vm = resource_pool.runtime.memory.unreservedForVm
+    # finally:
+    #     container_view.Destroy()
     # content = si.RetrieveContent()
     # esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
-    folder = content.searchIndex.FindByInventoryPath("datacenter-2")
+    # folder = content.searchIndex.FindByInventoryPath("datacenter-2")
     # print(type(folder))
-    task = folder.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", 
-                                    name="abc1", asTemplate=False, pool=largest_rp, host=esx_host)
+    # task = folder.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", 
+    #                                 name="abc1", asTemplate=False, pool=largest_rp, host=esx_host)
     # datacenter = si.content.rootFolder.childEntity[0]
     # f = datacenter.vmFolder
     # print(type(f))
+    obj_view = content.viewManager.CreateContainerView(content.rootFolder, [vim.Folder], True)
+    folder_list = obj_view.view
+
+    xxx = None
+    for folder in folder_list:
+        if folder.name == "vm":
+            xxx = folder
+        # print('Checking folder %s' % folder.name)
+        # if folder.name == name:
+        #    print('Found folder %s' % folder.name)
+    esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
+    view_manager = content.viewManager
+    datacenter = content.rootFolder.childEntity[0]
+    container_view = view_manager.CreateContainerView(datacenter, [vim.ResourcePool], True)
+    for resource_pool in container_view.view:
+        largest_rp = resource_pool
+    task = folder.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", name="abc1", asTemplate=False, pool=largest_rp, host=esx_host)
 
 if __name__ == '__main__':
     main()
