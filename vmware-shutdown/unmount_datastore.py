@@ -37,7 +37,7 @@ def main():
             if m.volume.type == "VMFS":
                 uuids.append({'uuid': m.volume.uuid, 'name': m.volume.name, 'host': host})
     
-    result = []
+    results = []
     # Match the csv uuid with Vcenter uuid
     for csv_name, csv_uuid in csv_uuids.items():
         for u in uuids:
@@ -46,9 +46,9 @@ def main():
     
     # Unmount the datastores
     count = 0
-    for x in result:
-        print(f"{x['host']} unmount datastore {x['name']} {x['uuid']}")
-        x['host'].configManager.storageSystem.UnmountVmfsVolume(vmfsUuid=x['uuid'])
+    for res in results:
+        print(f"{res['host']} unmount datastore {res['name']} {res['uuid']}")
+        res['host'].configManager.storageSystem.UnmountVmfsVolume(vmfsUuid=res['uuid'])
         count += 1
 
     print(f"\n{count} datastores are unmounted.")
