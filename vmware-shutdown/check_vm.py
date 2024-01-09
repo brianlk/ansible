@@ -45,13 +45,12 @@ def main():
     content = si.RetrieveContent()
     esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
     print(esx_host)
-    rp = pchelper.search_for_obj(content, [vim.ResourcePool], "")
+    rp = pchelper.search_for_obj(content, [vim.ResourcePool], "resgroup-8")
     folder = content.searchIndex.FindByInventoryPath("/")
     # task = folder.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", 
     #                               name="new vm name", asTemplate=False, pool=rp, host=esx_host)
-    clusters = pchelper.get_all_obj(content, [vim.ResourcePool])
-
-    print(dir(clusters))
+    view = pchelper.get_container_view(si, obj_type=[vim.ResourcePool])
+    print(view.type)
 
 if __name__ == '__main__':
     main()
