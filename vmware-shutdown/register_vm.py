@@ -47,7 +47,9 @@ def main():
     container_view = view_manager.CreateContainerView(datacenter, [vim.ResourcePool], True)
     for resource_pool in container_view.view:
         largest_rp = resource_pool
-    task = folder.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", name="abc1", asTemplate=False, pool=largest_rp, host=esx_host)
+    # task = folder.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", name="abc1", asTemplate=False, pool=largest_rp, host=esx_host)
+    vm = pchelper.get_obj(content, [vim.VirtualMachine], "abc1")
+    print(vm.config)
 
 if __name__ == '__main__':
     main()
