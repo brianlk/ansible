@@ -46,8 +46,9 @@ def main():
     esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
     print(esx_host)
     folder = content.searchIndex.FindByInventoryPath("/")
-    task = folder.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", 
-                                  name="new vm name", asTemplate=False, pool=None, host=esx_host)
+    # task = folder.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", 
+    #                               name="new vm name", asTemplate=False, pool=None, host=esx_host)
+    print(content.rootFolder.childEntity)
 
 
 if __name__ == '__main__':
