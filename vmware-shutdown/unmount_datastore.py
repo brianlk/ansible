@@ -42,7 +42,7 @@ def main():
     for csv_name, csv_uuid in csv_uuids.items():
         for u in uuids:
             if u['uuid'] == csv_uuid and u['name'] == csv_name:
-                result.append(u)
+                results.append(u)
     
     # Unmount the datastores
     count = 0

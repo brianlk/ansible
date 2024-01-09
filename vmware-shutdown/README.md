@@ -34,7 +34,7 @@ Output:
     Shutting down: abc2
     abc1 is in poweredOff
     abc2 is in poweredOff
-    
+
     2 VMs are powered off.
 
 **_Unregister VMs in Vcenter_**
@@ -55,3 +55,14 @@ Add the datastores being umounted
 **_Unmount datastores in Vcenter_**
 
 ./unmount_datastore.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl
+
+Output:
+
+    'vim.HostSystem:host-10' unmount datastore san-1 65976112-57b5c868-b7b1-005056af88ac
+    'vim.HostSystem:host-16' unmount datastore san-1 65976112-57b5c868-b7b1-005056af88ac
+    'vim.HostSystem:host-10' unmount datastore san-2 65976122-59d3f660-dded-005056af88ac
+    'vim.HostSystem:host-16' unmount datastore san-2 65976122-59d3f660-dded-005056af88ac
+    'vim.HostSystem:host-10' unmount datastore san-3 65976131-80086a28-d939-005056af88ac
+    'vim.HostSystem:host-16' unmount datastore san-3 65976131-80086a28-d939-005056af88ac
+
+    6 datastores are unmounted.
