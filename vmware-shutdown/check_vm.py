@@ -65,7 +65,7 @@ def main():
         container_view.Destroy()
     # content = si.RetrieveContent()
     # esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
-    folder = pchelper.get_obj(content, [vim.Folder], "[san-1] abc1")
+    folder = content.searchIndex.FindByInventoryPath("datacenter-2")
     # print(type(folder))
     task = folder.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", 
                                     name="abc1", asTemplate=False, pool=largest_rp, host=esx_host)
