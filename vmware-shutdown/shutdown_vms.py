@@ -23,7 +23,6 @@ def shut_down(vm_name, ans = 'n'):
     if VM is None:
         raise SystemExit("Unable to locate VirtualMachine.")
 
-    count = 0
     while VM.runtime.powerState != "poweredOff":
         try:
             VM.ShutdownGuest()
@@ -34,6 +33,7 @@ def shut_down(vm_name, ans = 'n'):
             print(f"Shutting down: {vm_name}")
             time.sleep(5)
     print(f"{vm_name} is in {VM.runtime.powerState}")
+    return True
     
 
 def main():
@@ -44,9 +44,8 @@ def main():
 
     with ThreadPoolExecutor(max_workers=10) as executor:
         processes = [executor.submit(shut_down, vm.strip()) for vm in vms if not vm.startswith('#')]
-    count = 0
-    for task in as_completed(processes):
-        print(task.done())
+        for task in as_completed(processes):
+            print(task.result())
     
 
 if __name__ == '__main__':
