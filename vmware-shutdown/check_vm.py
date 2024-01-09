@@ -22,7 +22,7 @@ def shut_down(vm_name, ans = 'n'):
     print(esx_host)
     folder = si.content.searchIndex.FindByInventoryPath("Datacenter/vm/Brian/")
     print(dir(folder))
-    task = folder.RegisterVM_Task(path="[V7000F_Temp] VMware-vCenter-Server-Appliance-6.7.0.12000-8832884_OVF10/VMware-vCenter-Server-Appliance-6.7.0.12000-8832884_OVF10.vmx", 
+    task = folder.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", 
                                   name="new vm name", asTemplate=False, pool=None, host=esx_host)
 
 
@@ -30,16 +30,25 @@ def shut_down(vm_name, ans = 'n'):
 
 def main():
     # Read the VM names from hosts file
-    with open("vm_list", "r") as file:
-        file_content = file.read()
-    vms = file_content.split('\n')
+    # with open("vm_list", "r") as file:
+    #     file_content = file.read()
+    # vms = file_content.split('\n')
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
-        processes = [executor.submit(shut_down, vm.strip()) for vm in vms]
-    count = 0
-    for task in as_completed(processes):
-        print(task.done())
-    
+    # with ThreadPoolExecutor(max_workers=10) as executor:
+    #     processes = [executor.submit(shut_down, vm.strip()) for vm in vms]
+    # count = 0
+    # for task in as_completed(processes):
+    #     print(task.done())
+    parser = cli.Parser()
+    args = parser.get_args()
+    si = service_instance.connect(args)
+    content = si.RetrieveContent()
+    esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
+    print(esx_host)
+    folder = content.searchIndex.FindByInventoryPath("/")
+    task = folder.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", 
+                                  name="new vm name", asTemplate=False, pool=None, host=esx_host)
+
 
 if __name__ == '__main__':
     main()
