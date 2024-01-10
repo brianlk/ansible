@@ -35,6 +35,7 @@ def print_vminfo(vm, depth=1):
 
     # if this is a group it will have children. if it does, recurse into them
     # and then return
+    print(vm)
     if hasattr(vm, 'childEntity'):
         if depth > MAX_DEPTH:
             return
@@ -52,7 +53,7 @@ def print_vminfo(vm, depth=1):
     # print(summary.config.name)
 
 
-def get_vms_in_dc():
+def get_vms_in_dc(vm_name=None):
     """
     Simple command-line program for listing the virtual machines on a host.
     """

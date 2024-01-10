@@ -143,7 +143,7 @@ def get_all_obj(content, vim_type, folder=None, recurse=True):
     return obj
 
 
-def get_obj(content, vim_type, name, folder=None, recurse=True):
+def get_obj(content, vim_type, name, folder=None, recurse=True, datacenter_name=None):
     """
     Retrieves the managed object for the name and type specified
     Throws an exception if of not found.
