@@ -12,6 +12,13 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import time
 
+
+def check_dc(content, datacenter_name, uuid):
+    DC = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
+    SI = content.searchIndex.FindByUuid(None, uuid, True)
+
+
+
 def shut_down(vm_name, ans = 'n'):
     parser = cli.Parser()
     parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
@@ -21,9 +28,7 @@ def shut_down(vm_name, ans = 'n'):
     VM = None
     content = si.RetrieveContent()
     VM = pchelper.get_obj(content, [vim.VirtualMachine], vm_name)
-    print("================================================")
-    print(VM.Datastore)
-    exit()
+
     if VM is None:
         raise SystemExit("Unable to locate VirtualMachine.")
 
