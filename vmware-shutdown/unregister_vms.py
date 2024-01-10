@@ -7,23 +7,28 @@
 from tools import cli, service_instance, tasks, pchelper
 from get_all_vm_names import get_vms_in_dc
 from pyVmomi import vim
-
+from datacenter import check_vm_in_dc
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import time
 
 def unregister(vm_name):
     parser = cli.Parser()
+    parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
     args = parser.get_args()
     si = service_instance.connect(args)
-
+    content = si.RetrieveContent()
     VM = None
     content = si.RetrieveContent()
-    VM = pchelper.get_obj(content, [vim.VirtualMachine], vm_name)
+    try:
+        VM = pchelper.get_obj(content, [vim.VirtualMachine], vm_name)
+    except:
+        pass
 
     if VM is None:
-        raise SystemExit("Unable to locate VirtualMachine.")
-
+        return False
+    if not check_vm_in_dc(content, args.datacenter_name, VM.config.uuid):
+        return False
 
     if VM.runtime.powerState == "poweredOff":
         VM.UnregisterVM()

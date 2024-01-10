@@ -1,0 +1,137 @@
+INFO:root:abc1
+INFO:root:srm-va_OVF10
+INFO:root:VCSA6.7
+INFO:root:econfigurator
+INFO:root:observer
+INFO:root:vCLS (1)
+INFO:root:vCLS (2)
+INFO:root:Centos_7.9_Image_Registry
+INFO:root:SUSE_DB_Migration_Test
+INFO:root:Oracle Linux 9.2
+INFO:root:RHEL_9_Clean
+INFO:root:RHEL_9.1_ZABBIX
+INFO:root:RHEL_8.9_Clean
+INFO:root:Temp oracle
+INFO:root:Window_2019_SCCM
+INFO:root:RHEL 9.2 HA Cluster Node 2
+INFO:root:RHEL 9.2 HA Cluster Node 1
+INFO:root:Centos_HA_Cluster_Node_3
+INFO:root:Centos_HA_Cluster_Node_1
+INFO:root:Centos_HA_Cluster_Node_2
+INFO:root:Centos_Ansible_Managed_Node_4
+INFO:root:Centos_Ansible_Managed_Node_2
+INFO:root:Centos_Ansible_Managed_Node_3
+INFO:root:Centos_Ansible_Control_Node
+INFO:root:Centos_Ansible_Managed_Node_1
+INFO:root:RHEL_9_Ansible_Automation_Platform
+INFO:root:RHEL_9_Ansible_Automation_Hub
+INFO:root:Calvin_K8s_master1.k8s.tdd
+INFO:root:Calvin_K8s_worker3.k8s.tdd
+INFO:root:Calvin_K8s_dns.k8s.tdd
+INFO:root:Calvin_K8s_master2.k8s.tdd
+INFO:root:Calvin_K8s_worker1.k8s.tdd
+INFO:root:Calvin_K8s_worker2.k8s.tdd
+INFO:root:Calvin_Openshift_4.2_ldb.os4.td
+INFO:root:Calvin_Openshift_4.12_Master_3
+INFO:root:Calvin_Openshift_4.12_Master_1
+INFO:root:Calvin_Openshift_4.12_Worker_2
+INFO:root:Calvin_Openshift_4.5_installer_Centos7
+INFO:root:Calvin_Openshift_4.12_Master_2
+INFO:root:Calvin_Openshift_4.2_dns.os4.td
+INFO:root:Calvin_Openshift_4.12_Worker_3
+INFO:root:Calvin_Openshift_4.12_Worker_1
+INFO:root:Calvin_Ceph_Node_2
+INFO:root:Calvin_Ceph_Node_3
+INFO:root:Calvin_Ceph_Node_1
+INFO:root:Calvin_Ceph_Admin_Node
+INFO:root:RHEL_8.9_Helpsystem_Insite
+INFO:root:Calvin_Openshift_4.12_Cluster2_Worker_3
+INFO:root:Calvin_Openshift_4.12_Cluster2_Master_2
+INFO:root:Calvin_Openshift_4.12_Cluster2_Master_3
+INFO:root:Calvin_Openshift_4.12_Cluster2_ldb.clu2.td
+INFO:root:Calvin_Openshift_4.12_Cluster2_Worker_2
+INFO:root:Calvin_Openshift_4.12_Cluster2_Worker_1
+INFO:root:Calvin_Openshift_4.12_Cluster2_Master_1
+INFO:root:Calvin_K8s_worker3.k8s.clu2
+INFO:root:Calvin_K8s_worker1.k8s.clu2
+INFO:root:Calvin_K8s_worker2.k8s.clu2
+INFO:root:Calvin_K8s_master2.k8s.clu2
+INFO:root:Calvin_K8s_master1.k8s.clu2
+INFO:root:Veeam backup server
+INFO:root:Clus-A.chrislab.com
+INFO:root:VCSA7.0DR
+INFO:root:VCSA7M
+INFO:root:Chris-Windows2016-3Par
+INFO:root:RHEL7.8_Veeam_Test2
+INFO:root:clus-b.chrislab.com
+INFO:root:Chris-redhat9
+INFO:root:Chris-RHEL
+INFO:root:Chris-CentOS
+INFO:root:Chris-Win2012-AD.Lab
+INFO:root:FlashcopyVM
+INFO:root:Arcserve client
+INFO:root:Blue_CDC_server
+INFO:root:SKLM_for_HKlife_Win08R2a
+INFO:root:econfigurator2
+INFO:root:SKLM_for_HKlife_Win08R2b
+INFO:root:AcronisGW2
+INFO:root:Golden-Gate
+INFO:root:Win2003TKLM (10.1.4.190)
+INFO:root:COE_console
+INFO:root:CTS_BackupExec2016
+INFO:root:rhel_Vsp-4.4.0.GA-142
+INFO:root:SKLM_for_HKlife_Win2KR2II
+INFO:root:DSAJ_Linux
+INFO:root:Blue_CDC_console
+INFO:root:SKLM30
+INFO:root:Win2016SKLM
+INFO:root:New Virtual Machine
+INFO:root:rhcos-latest
+INFO:root:FreeNAS
+INFO:root:DNS_Temp
+INFO:root:Promise_SKLM25
+INFO:root:teamviewer
+INFO:root:SKLM27
+INFO:root:Tiny Linux template
+INFO:root:HPE_SSMC_Appliance-3.6.0.0.269-VC
+INFO:root:AcronisGW
+INFO:root:Alex-Sangfor
+INFO:root:Terence - Ansible BNPP Database
+INFO:root:James - FalconStor Console
+INFO:root:James_njmon_InfluxDB_Grafana
+INFO:root:IBM_v10_vHMC
+INFO:root:James - Rocky Linux 9 AnsibleNode
+INFO:root:James - Rocky Linux 9 AnsibleControl
+INFO:root:James_SGKLM_v411
+INFO:root:James - Ansible Tower Test RHEL 7.4
+INFO:root:James - FalconStor StorSafe VA 10.05
+INFO:root:James - SKLM v2.5
+INFO:root:James_WinSvr2016_SGKLM4.1.0.0
+INFO:root:James - RHEL v9 POWERVC v2.2
+INFO:root:esxi-1
+INFO:root:local-repo
+INFO:root:k8s-s3
+INFO:root:esxi-2
+INFO:root:k8s-s2
+INFO:root:VMware-vCenter-Server-Appliance-6.7.0.12000-8832884_OVF10
+INFO:root:k8s-m1
+INFO:root:RL-8.8-template
+INFO:root:jenkins
+INFO:root:k8s-s1
+INFO:root:ol8u6-carbon-2
+INFO:root:win2016a
+INFO:root:BrianLeung-automation-platform
+INFO:root:BrianLeung-automation-hub
+INFO:root:BrianLeung-ansible-pass-auth
+INFO:root:BrianLeung-ansible-cert-auth
+INFO:root:BrianLeung-ansible-ctrl
+INFO:root:BrianLeung-ansible-node
+INFO:root:oc-worker2
+INFO:root:oc-dns-router
+INFO:root:ol8u6-carbon-1
+INFO:root:oc-master3
+INFO:root:oc-master1
+INFO:root:oc-master2
+INFO:root:oc-worker1
+INFO:root:oc-worker3
+INFO:root:win2016

@@ -19,11 +19,13 @@ from tools import cli, service_instance, pchelper
 from pyVmomi import vim
 
 import inspect
+import logging
 
 MAX_DEPTH = 10
 vmdup = []
 vms = []
 
+logging.basicConfig(filename="log.txt", level=logging.INFO)
 
 def print_vminfo(vm, depth=1):
     """
@@ -46,6 +48,7 @@ def print_vminfo(vm, depth=1):
         vmdup.append(summary.config.name)
     else:
         vms.append(summary.config.name)
+    logging.info(summary.config.name)
     print(summary.config.name)
 
 

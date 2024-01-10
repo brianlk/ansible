@@ -7,21 +7,13 @@
 from tools import cli, service_instance, tasks, pchelper
 from get_all_vm_names import get_vms_in_dc
 from pyVmomi import vim
-
+from datacenter import check_vm_in_dc
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import time
 
 
-def check_vm_in_dc(content, datacenter_name, uuid):
-    DC = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
-    SI = content.searchIndex.FindByUuid(DC, uuid, True)
-    if isinstance(SI, vim.VirtualMachine):
-        return True
-    return False
-
-
-def shut_down(vm_name, ans = 'n'):
+def shut_down(vm_name):
     parser = cli.Parser()
     parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
     args = parser.get_args()
