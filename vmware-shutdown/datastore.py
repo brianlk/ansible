@@ -2,7 +2,7 @@
 #
 # Written by Brian Leung
 #
-# Example script to unmount datastores
+# Example script to unmount/mount datastores
 
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim

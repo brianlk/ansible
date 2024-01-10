@@ -36,7 +36,7 @@ def print_vminfo(vm, depth=1):
             return
         vmlist = vm.childEntity
         for child in vmlist:
-            print(child.guest)
+            print(child.config)
             print("===================================")
             # print_vminfo(child, depth+1)
         return
