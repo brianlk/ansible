@@ -21,6 +21,8 @@ from pyVmomi import vim
 import inspect
 
 MAX_DEPTH = 10
+vmdup = []
+vms = []
 
 
 def print_vminfo(vm, depth=1):
@@ -37,9 +39,13 @@ def print_vminfo(vm, depth=1):
         vmlist = vm.childEntity
         for child in vmlist:
             print_vminfo(child, depth+1)
-        return summary.config.name
+        return
 
     summary = vm.summary
+    if summary.config.name in vms:
+        vmdup.append(summary.config.name)
+    else:
+        vms.append(summary.config.name)
     print(summary.config.name)
 
 
@@ -65,7 +71,9 @@ def get_vms_in_dc():
                 vmlist = vmfolder.childEntity
                 for vm in vmlist:
                     print_vminfo(vm)
-
+    if len(vmdup) > 0:
+        print(f"{vmdup} are duplicated in vcenter. Please remove one of them.")
+        return vmdup
 
 def main():
     get_vms_in_dc()
