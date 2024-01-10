@@ -16,9 +16,9 @@ source ~/venv/bin/activate
 
 ## DR steps
 
-**_List all VMs_**
+**_List all VMs in Vcenter_**
 
-./get_all_vm_names.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl
+./get_all_vm_names.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl --datacenter-name '_datacenter_name_'
 
 **_edit hostlist_**
 
@@ -26,7 +26,7 @@ Add the vm names into file vm_list
 
 **_Shut down VMs in Vcenter_**
 
-./shutdown_vms.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl
+./shutdown_vms.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl --datacenter-name '_datacenter_name_'
 
 Output:
 
