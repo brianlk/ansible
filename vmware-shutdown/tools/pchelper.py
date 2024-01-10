@@ -143,7 +143,7 @@ def get_all_obj(content, vim_type, folder=None, recurse=True):
     return obj
 
 
-def get_obj(content, vim_type, name, folder=None, recurse=True, datacenter_name=None):
+def get_obj(content, vim_type, name, folder=None, recurse=True, datacenter=None):
     """
     Retrieves the managed object for the name and type specified
     Throws an exception if of not found.
@@ -152,6 +152,11 @@ def get_obj(content, vim_type, name, folder=None, recurse=True, datacenter_name=
 
     get_obj(content, [vim.Datastore], "Datastore Name")
     """
+    if datacenter is not None:
+        for child in content.rootFolder.childEntity:
+            print(child)
+            return 
+
     obj = search_for_obj(content, vim_type, name, folder, recurse)
     if not obj:
         raise RuntimeError("Managed Object " + name + " not found.")
