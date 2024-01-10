@@ -18,16 +18,17 @@ def unregister(vm_name):
     args = parser.get_args()
     si = service_instance.connect(args)
     content = si.RetrieveContent()
+    DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
     VM = None
     try:
-        VM = pchelper.get_obj(content, [vim.VirtualMachine], vm_name)
+        VM = pchelper.get_obj(content, [vim.VirtualMachine], vm_name, DATACENTER.vmFolder)
     except:
         pass
 
     if VM is None:
         return False
-    if not check_vm_in_dc(content, args.datacenter_name, VM.config.uuid):
-        return False
+    # if not check_vm_in_dc(content, args.datacenter_name, VM.config.uuid):
+    #     return False
 
     if VM.runtime.powerState == "poweredOff":
         VM.UnregisterVM()

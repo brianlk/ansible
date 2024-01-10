@@ -18,17 +18,18 @@ def shut_down(vm_name):
     parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
     args = parser.get_args()
     si = service_instance.connect(args)
-    VM = None
     content = si.RetrieveContent()
+    DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
+    VM = None
     try:
-        VM = pchelper.get_obj(content, [vim.VirtualMachine], vm_name)
+        VM = pchelper.get_obj(content, [vim.VirtualMachine], vm_name, DATACENTER.vmFolder)
     except:
         pass
 
     if VM is None:
         return False
-    if not check_vm_in_dc(content, args.datacenter_name, VM.config.uuid):
-        return False
+    # if not check_vm_in_dc(content, args.datacenter_name, VM.config.uuid):
+    #     return False
 
     while VM.runtime.powerState != "poweredOff":
         try:
@@ -44,8 +45,8 @@ def shut_down(vm_name):
     
 
 def main():
-    # if len(get_vms_in_dc()) > 0:
-    #     raise Exception("Duplicaed VM name in VCenter.")
+    if len(get_vms_in_dc()) > 0:
+        raise Exception("Duplicaed VM name in VCenter.")
     # Read the VM names from hosts file
     with open("vm_list", "r") as file:
         file_content = file.read()
