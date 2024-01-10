@@ -46,7 +46,7 @@ def print_vminfo(vm, depth=1):
         vmdup.append(summary.config.name)
     else:
         vms.append(summary.config.name)
-    # print(summary.config.name)
+    print(summary.config.name)
 
 
 def get_vms_in_dc():
