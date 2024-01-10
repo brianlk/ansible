@@ -19,7 +19,6 @@ def unregister(vm_name):
     si = service_instance.connect(args)
     content = si.RetrieveContent()
     VM = None
-    content = si.RetrieveContent()
     try:
         VM = pchelper.get_obj(content, [vim.VirtualMachine], vm_name)
     except:
