@@ -48,9 +48,9 @@ def main():
     for resource_pool in container_view.view:
         largest_rp = resource_pool
     # task = folder.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", name="abc1", asTemplate=False, pool=largest_rp, host=esx_host)
-    vm = pchelper.get_obj(content, [vim.VirtualMachine], "abc1")
-    print(vm.config)
-    aaa = pchelper.get_obj(content, [vim.vm.GuestInfo], "abc1")
+    # vm = pchelper.get_obj(content, [vim.VirtualMachine], "abc1")
+    # print(vm.config)
+    # aaa = pchelper.get_obj(content, [vim.vm.GuestInfo], "abc1")
     
 
 if __name__ == '__main__':
