@@ -22,24 +22,21 @@ def check_vm_in_dc(content, datacenter_name, uuid):
 
 
 def shut_down(vm_name, ans = 'n'):
-    print("xxxxxxxxxxx")
     parser = cli.Parser()
     parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
     args = parser.get_args()
     si = service_instance.connect(args)
-    print("xxxxxxxxxxx")
     VM = None
     content = si.RetrieveContent()
     try:
         VM = pchelper.get_obj(content, [vim.VirtualMachine], vm_name)
     except:
-        print("eeeeeeeeee")
-    print("xxxxxxxxxxx")
-    print(VM)
+        pass
+
     if VM is None:
-        raise SystemExit("Unable to locate VirtualMachine.")
+        return False
     if not check_vm_in_dc(content, args.datacenter_name, VM.config.uuid):
-        raise SystemExit("Unable to locate VirtualMachine.")
+        return False
 
     while VM.runtime.powerState != "poweredOff":
         try:
