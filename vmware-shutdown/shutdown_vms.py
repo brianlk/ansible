@@ -40,7 +40,7 @@ def shut_down(vm_name, ans = 'n'):
 
 def main():
     if len(get_vms_in_dc()) > 0:
-        return False
+        raise Exception("Duplicaed VM")
     # Read the VM names from hosts file
     with open("vm_list", "r") as file:
         file_content = file.read()

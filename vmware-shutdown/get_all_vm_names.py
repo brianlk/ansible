@@ -46,7 +46,7 @@ def print_vminfo(vm, depth=1):
         vmdup.append(summary.config.name)
     else:
         vms.append(summary.config.name)
-    print(summary.config.name)
+    # print(summary.config.name)
 
 
 def get_vms_in_dc():
@@ -72,8 +72,8 @@ def get_vms_in_dc():
                 for vm in vmlist:
                     print_vminfo(vm)
     if len(vmdup) > 0:
-        print(f"{vmdup} are duplicated in vcenter. Please remove one of them.")
-        return vmdup
+        print(f"{vmdup} are duplicated in vcenter. Ensure vm name is unique in vcenter.")
+    return vmdup
 
 def main():
     get_vms_in_dc()
