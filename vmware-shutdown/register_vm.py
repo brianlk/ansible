@@ -47,15 +47,15 @@ def main():
     container_view = view_manager.CreateContainerView(datacenter, [vim.ResourcePool], True)
     for resource_pool in container_view.view:
         largest_rp = resource_pool
-    # task = xxx.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", name="abc1", asTemplate=False, pool=largest_rp, host=esx_host)
-    # vm = pchelper.get_obj(content, [vim.VirtualMachine], "abc1")
-    # print(vm.config)
-    # aaa = pchelper.get_obj(content, [vim.vm.GuestInfo], "abc1")
+    # Register vm
+    TASK = xxx.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", name="abc1", asTemplate=False, pool=largest_rp, host=esx_host)
+    tasks.wait_for_tasks(si, [TASK])
+    # Show host of guest OS
     container = content.viewManager.CreateContainerView(
         content.rootFolder, [vim.VirtualMachine], True
     )
     for c in container.view:
-        print(c.summary.runtime)
+        print(c.runtime.host.name)
     
 
 if __name__ == '__main__':
