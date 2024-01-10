@@ -15,8 +15,8 @@ import time
 
 def check_dc(content, datacenter_name, uuid):
     DC = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
-    SI = content.searchIndex.FindByUuid(None, uuid, True)
-
+    SI = content.searchIndex.FindByUuid(DC, uuid, True)
+    print(type(SI))
 
 
 def shut_down(vm_name, ans = 'n'):
@@ -29,6 +29,9 @@ def shut_down(vm_name, ans = 'n'):
     content = si.RetrieveContent()
     VM = pchelper.get_obj(content, [vim.VirtualMachine], vm_name)
 
+    check_dc(content, args.datacenter_name, VM.config.uuid)
+
+    exit()
     if VM is None:
         raise SystemExit("Unable to locate VirtualMachine.")
 
