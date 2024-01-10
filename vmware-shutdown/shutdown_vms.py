@@ -22,25 +22,22 @@ def shut_down(vm_name):
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
     VM = None
     try:
-        VM = pchelper.get_obj(content, [vim.VirtualMachine], vm_name, DATACENTER.vmFolder)
+        VM = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
     except:
         pass
-    print(type(VM))
-    if VM is None:
+    if not VM:
         return False
-    # if not check_vm_in_dc(content, args.datacenter_name, VM.config.uuid):
-    #     return False
-
-    while VM.runtime.powerState != "poweredOff":
-        try:
-            VM.ShutdownGuest()
-        except:
-            TASK = VM.PowerOffVM_Task()
-            tasks.wait_for_tasks(si, [TASK])
-        finally:
-            print(f"Shutting down: {vm_name}")
-            time.sleep(5)
-    print(f"{vm_name} is in {VM.runtime.powerState}")
+    for key, value in VM.items():
+        while key.runtime.powerState != "poweredOff" and value == vm_name:
+            try:
+                key.ShutdownGuest()
+            except:
+                TASK = key.PowerOffVM_Task()
+                tasks.wait_for_tasks(si, [TASK])
+            finally:
+                print(f"Shutting down: {vm_name}")
+                time.sleep(5)
+        print(f"{vm_name} is in {key.runtime.powerState}")
     return True
     
 
