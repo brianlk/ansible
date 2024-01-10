@@ -5,6 +5,7 @@
 # Example script to shut down VMs
 
 from tools import cli, service_instance, tasks, pchelper
+from get_all_vm_names import get_vms_in_dc
 from pyVmomi import vim
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -13,6 +14,7 @@ import time
 
 def shut_down(vm_name, ans = 'n'):
     parser = cli.Parser()
+    parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
     args = parser.get_args()
     si = service_instance.connect(args)
 
@@ -37,6 +39,7 @@ def shut_down(vm_name, ans = 'n'):
     
 
 def main():
+    get_vms_in_dc()
     # Read the VM names from hosts file
     with open("vm_list", "r") as file:
         file_content = file.read()

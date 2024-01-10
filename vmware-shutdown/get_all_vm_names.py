@@ -37,13 +37,13 @@ def print_vminfo(vm, depth=1):
         vmlist = vm.childEntity
         for child in vmlist:
             print_vminfo(child, depth+1)
-        return
+        return summary.config.name
 
     summary = vm.summary
     print(summary.config.name)
 
 
-def main():
+def get_vms_in_dc():
     """
     Simple command-line program for listing the virtual machines on a host.
     """
@@ -66,6 +66,9 @@ def main():
                 for vm in vmlist:
                     print_vminfo(vm)
 
+
+def main():
+    get_vms_in_dc()
 
 # Start program
 if __name__ == "__main__":
