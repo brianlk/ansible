@@ -28,18 +28,14 @@ def unregister(vm_name):
         VM.UnregisterVM()
         print(f"{vm_name} is unregistered.")
         return True
-    
+
 
 def main():
     # Read the VM names from hosts file
     with open("vm_list", "r") as file:
         file_content = file.read()
     vms = file_content.split('\n')
-    for vm in vms:
-        if not vm.startswith('#'):
-            print(vm)
 
-    exit()
     count = 0
     with ThreadPoolExecutor(max_workers=10) as executor:
         processes = [executor.submit(unregister, vm.strip()) for vm in vms if not vm.startswith('#')]
