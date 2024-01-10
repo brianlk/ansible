@@ -15,7 +15,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-from tools import cli, service_instance
+from tools import cli, service_instance, pchelper
+from pyVmomi import vim
 
 import inspect
 
@@ -31,7 +32,6 @@ def print_vminfo(vm, depth=1):
     # if this is a group it will have children. if it does, recurse into them
     # and then return
     if hasattr(vm, 'childEntity'):
-        print(vm.parent)
         # print(dir(vm))
         if depth > MAX_DEPTH:
             return
@@ -50,11 +50,17 @@ def main():
     """
 
     parser = cli.Parser()
+    parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
     args = parser.get_args()
+    
     si = service_instance.connect(args)
 
     content = si.RetrieveContent()
+    DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
+
     for child in content.rootFolder.childEntity:
+        if child != DATACENTER:
+            next
         if hasattr(child, 'vmFolder'):
             datacenter = child
             vmfolder = datacenter.vmFolder
