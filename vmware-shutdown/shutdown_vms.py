@@ -21,7 +21,9 @@ def shut_down(vm_name, ans = 'n'):
     VM = None
     content = si.RetrieveContent()
     VM = pchelper.get_obj(content, [vim.VirtualMachine], vm_name)
-
+    print("================================================")
+    print(VM.Datastore)
+    exit()
     if VM is None:
         raise SystemExit("Unable to locate VirtualMachine.")
 
