@@ -25,7 +25,7 @@ def shut_down(vm_name):
         VM = pchelper.get_obj(content, [vim.VirtualMachine], vm_name, DATACENTER.vmFolder)
     except:
         pass
-
+    print(type(VM))
     if VM is None:
         return False
     # if not check_vm_in_dc(content, args.datacenter_name, VM.config.uuid):
@@ -45,8 +45,8 @@ def shut_down(vm_name):
     
 
 def main():
-    if len(get_vms_in_dc()) > 0:
-        raise Exception("Duplicaed VM name in VCenter.")
+    # if len(get_vms_in_dc()) > 0:
+    #     raise Exception("Duplicaed VM name in VCenter.")
     # Read the VM names from hosts file
     with open("vm_list", "r") as file:
         file_content = file.read()
