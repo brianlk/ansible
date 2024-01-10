@@ -35,6 +35,8 @@ def print_vminfo(vm, depth=1):
 
     # if this is a group it will have children. if it does, recurse into them
     # and then return
+    if isinstance(vm, vim.VirtualMachine):
+        print("zaaaaaaaaaaaaaaaa")
     if hasattr(vm, 'childEntity'):
         if depth > MAX_DEPTH:
             return
