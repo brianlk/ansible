@@ -25,7 +25,7 @@ MAX_DEPTH = 10
 vmdup = []
 vms = []
 
-logging.basicConfig(filename="log.txt", level=logging.INFO)
+logging.basicConfig(filename="log.txt", level=logging.INFO, format="%(message)s", filemode='w',)
 
 def print_vminfo(vm, depth=1):
     """
@@ -49,7 +49,7 @@ def print_vminfo(vm, depth=1):
     else:
         vms.append(summary.config.name)
     logging.info(summary.config.name)
-    print(summary.config.name)
+    # print(summary.config.name)
 
 
 def get_vms_in_dc():
