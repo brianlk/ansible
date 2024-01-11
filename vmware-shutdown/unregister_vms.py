@@ -31,6 +31,7 @@ def unregister(vm_name):
             # key.UnregisterVM()
             print(f"{vm_name} is unregistered.")
             return True
+    return False
 
 
 def main():
