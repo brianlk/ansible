@@ -54,10 +54,11 @@ def main():
         if isinstance(folder.childEntity, list):
             for v in folder.childEntity:
                 if isinstance(v, vim.VirtualMachine):
-                    print(v.config)
-                    exit()
+                    print(folder, v.name)
 
-    # esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
+    esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
+    for obj in esx_host.vm:
+        print(obj.config.uuid)
     # view_manager = content.viewManager
     # datacenter = content.rootFolder.childEntity[0]
     # container_view = view_manager.CreateContainerView(datacenter, [vim.ResourcePool], True)
