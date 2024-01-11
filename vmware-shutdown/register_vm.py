@@ -28,15 +28,15 @@ import time
 
 
 def recurring_loop(item):
-    if isinstance(item.childEntity, vim.Folder):
+    if isinstance(item, vim.Folder):
         recurring_loop(item.childEntity)
 
-    # for item in item.childEntity:
-    #     print("================")
-    #     print(item.config)
-
-
-
+    if isinstance(item, list):
+        for i in item:
+            if isinstance(i, vim.VirtualMachine):
+                print(i)
+                return i
+            recurring_loop(i.childEntity)
 
 
 def main():
@@ -50,9 +50,8 @@ def main():
 
     obj_view = content.viewManager.CreateContainerView(DATACENTER.vmFolder, [vim.Folder], True)
     folder_list = obj_view.view
-    xxx = None
-    for folder in folder_list:
-        recurring_loop(folder)
+    xxx = [recurring_loop(folder) for folder in folder_list]
+    print(xxx)
         # if folder.name == "vm":
         #     xxx = folder
 
