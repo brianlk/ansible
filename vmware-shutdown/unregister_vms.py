@@ -21,36 +21,23 @@ def unregister(vm_name):
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
     VM = None
     try:
-        VM = pchelper.get_all_obj(content, [vim.VirtualMachine], vm_name, DATACENTER.vmFolder)
+        VM = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
     except:
         pass
 
     if VM is None:
         return False
-    # if not check_vm_in_dc(content, args.datacenter_name, VM.config.uuid):
-    #     return False
+
     for key, value in VM.items():
-        while key.runtime.powerState != "poweredOff" and value == vm_name:
-            try:
-                key.ShutdownGuest()
-            except:
-                TASK = key.PowerOffVM_Task()
-                tasks.wait_for_tasks(si, [TASK])
-            finally:
-                print(f"Shutting down: {value}")
-                print(f"{value} is in {key.runtime.powerState}")
-
-
-
-    if VM.runtime.powerState == "poweredOff":
-        VM.UnregisterVM()
-        print(f"{vm_name} is unregistered.")
-        return True
+        if key.runtime.powerState == "poweredOff" and value == vm_name:
+            TASK = key.UnregisterVM()
+            print(f"{vm_name} is unregistered.")
+    return True
 
 
 def main():
-    if len(get_vms_in_dc()) > 0:
-        raise Exception("Duplicaed VM name in VCenter.")
+    # if len(get_vms_in_dc()) > 0:
+    #     raise Exception("Duplicaed VM name in VCenter.")
     # Read the VM names from hosts file
     with open("vm_list", "r") as file:
         file_content = file.read()
