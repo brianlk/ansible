@@ -27,6 +27,16 @@ import time
 #                                   name="new vm name", asTemplate=False, pool=None, host=esx_host)
 
 
+def recurring_loop(item):
+    if isinstance(item.childEntity, vim.Folder):
+        recurring_loop(item.childEntity)
+
+    # for item in item.childEntity:
+    #     print("================")
+    #     print(item.config)
+
+
+
 
 
 def main():
@@ -42,7 +52,7 @@ def main():
     folder_list = obj_view.view
     xxx = None
     for folder in folder_list:
-        print(folder)
+        recurring_loop(folder)
         # if folder.name == "vm":
         #     xxx = folder
 
