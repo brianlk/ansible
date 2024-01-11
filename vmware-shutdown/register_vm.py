@@ -34,7 +34,6 @@ def recurring_loop(item):
     if isinstance(item, list):
         for i in item:
             if isinstance(i, vim.VirtualMachine):
-                print(i)
                 return i
             recurring_loop(i.childEntity)
 
@@ -50,11 +49,13 @@ def main():
 
     obj_view = content.viewManager.CreateContainerView(DATACENTER.vmFolder, [vim.Folder], True)
     folder_list = obj_view.view
-    xxx = [recurring_loop(folder) for folder in folder_list]
-    print(xxx)
-        # if folder.name == "vm":
-        #     xxx = folder
-
+    xxx = None
+    for folder in folder_list:
+        if isinstance(folder.childEntity, list):
+            for v in folder.childEntity:
+                if isinstance(v, vim.VirtualMachine):
+                    print(v.config)
+                    exit()
 
     # esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
     # view_manager = content.viewManager
