@@ -21,7 +21,7 @@ def unregister(vm_name):
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
     VM = None
     try:
-        VM = pchelper.get_obj(content, [vim.VirtualMachine], vm_name, DATACENTER.vmFolder)
+        VM = pchelper.get_all_obj(content, [vim.VirtualMachine], vm_name, DATACENTER.vmFolder)
     except:
         pass
 
@@ -29,6 +29,18 @@ def unregister(vm_name):
         return False
     # if not check_vm_in_dc(content, args.datacenter_name, VM.config.uuid):
     #     return False
+    for key, value in VM.items():
+        while key.runtime.powerState != "poweredOff" and value == vm_name:
+            try:
+                key.ShutdownGuest()
+            except:
+                TASK = key.PowerOffVM_Task()
+                tasks.wait_for_tasks(si, [TASK])
+            finally:
+                print(f"Shutting down: {value}")
+                print(f"{value} is in {key.runtime.powerState}")
+
+
 
     if VM.runtime.powerState == "poweredOff":
         VM.UnregisterVM()

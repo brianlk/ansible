@@ -35,9 +35,8 @@ def shut_down(vm_name):
                 TASK = key.PowerOffVM_Task()
                 tasks.wait_for_tasks(si, [TASK])
             finally:
-                print(f"Shutting down: {vm_name}")
-                time.sleep(5)
-        print(f"{vm_name} is in {key.runtime.powerState}")
+                print(f"Shutting down: {value}")
+                print(f"{value} is in {key.runtime.powerState}")
     return True
     
 
