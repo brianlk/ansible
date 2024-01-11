@@ -38,28 +38,31 @@ def main():
             if m.volume.type == "VMFS":
                 uuids.append({'uuid': m.volume.uuid, 'name': m.volume.name, 'host': host})
     
-    results = []
-    # Match the csv uuid with Vcenter uuid
-    for csv_name, csv_uuid in csv_uuids.items():
-        for u in uuids:
-            if u['uuid'] == csv_uuid and u['name'] == csv_name:
-                results.append(u)
+    for u in uuids:
+        print(u)
+    
+    # results = []
+    # # Match the csv uuid with Vcenter uuid
+    # for csv_name, csv_uuid in csv_uuids.items():
+    #     for u in uuids:
+    #         if u['uuid'] == csv_uuid and u['name'] == csv_name:
+    #             results.append(u)
     
     # Unmount the datastores
-    count = 0
-    for res in results:
+    # count = 0
+    # for res in results:
         
-        if args.mount == 'n':
-            res['host'].configManager.storageSystem.UnmountVmfsVolume(vmfsUuid=res['uuid'])
-            state = "unmounted"
-        else:
-            res['host'].configManager.storageSystem.MountVmfsVolume(vmfsUuid=res['uuid'])
-            state = "mounted"
-        print(f"{res['host']} {state} datastore {res['name']} {res['uuid']}")
+    #     if args.mount == 'n':
+    #         res['host'].configManager.storageSystem.UnmountVmfsVolume(vmfsUuid=res['uuid'])
+    #         state = "unmounted"
+    #     else:
+    #         res['host'].configManager.storageSystem.MountVmfsVolume(vmfsUuid=res['uuid'])
+    #         state = "mounted"
+    #     print(f"{res['host']} {state} datastore {res['name']} {res['uuid']}")
 
-        count += 1
+    #     count += 1
 
-    print(f"\n{count} datastores are {state}.")
+    # print(f"\n{count} datastores are {state}.")
 
 if __name__ == '__main__':
     main()
