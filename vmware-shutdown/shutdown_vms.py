@@ -5,9 +5,7 @@
 # Example script to shut down VMs
 
 from tools import cli, service_instance, tasks, pchelper
-from get_all_vm_names import get_vms_in_dc
 from pyVmomi import vim
-from datacenter import check_vm_in_dc
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import time
@@ -40,8 +38,6 @@ def shut_down(vm_name):
     
 
 def main():
-    # if len(get_vms_in_dc()) > 0:
-    #     raise Exception("Duplicaed VM name in VCenter.")
     # Read the VM names from hosts file
     with open("vm_list", "r") as file:
         file_content = file.read()

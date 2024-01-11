@@ -5,9 +5,7 @@
 # Example script to unregister VMs
 
 from tools import cli, service_instance, tasks, pchelper
-from get_all_vm_names import get_vms_in_dc
 from pyVmomi import vim
-from datacenter import check_vm_in_dc
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import time
@@ -30,25 +28,25 @@ def unregister(vm_name):
 
     for key, value in VM.items():
         if key.runtime.powerState == "poweredOff" and value == vm_name:
-            TASK = key.UnregisterVM()
+            # TASK = key.UnregisterVM()
             print(f"{vm_name} is unregistered.")
     return True
 
 
 def main():
-    # if len(get_vms_in_dc()) > 0:
-    #     raise Exception("Duplicaed VM name in VCenter.")
     # Read the VM names from hosts file
     with open("vm_list", "r") as file:
         file_content = file.read()
     vms = file_content.split('\n')
 
     count = 0
-    with ThreadPoolExecutor(max_workers=10) as executor:
-        processes = [executor.submit(unregister, vm.strip()) for vm in vms if not vm.startswith('#')]
-        for result in as_completed(processes):
-            if result._result:
-                count += 1
+    for vm in vms:
+        unregister(vm)
+    # with ThreadPoolExecutor(max_workers=10) as executor:
+    #     processes = [executor.submit(unregister, vm.strip()) for vm in vms if not vm.startswith('#')]
+    #     for result in as_completed(processes):
+    #         if result._result:
+    #             count += 1
     print(f"\n{count} VMs are unregistered.")
     
 
