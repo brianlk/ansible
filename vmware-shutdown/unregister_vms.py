@@ -23,14 +23,14 @@ def unregister(vm_name):
     except:
         pass
 
-    if VM is None:
+    if not VM:
         return False
 
     for key, value in VM.items():
         if key.runtime.powerState == "poweredOff" and value == vm_name:
-            # TASK = key.UnregisterVM()
+            # key.UnregisterVM()
             print(f"{vm_name} is unregistered.")
-    return True
+            return True
 
 
 def main():
@@ -41,12 +41,8 @@ def main():
 
     count = 0
     for vm in vms:
-        unregister(vm)
-    # with ThreadPoolExecutor(max_workers=10) as executor:
-    #     processes = [executor.submit(unregister, vm.strip()) for vm in vms if not vm.startswith('#')]
-    #     for result in as_completed(processes):
-    #         if result._result:
-    #             count += 1
+        if unregister(vm):
+            count += 1
     print(f"\n{count} VMs are unregistered.")
     
 
