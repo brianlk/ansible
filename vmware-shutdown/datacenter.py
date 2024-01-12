@@ -13,28 +13,36 @@ import json
 def config_snapshot(si, datacenter_name):
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
-    obj_view = content.viewManager.CreateContainerView(DATACENTER.vmFolder, 
-                                                       [vim.Folder], True)
-    folder_list = obj_view.view
+    # obj_view = content.viewManager.CreateContainerView(DATACENTER.vmFolder, 
+    #                                                    [vim.Folder], True)
+    # folder_list = obj_view.view
     results = []
-    for folder in folder_list:
-        if isinstance(folder.childEntity, list):
-            for v in folder.childEntity:
-                if isinstance(v, vim.VirtualMachine) and not v.config.template:
-                    obj = {}
-                    obj['name'] = v.name
-                    obj['uuid'] = v.config.uuid
-                    obj['folder'] = str(folder)
-                    obj['host'] = str(v.summary.runtime.host)
-                    obj['vm_path'] = v.summary.config.vmPathName
-                    obj['resource_pool'] = str(v.resourcePool)
-                    results.append(obj)
-        else:
-            print(folder)
+    # for folder in folder_list:
+    #     if isinstance(folder.childEntity, list):
+    #         for v in folder.childEntity:
+    #             if isinstance(v, vim.VirtualMachine) and not v.config.template:
+    #                 obj = {}
+    #                 obj['name'] = v.name
+    #                 obj['uuid'] = v.config.uuid
+    #                 obj['folder'] = str(folder)
+    #                 obj['host'] = str(v.summary.runtime.host)
+    #                 obj['vm_path'] = v.summary.config.vmPathName
+    #                 obj['resource_pool'] = str(v.resourcePool)
+    #                 results.append(obj)
+    #     else:
+    #         print(folder)
 
     VM = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
     for v in VM:
-        print(v.parent.name)
+        if not v.config.template:
+            obj = {}
+            obj['name'] = v.name
+            obj['uuid'] = v.config.uuid
+            obj['folder'] = str(v.parent)
+            obj['host'] = str(v.summary.runtime.host)
+            obj['vm_path'] = v.summary.config.vmPathName
+            obj['resource_pool'] = str(v.resourcePool)
+            results.append(obj)
 
 
     with open("results.json", "w") as f:
