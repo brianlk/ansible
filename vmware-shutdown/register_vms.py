@@ -33,14 +33,15 @@ def main():
     all_folders = pchelper.get_all_obj(content, [vim.Folder], DATACENTER.vmFolder)
 
     for f in all_folders:
+        print(f.childEntity)
         fds[str(f)] = f
 
+    print(str(DATACENTER.vmFolder))
     #Read the VM names from hosts file
     with open("vm_list", "r") as file:
         file_content = file.read()
     vms = file_content.split('\n')
 
-    print(DATACENTER.vmFolder)
     for d in data:
         for vm in vms:
             if vm == d['name']:
