@@ -18,6 +18,7 @@ def config_snapshot(si, datacenter_name):
     folder_list = obj_view.view
     results = []
     for folder in folder_list:
+        print(folder.name)
         if isinstance(folder.childEntity, list):
             for v in folder.childEntity:
                 if isinstance(v, vim.VirtualMachine) and not v.config.template:
@@ -30,6 +31,12 @@ def config_snapshot(si, datacenter_name):
                     obj['resource_pool'] = str(v.resourcePool)
                     results.append(obj)
 
+
+    obj_view = content.viewManager.CreateContainerView(DATACENTER.vmFolder, 
+                                                       [vim.VirtualMachine], True)
+    folder_list = obj_view.view
+    for folder in folder_list:
+        print(folder)
     with open("results.json", "w") as f:
         f.write(json.dumps(results))
         
