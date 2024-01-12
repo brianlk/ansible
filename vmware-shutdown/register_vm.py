@@ -35,16 +35,23 @@ def register():
     content = si.RetrieveContent()
     with open("results.json", "r") as j:
         data = json.load(j)
-    for d in data:
-        print(d)
+
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
+
+    pl = {}
+    all_folders = pchelper.get_all_obj(content, [vim.ResourcePool], DATACENTER.vmFolder)
+    print(all_folders)
     abc = pchelper.get_obj(content, [vim.Folder], 'xxx')
     all_folders = pchelper.get_all_obj(content, [vim.Folder], DATACENTER.vmFolder)
     xxx = {}
     for f in all_folders:
         xxx[str(f)] = f
-
-
+    esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.5.3")
+    # for d in data:
+        # print(d['folder'])
+        # print(type(xxx[d['folder']]))
+        # print(pl['vim.ResourcePool:resgroup-1388'])
+        # xxx[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'], asTemplate=False, pool=pl[d['resource_pool']], host=esx_host)
 
 def recurring_loop(item):
     if isinstance(item, vim.Folder):
