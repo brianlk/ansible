@@ -9,6 +9,7 @@ from pyVmomi import vim
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+import json
 import time
 
 # def shut_down(vm_name, ans = 'n'):
@@ -26,6 +27,17 @@ import time
 #     task = folder.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", 
 #                                   name="new vm name", asTemplate=False, pool=None, host=esx_host)
 
+def register():
+    parser = cli.Parser()
+    parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
+    args = parser.get_args()
+    si = service_instance.connect(args)
+    content = si.RetrieveContent()
+    with open("results.json", "r") as j:
+        data = json.load(j)
+
+    for row in data:
+        folder = pchelper.get_obj(content, [vim.Folder], 'group-v1403')
 
 def recurring_loop(item):
     if isinstance(item, vim.Folder):
@@ -76,4 +88,4 @@ def main():
     
 
 if __name__ == '__main__':
-    main()
+    register()
