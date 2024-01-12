@@ -40,6 +40,7 @@ def main():
         file_content = file.read()
     vms = file_content.split('\n')
 
+    print(DATACENTER.vmFolder)
     for d in data:
         for vm in vms:
             if vm == d['name']:
