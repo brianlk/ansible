@@ -50,12 +50,14 @@ def main():
     count = 0
     for res in results:
         
-        if args.mount == 'n':
+        if args.mount.lower() == 'n':
             res['host'].configManager.storageSystem.UnmountVmfsVolume(vmfsUuid=res['uuid'])
             state = "unmounted"
-        else:
+        elif args.mount.lower() == 'y':
             res['host'].configManager.storageSystem.MountVmfsVolume(vmfsUuid=res['uuid'])
             state = "mounted"
+        else:
+            raise Exception(f"Wrong mount state: {state}")
         print(f"{res['host']} {state} datastore {res['name']} {res['uuid']}")
 
         count += 1
