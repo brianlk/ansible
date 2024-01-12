@@ -51,7 +51,10 @@ def register():
     for d in data:
         print(fds[d['folder']])
         print(rp[d['resource_pool']].name)
-        pchelper.get_obj(content, [vim.ResourcePool], rp[d['resource_pool']].name)
+        print(d['name'])
+        a=pchelper.get_obj(content, [vim.ResourcePool], rp[d['resource_pool']].name)
+        TASK=fds[d['folder']].RegisterVM_Task(path="[san-1] abc1/abc1.vmx", name="abc1",asTemplate=False, pool=a,host=esx_host)
+        tasks.wait_for_tasks(si, [TASK])
         # fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'], 
         #                                  asTemplate=False, 
         #                                  pool=rp[d['resource_pool']], 

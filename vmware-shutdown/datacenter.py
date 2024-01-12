@@ -29,6 +29,7 @@ def config_snapshot(si, datacenter_name):
                     obj['vm_path'] = v.summary.config.vmPathName
                     obj['resource_pool'] = str(v.resourcePool)
                     results.append(obj)
+                    print(v.datastore)
 
     with open("results.json", "w") as f:
         f.write(json.dumps(results))
