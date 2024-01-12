@@ -8,24 +8,7 @@
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 
-from json import JSONEncoder
-
-
-# subclass JSONEncoder
-class EmployeeEncoder(JSONEncoder):
-        def default(self, o):
-            return o.__dict__
-        
-
-class ResultObj:
-    def __init__(self, name, uuid, folder, host, vm_path, resource_pool):
-        self.name = name
-        self.uuid = uuid
-        self.folder = folder
-        self.host = host
-        self.vm_path = vm_path
-        self.resource_pool = resource_pool
-
+import json
 
 def config_snapshot(si, datacenter_name):
     content = si.RetrieveContent()
@@ -37,20 +20,20 @@ def config_snapshot(si, datacenter_name):
     for folder in folder_list:
         if isinstance(folder.childEntity, list):
             for v in folder.childEntity:
-
                 if isinstance(v, vim.VirtualMachine):
-                    obj = ResultObj(v.name, v.config.uuid, EmployeeEncoder().encode(folder), 
-                                    EmployeeEncoder().encode(v.summary.runtime.host), 
-                                    v.summary.config.vmPathName, EmployeeEncoder().encode(v.resourcePool))
-
+                    obj = {}
+                    obj['name'] = v.name
+                    obj['uuid'] = v.config.uuid
+                    obj['folder'] = str(folder)
+                    obj['host'] = str(v.summary.runtime.host)
+                    obj['vm_path'] = v.summary.config.vmPathName
+                    obj['resource_pool'] = str(v.resourcePool)
                     results.append(obj)
 
+    with open("results.json", "w") as f:
+        f.write(json.dumps(results))
+        
     
-    # esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
-    # for obj in esx_host.vm:
-    #     print(obj.config.uuid)
-
-
 def main():
     parser = cli.Parser()
     parser.add_required_arguments(cli.Argument.DATACENTER_NAME)

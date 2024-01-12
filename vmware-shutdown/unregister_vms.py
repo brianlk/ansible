@@ -7,6 +7,7 @@
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datacenter import config_snapshot
 
 import time
 
@@ -27,6 +28,7 @@ def main():
     parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
     args = parser.get_args()
     si = service_instance.connect(args)
+    config_snapshot(si, args.datacenter_name)
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
     # Read the VM names from hosts file
