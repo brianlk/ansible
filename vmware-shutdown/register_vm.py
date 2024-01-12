@@ -28,11 +28,21 @@ import time
 #                                   name="new vm name", asTemplate=False, pool=None, host=esx_host)
 
 def register():
+
+
     parser = cli.Parser()
     parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
     args = parser.get_args()
     si = service_instance.connect(args)
     content = si.RetrieveContent()
+
+    view_manager = content.viewManager
+    datacenter = content.rootFolder.childEntity[0]
+    container_view = view_manager.CreateContainerView(datacenter, [vim.ResourcePool], True)
+    for resource_pool in container_view.view:
+        largest_rp = resource_pool
+
+
     with open("results.json", "r") as j:
         data = json.load(j)
 
@@ -48,14 +58,14 @@ def register():
     for f in all_folders:
         print(f.name)
         fds[str(f)] = f
-    esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.5.3")
+    esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
     for d in data:
-        print(fds[d['folder']].parent.name)
-        print(rp[d['resource_pool']].name)
-        print(d['name'])
+        # print(fds[d['folder']].parent.name)
+        # print(rp[d['resource_pool']].name)
+        # print(d['name'])
         a=pchelper.get_obj(content, [vim.ResourcePool], rp[d['resource_pool']].name)
-        print(fds[d['folder']].childEntity)
-        fds[d['folder']].RegisterVM_Task(path='[san-1] abc1.vmx', name="abc1",asTemplate=False, pool=a,host=esx_host)
+        print(fds[d['folder']])
+        fds[d['folder']].RegisterVM_Task(path="[san-1] abc1/abc1.vmx", name="abc1",asTemplate=False, pool=largest_rp,host=esx_host)
         # tasks.wait_for_tasks(si, [TASK])
         # fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'], 
         #                                  asTemplate=False, 
@@ -91,7 +101,8 @@ def main():
         if isinstance(folder.childEntity, list):
             for v in folder.childEntity:
                 if isinstance(v, vim.VirtualMachine):
-                    print(folder, v.name)
+                    xxx = folder
+        break
 
     esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
     for obj in esx_host.vm:
@@ -101,9 +112,12 @@ def main():
     container_view = view_manager.CreateContainerView(datacenter, [vim.ResourcePool], True)
     for resource_pool in container_view.view:
         largest_rp = resource_pool
+
+    FOLDER = pchelper.get_obj(content, [vim.Folder], "xxx", DATACENTER.vmFolder)
+    print(FOLDER)
     # Register vm
-    TASK = xxx.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", name="abc1", asTemplate=False, pool=largest_rp, host=esx_host)
-    tasks.wait_for_tasks(si, [TASK])
+    TASK = FOLDER.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", name="abc1", asTemplate=False, pool=largest_rp, host=esx_host)
+    # tasks.wait_for_tasks(si, [TASK])
     # # Show host of guest OS
     # container = content.viewManager.CreateContainerView(
     #     content.rootFolder, [vim.VirtualMachine], True
@@ -113,4 +127,4 @@ def main():
     
 
 if __name__ == '__main__':
-    main()
+    register()
