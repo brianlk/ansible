@@ -15,6 +15,16 @@ from json import JSONEncoder
 class EmployeeEncoder(JSONEncoder):
         def default(self, o):
             return o.__dict__
+        
+
+class ResultObj:
+    def __init__(self, name, uuid, folder, host, vm_path, resource_pool):
+        self.name = name
+        self.uuid = uuid
+        self.folder = folder
+        self.host = host
+        self.vm_path = vm_path
+        self.resource_pool = resource_pool
 
 
 def config_snapshot(si, datacenter_name):
@@ -27,18 +37,15 @@ def config_snapshot(si, datacenter_name):
     for folder in folder_list:
         if isinstance(folder.childEntity, list):
             for v in folder.childEntity:
-                obj = Object()
+
                 if isinstance(v, vim.VirtualMachine):
-                    obj.name = v.name
-                    obj.uuid = v.config.uuid
-                    obj.folder = folder
-                    obj.host = v.summary.runtime.host
-                    obj.vm_path = v.summary.config.vmPathName
-                    obj.resource_pool = v.resourcePool
+                    obj = ResultObj(v.name, v.config.uuid, EmployeeEncoder().encode(folder), 
+                                    EmployeeEncoder().encode(v.summary.runtime.host), 
+                                    v.summary.config.vmPathName, EmployeeEncoder().encode(v.resourcePool))
+
                     results.append(obj)
 
     
-print(results.toJSON)
     # esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
     # for obj in esx_host.vm:
     #     print(obj.config.uuid)
