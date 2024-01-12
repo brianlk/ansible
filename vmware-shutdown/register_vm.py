@@ -53,22 +53,19 @@ def register():
         fds[str(f)] = f
     esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
     for d in data:
-        # print(fds[d['folder']].parent.name)
-        # print(rp[d['resource_pool']].name)
-        # print(d['name'])
-        # print(type(rp[d['resource_pool']]))
-        # print(fds[d['folder']])
-        fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'],
-                                         asTemplate=False, 
-                                         pool=rp[d['resource_pool']],
-                                         host=pchelper.get_obj(content, [vim.HostSystem], d['host']))
-        # tasks.wait_for_tasks(si, [TASK])
-        # fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'], 
-        #                                  asTemplate=False, 
-        #                                  pool=rp[d['resource_pool']], 
-        #                                  host=esx_host)
-        # xxx[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'], asTemplate=False, pool=pl[d['resource_pool']], host=esx_host)
-        break
+        esx_host = pchelper.get_obj(content, [vim.HostSystem], d['host'])
+        if d['folder'] == str(DATACENTER.vmFolder):
+            # VM in datacenter root folder
+            DATACENTER.vmFolder.RegisterVM_Task(path=d['vm_path'], name=d['name'],
+                                            asTemplate=False, 
+                                            pool=rp[d['resource_pool']],
+                                            host=esx_host)
+        else:
+            fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'],
+                                            asTemplate=False, 
+                                            pool=rp[d['resource_pool']],
+                                            host=esx_host)
+
 
 def recurring_loop(item):
     if isinstance(item, vim.Folder):
