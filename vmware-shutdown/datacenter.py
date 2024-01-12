@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+#
+# Written by Brian Leung
+#
+# Example script to power off VMs
+
+
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 
@@ -12,11 +19,11 @@ def config_snapshot(si, datacenter_name):
         if isinstance(folder.childEntity, list):
             for v in folder.childEntity:
                 if isinstance(v, vim.VirtualMachine):
-                    print(folder, v.name)
+                    print(v.name, v.config.uuid, folder, v.summary.runtime.host, v.summary.config.vmPathName)
 
-    esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
-    for obj in esx_host.vm:
-        print(obj.config.uuid)
+    # esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
+    # for obj in esx_host.vm:
+    #     print(obj.config.uuid)
 
 
 def main():
