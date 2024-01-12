@@ -36,13 +36,6 @@ def register():
     si = service_instance.connect(args)
     content = si.RetrieveContent()
 
-    view_manager = content.viewManager
-    datacenter = content.rootFolder.childEntity[0]
-    container_view = view_manager.CreateContainerView(datacenter, [vim.ResourcePool], True)
-    for resource_pool in container_view.view:
-        largest_rp = resource_pool
-
-
     with open("results.json", "r") as j:
         data = json.load(j)
 
@@ -63,9 +56,9 @@ def register():
         # print(fds[d['folder']].parent.name)
         # print(rp[d['resource_pool']].name)
         # print(d['name'])
-        a=pchelper.get_obj(content, [vim.ResourcePool], rp[d['resource_pool']].name)
-        print(fds[d['folder']])
-        fds[d['folder']].RegisterVM_Task(path="[san-1] abc1/abc1.vmx", name="abc1",asTemplate=False, pool=largest_rp,host=esx_host)
+        # print(type(rp[d['resource_pool']]))
+        # print(fds[d['folder']])
+        fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'],asTemplate=False, pool=rp[d['resource_pool']],host=esx_host)
         # tasks.wait_for_tasks(si, [TASK])
         # fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'], 
         #                                  asTemplate=False, 
