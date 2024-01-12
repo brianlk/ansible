@@ -46,6 +46,7 @@ def register():
     fds = {}
     all_folders = pchelper.get_all_obj(content, [vim.Folder], DATACENTER.vmFolder)
     for f in all_folders:
+        print(f.name)
         fds[str(f)] = f
     esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.5.3")
     for d in data:
@@ -54,7 +55,7 @@ def register():
         print(d['name'])
         a=pchelper.get_obj(content, [vim.ResourcePool], rp[d['resource_pool']].name)
         print(fds[d['folder']].childEntity)
-        fds[d['folder']].RegisterVM_Task(path='[san-1] xxx/abc1/abc1.vmx', name="abc1",asTemplate=False, pool=a,host=esx_host)
+        fds[d['folder']].RegisterVM_Task(path='[san-1] abc1.vmx', name="abc1",asTemplate=False, pool=a,host=esx_host)
         # tasks.wait_for_tasks(si, [TASK])
         # fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'], 
         #                                  asTemplate=False, 
@@ -95,14 +96,14 @@ def main():
     esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.23.100")
     for obj in esx_host.vm:
         print(obj.config.uuid)
-    # view_manager = content.viewManager
-    # datacenter = content.rootFolder.childEntity[0]
-    # container_view = view_manager.CreateContainerView(datacenter, [vim.ResourcePool], True)
-    # for resource_pool in container_view.view:
-    #     largest_rp = resource_pool
-    # # Register vm
-    # TASK = xxx.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", name="abc1", asTemplate=False, pool=largest_rp, host=esx_host)
-    # tasks.wait_for_tasks(si, [TASK])
+    view_manager = content.viewManager
+    datacenter = content.rootFolder.childEntity[0]
+    container_view = view_manager.CreateContainerView(datacenter, [vim.ResourcePool], True)
+    for resource_pool in container_view.view:
+        largest_rp = resource_pool
+    # Register vm
+    TASK = xxx.RegisterVM_Task(path="[san-1] abc1/abc1.vmx", name="abc1", asTemplate=False, pool=largest_rp, host=esx_host)
+    tasks.wait_for_tasks(si, [TASK])
     # # Show host of guest OS
     # container = content.viewManager.CreateContainerView(
     #     content.rootFolder, [vim.VirtualMachine], True
@@ -112,4 +113,4 @@ def main():
     
 
 if __name__ == '__main__':
-    register()
+    main()
