@@ -18,18 +18,20 @@ def config_snapshot(si, datacenter_name):
     folder_list = obj_view.view
     results = []
     for folder in folder_list:
-        if isinstance(folder.childEntity, list):
-            for v in folder.childEntity:
-                if isinstance(v, vim.VirtualMachine) and not v.config.template:
-                    obj = {}
-                    obj['name'] = v.name
-                    obj['uuid'] = v.config.uuid
-                    obj['folder'] = str(folder)
-                    obj['host'] = str(v.summary.runtime.host)
-                    obj['vm_path'] = v.summary.config.vmPathName
-                    obj['resource_pool'] = str(v.resourcePool)
-                    results.append(obj)
-                    print(v.datastore)
+        print(folder.name)
+        # if isinstance(folder.childEntity, list):
+        #     for v in folder.childEntity:
+        #         if isinstance(v, vim.VirtualMachine) and not v.config.template:
+        #             obj = {}
+        #             obj['name'] = v.name
+        #             obj['uuid'] = v.config.uuid
+        #             obj['folder'] = str(folder)
+        #             obj['host'] = str(v.summary.runtime.host)
+        #             obj['vm_path'] = v.summary.config.vmPathName
+        #             obj['resource_pool'] = str(v.resourcePool)
+        #             print(folder.name)
+        #             results.append(obj)
+        #             print(v.datastore)
 
     with open("results.json", "w") as f:
         f.write(json.dumps(results))
