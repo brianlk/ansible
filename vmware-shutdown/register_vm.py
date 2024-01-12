@@ -39,14 +39,25 @@ def register():
     rp = {}
     all_folders = pchelper.get_all_obj(content, [vim.ResourcePool])
     for x in all_folders:
+        print(x)
         rp[str(x)] = x
 
+    DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
+    fds = {}
+    all_folders = pchelper.get_all_obj(content, [vim.Folder], DATACENTER.vmFolder)
+    for f in all_folders:
+        fds[str(f)] = f
     esx_host = pchelper.get_obj(content, [vim.HostSystem], "10.1.5.3")
     for d in data:
-        print(d['folder'])
-        print(type(xxx[d['folder']]))
-        print(pl['vim.ResourcePool:resgroup-1388'])
-        xxx[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'], asTemplate=False, pool=pl[d['resource_pool']], host=esx_host)
+        print(fds[d['folder']])
+        print(rp[d['resource_pool']].name)
+        pchelper.get_obj(content, [vim.ResourcePool], rp[d['resource_pool']].name)
+        # fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'], 
+        #                                  asTemplate=False, 
+        #                                  pool=rp[d['resource_pool']], 
+        #                                  host=esx_host)
+        # xxx[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'], asTemplate=False, pool=pl[d['resource_pool']], host=esx_host)
+        break
 
 def recurring_loop(item):
     if isinstance(item, vim.Folder):
