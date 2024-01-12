@@ -27,18 +27,14 @@ def shut_down(vm_name):
         return False
     for key, value in VM.items():
         if key.runtime.powerState != "poweredOff" and value == vm_name:
-            # try:
-            #     task = key.ShutdownGuest()
-            #     tasks.wait_for_tasks(si, [task])
-            #     print(f"Shutting down: {value}")
-            # except Exception as e:
-            #     print(str(e))
-            #     key.PowerOffVM_Task()
-            # finally:
-            #     print(f"{value} is in {key.runtime.powerState}")
-            #     return True
-            task = key.ShutdownGuest()
-            tasks.wait_for_tasks(si, [task])
+            try:
+                task = key.ShutdownGuest()
+                tasks.wait_for_tasks(si, [task])
+            except:
+                key.PowerOffVM_Task()
+            finally:
+                print(f"{value} is in {key.runtime.powerState}")
+                return True
     return False
     
 

@@ -41,6 +41,7 @@ def main():
     vms = file_content.split('\n')
 
     count = 0
+    all_vms = VM = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
     for vm in vms:
         if unregister(vm):
             count += 1
