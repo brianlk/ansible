@@ -35,9 +35,16 @@ def register():
     content = si.RetrieveContent()
     with open("results.json", "r") as j:
         data = json.load(j)
+    for d in data:
+        print(d)
+    DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
+    abc = pchelper.get_obj(content, [vim.Folder], 'xxx')
+    all_folders = pchelper.get_all_obj(content, [vim.Folder], DATACENTER.vmFolder)
+    xxx = {}
+    for f in all_folders:
+        xxx[str(f)] = f
 
-    for row in data:
-        folder = pchelper.get_obj(content, [vim.Folder], 'group-v1403')
+
 
 def recurring_loop(item):
     if isinstance(item, vim.Folder):

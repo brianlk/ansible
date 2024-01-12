@@ -28,8 +28,6 @@ def config_snapshot(si, datacenter_name):
                     obj['host'] = str(v.summary.runtime.host)
                     obj['vm_path'] = v.summary.config.vmPathName
                     obj['resource_pool'] = str(v.resourcePool)
-                    print(folder.childEntity)
-                    break
                     results.append(obj)
 
     with open("results.json", "w") as f:
