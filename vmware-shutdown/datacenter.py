@@ -39,7 +39,7 @@ def config_snapshot(si, datacenter_name):
             obj['name'] = v.name
             obj['uuid'] = v.config.uuid
             obj['folder'] = str(v.parent)
-            obj['host'] = str(v.summary.runtime.host)
+            obj['host'] = v.summary.runtime.host.name
             obj['vm_path'] = v.summary.config.vmPathName
             obj['resource_pool'] = str(v.resourcePool)
             results.append(obj)

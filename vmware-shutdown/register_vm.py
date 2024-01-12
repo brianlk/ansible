@@ -58,8 +58,10 @@ def register():
         # print(d['name'])
         # print(type(rp[d['resource_pool']]))
         # print(fds[d['folder']])
-        if d['name'] != "abc2":
-            fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'],asTemplate=False, pool=rp[d['resource_pool']],host=esx_host)
+        fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'],
+                                         asTemplate=False, 
+                                         pool=rp[d['resource_pool']],
+                                         host=pchelper.get_obj(content, [vim.HostSystem], d['host']))
         # tasks.wait_for_tasks(si, [TASK])
         # fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'], 
         #                                  asTemplate=False, 
