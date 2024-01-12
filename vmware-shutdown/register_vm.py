@@ -2,7 +2,7 @@
 #
 # Written by Brian Leung
 #
-# Example script to power off VMs
+# Example script to register VMs after DR
 
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
@@ -35,19 +35,26 @@ def main():
     for f in all_folders:
         fds[str(f)] = f
 
+    #Read the VM names from hosts file
+    with open("vm_list", "r") as file:
+        file_content = file.read()
+    vms = file_content.split('\n')
+
     for d in data:
-        esx_host = pchelper.get_obj(content, [vim.HostSystem], d['host'])
-        if d['folder'] == str(DATACENTER.vmFolder):
-            # VM in datacenter root folder
-            DATACENTER.vmFolder.RegisterVM_Task(path=d['vm_path'], name=d['name'],
-                                            asTemplate=False, 
-                                            pool=rp[d['resource_pool']],
-                                            host=esx_host)
-        else:
-            fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'],
-                                            asTemplate=False, 
-                                            pool=rp[d['resource_pool']],
-                                            host=esx_host)
+        for vm in vms:
+            if vm == d['name']:
+                esx_host = pchelper.get_obj(content, [vim.HostSystem], d['host'])
+                if d['folder'] == str(DATACENTER.vmFolder):
+                    # VM in datacenter root folder
+                    DATACENTER.vmFolder.RegisterVM_Task(path=d['vm_path'], name=d['name'],
+                                                    asTemplate=False, 
+                                                    pool=rp[d['resource_pool']],
+                                                    host=esx_host)
+                else:
+                    fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'],
+                                                    asTemplate=False, 
+                                                    pool=rp[d['resource_pool']],
+                                                    host=esx_host)
 
 
 if __name__ == '__main__':

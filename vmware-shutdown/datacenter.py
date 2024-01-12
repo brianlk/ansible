@@ -17,16 +17,16 @@ def config_snapshot(si, datacenter_name):
     results = []
     VM = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
     for v in VM:
-        # if not v.config.template:
-        print(f"Storing config of {v.name} in results.json.")
-        obj = {}
-        obj['name'] = v.name
-        obj['uuid'] = v.config.uuid
-        obj['folder'] = str(v.parent)
-        obj['host'] = v.summary.runtime.host.name
-        obj['vm_path'] = v.summary.config.vmPathName
-        obj['resource_pool'] = str(v.resourcePool)
-        results.append(obj)
+        if not v.config.template:
+            print(f"Storing config of {v.name} in results.json.")
+            obj = {}
+            obj['name'] = v.name
+            obj['uuid'] = v.config.uuid
+            obj['folder'] = str(v.parent)
+            obj['host'] = v.summary.runtime.host.name
+            obj['vm_path'] = v.summary.config.vmPathName
+            obj['resource_pool'] = str(v.resourcePool)
+            results.append(obj)
 
 
     with open("results.json", "w") as f:
