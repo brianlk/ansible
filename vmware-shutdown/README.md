@@ -1,6 +1,6 @@
 # VMware DR scripts
 
-## Requirements:
+# Requirements:
 
 1. python 3.9 with virtual environment
 
@@ -8,13 +8,13 @@
 
 pip install pyvmomi
 
-## Getting started
+# Getting started
 
 **_Activate python virtual env_**
 
 source ~/venv/bin/activate
 
-## DR steps
+# DR steps
 
 **_List all VMs in Vcenter_**
 
@@ -39,7 +39,7 @@ Output:
 
 **_Unregister VMs in Vcenter_**
 
-./unregister_vms.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl
+./unregister_vms.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl --datacenter-name '_datacenter_name_'
 
 Output:
 
@@ -54,7 +54,7 @@ Add the datastores being umounted
 
 **_Unmount datastores in Vcenter_**
 
-./datastore.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl --mount n
+./datastore.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl --mount n --datacenter-name '_datacenter_name_'
 
 Output:
 
@@ -69,7 +69,7 @@ Output:
 
 **_Mount datastores in Vcenter_**
 
-./datastore.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl --mount y
+./datastore.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl --mount y --datacenter-name '_datacenter_name_'
 
 Output:
 
