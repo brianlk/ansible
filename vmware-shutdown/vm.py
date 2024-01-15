@@ -49,8 +49,6 @@ def shut_down(vm_name, si, datacenter_name):
                 tasks.wait_for_tasks(si, [task])
             except:
                 key.PowerOffVM_Task()
-            finally:
-                print(f"{value} is in {key.runtime.powerState}")
     
     return True
     
@@ -66,7 +64,7 @@ def main():
     if args.power == "on":
         # Parallel shutdown the VMs
         with ThreadPoolExecutor(max_workers=MAX_WORKERS_NUM) as executor:
-            results = [executor.submit(power_on, vm.strip(), si, args.datacenter_name) for vm in VM_LIST if not vm.startswith('#')]
+            results = [executor.submit(power_on, vm.strip(), si, args.datacenter_name) for vm in VM_LIST if vm and not vm.startswith('#')]
             for result in as_completed(results):
                 if result._result:
                     count += 1
@@ -74,7 +72,7 @@ def main():
     else:
         # Parallel shutdown the VMs
         with ThreadPoolExecutor(max_workers=MAX_WORKERS_NUM) as executor:
-            results = [executor.submit(shut_down, vm.strip(), si, args.datacenter_name) for vm in VM_LIST if not vm.startswith('#')]
+            results = [executor.submit(shut_down, vm.strip(), si, args.datacenter_name) for vm in VM_LIST if vm and not vm.startswith('#')]
             for result in as_completed(results):
                 if result._result:
                     count += 1
