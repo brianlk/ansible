@@ -116,11 +116,13 @@ def search_for_obj(content, vim_type, name, folder=None, recurse=True, uuid=None
 
     for managed_object_ref in container.view:
         if isinstance(managed_object_ref, vim.VirtualMachine) and uuid is not None:
-            if managed_object_ref.config.uuid == uuid: 
+            if managed_object_ref.config.uuid == uuid:
                 obj = managed_object_ref
+                print(name, obj)
                 break
-        if managed_object_ref.name == name:
+        if managed_object_ref.name == name and uuid is None:
             obj = managed_object_ref
+            print(name, obj)
             break
     container.Destroy()
     return obj

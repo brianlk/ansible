@@ -19,10 +19,11 @@ def power_on(vm_name, si, datacenter_name):
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
     for d in read_result_json():
-        print(d['name'], d['uuid'])
+
         if d['name'] == vm_name:
+            print(d['name'], d['uuid'])
             vm = pchelper.get_obj(content, [vim.VirtualMachine], d['name'], DATACENTER.vmFolder, uuid=d['uuid'])
-            print(vm)
+            # print(vm)
     # dc_all_vm = None
     # try:
     #     dc_all_vm = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
