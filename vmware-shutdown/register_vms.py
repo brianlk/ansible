@@ -12,6 +12,9 @@ from pyVmomi import vim
 import json
 
 
+VM_CFG_BACKUP = "results.json"
+
+
 def get_all_folders(content, DATACENTER):
     fds = {}
     all_folders = pchelper.get_all_obj(content, [vim.Folder], DATACENTER.vmFolder)
@@ -32,7 +35,8 @@ def get_all_resource_pools(content):
 
 
 def read_result_json():
-    with open("results.json", "r") as j:
+    # Read the vm config backup from results.json
+    with open(VM_CFG_BACKUP, "r") as j:
         data = json.load(j)
     return data
 
@@ -45,12 +49,14 @@ def register_vm(content, DATACENTER, vms, fds, rps):
                 esx_host = pchelper.get_obj(content, [vim.HostSystem], d['host'])
                 if d['folder'] == str(DATACENTER.vmFolder):
                     # VM in datacenter root folder
-                    DATACENTER.vmFolder.RegisterVM_Task(path=d['vm_path'], name=d['name'],
-                                                    asTemplate=False, 
-                                                    pool=rps[d['resource_pool']],
-                                                    host=esx_host)
+                    DATACENTER.vmFolder.RegisterVM_Task(path=d['vm_path'],
+                                                        name=d['name'],
+                                                        asTemplate=False, 
+                                                        pool=rps[d['resource_pool']],
+                                                        host=esx_host)
                 else:
-                    fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'],
+                    fds[d['folder']].RegisterVM_Task(path=d['vm_path'],
+                                                    name=d['name'],
                                                     asTemplate=False, 
                                                     pool=rps[d['resource_pool']],
                                                     host=esx_host)

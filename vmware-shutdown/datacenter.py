@@ -25,8 +25,8 @@ def run_cli(*args):
     parser = cli.Parser()
     for a in args:
         parser.add_required_arguments(a)
-    args = parser.get_args()
-    return args
+    return parser.get_args()
+
 
 
 def vm_config_backup(si, datacenter_name):
