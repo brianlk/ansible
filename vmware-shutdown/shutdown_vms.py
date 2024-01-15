@@ -4,7 +4,7 @@
 #
 # Example script to shut down VMs
 
-from datacenter import run_cli, read_vm_list
+from datacenter import run_cli, read_vm_list, read_result_json
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -14,6 +14,39 @@ import time
 
 MAX_WORKERS_NUM = 10
 
+
+def power_on(vm_name, si, datacenter_name):
+    content = si.RetrieveContent()
+    DATACENTER = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
+    dc_all_vm = None
+    try:
+        dc_all_vm = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
+    except:
+        pass
+    
+    if not dc_all_vm:
+        return False
+    
+    esx_host = None
+    for d in read_result_json():
+        if d['name'] == vm_name:
+            esx_host = pchelper.get_obj(content, [vim.HostSystem], d['host'])
+
+
+    for key, value in dc_all_vm.items():
+        if key.runtime.powerState != "poweredOff" and value == vm_name:
+            try:
+                print(f"Powering on: {value}")
+                task = key.PowerOnVM_Task(esx_host)
+                tasks.wait_for_tasks(si, [task])
+            except:
+                pass
+                # key.PowerOffVM_Task()
+            finally:
+                print(f"{value} is in {key.runtime.powerState}")
+                return True
+    return False
+    
 
 def shut_down(vm_name, si, datacenter_name):
     content = si.RetrieveContent()

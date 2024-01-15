@@ -5,14 +5,11 @@
 # Example script to register VMs after DR
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datacenter import run_cli, read_vm_list
+from datacenter import run_cli, read_vm_list, read_result_json
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 
 import json
-
-
-VM_CFG_BACKUP = "results.json"
 
 
 def get_all_folders(content, DATACENTER):
@@ -32,13 +29,6 @@ def get_all_resource_pools(content):
         rps[str(x)] = x
     # return a map rp['pool_name'] = pool object
     return rps
-
-
-def read_result_json():
-    # Read the vm config backup from results.json
-    with open(VM_CFG_BACKUP, "r") as j:
-        data = json.load(j)
-    return data
 
 
 def register_vm(content, DATACENTER, vms, fds, rps):

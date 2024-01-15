@@ -12,6 +12,7 @@ import json
 
 
 VM_LIST_FILE = "vm_list"
+VM_CFG_BACKUP = "results.json"
 
 
 def read_vm_list():
@@ -19,6 +20,13 @@ def read_vm_list():
     with open(VM_LIST_FILE, "r") as file:
         file_content = file.read()
     return file_content.split('\n')
+
+
+def read_result_json():
+    # Read the vm config backup from results.json
+    with open(VM_CFG_BACKUP, "r") as j:
+        data = json.load(j)
+    return data
 
 
 def run_cli(*args):
