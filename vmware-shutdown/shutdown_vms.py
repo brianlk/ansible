@@ -15,11 +15,9 @@ import time
 MAX_WORKERS_NUM = 10
 
 
-def shut_down(vm_name):
-    args = run_cli(cli.Argument.DATACENTER_NAME)
-    si = service_instance.connect(args)
+def shut_down(vm_name, si, datacenter_name):
     content = si.RetrieveContent()
-    DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
+    DATACENTER = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
     dc_all_vm = None
     try:
         dc_all_vm = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
@@ -44,12 +42,15 @@ def shut_down(vm_name):
     
 
 def main():
+    args = run_cli(cli.Argument.DATACENTER_NAME)
+    si = service_instance.connect(args)
+
     # Read the VM names from hosts file
     VM_LIST = read_vm_list()
     count = 0
     # Parallel shutdown the VMs
     with ThreadPoolExecutor(max_workers=MAX_WORKERS_NUM) as executor:
-        results = [executor.submit(shut_down, vm.strip()) for vm in VM_LIST if not vm.startswith('#')]
+        results = [executor.submit(shut_down, vm.strip(), si, args.datacenter_name) for vm in VM_LIST if not vm.startswith('#')]
         for result in as_completed(results):
             if result._result:
                 count += 1
