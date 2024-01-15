@@ -3,7 +3,7 @@
 # Written by Brian Leung
 #
 # Example script to register VMs after DR
-
+from datacenter import run_cli
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 
@@ -14,9 +14,7 @@ import time
 
 
 def main():
-    parser = cli.Parser()
-    parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
-    args = parser.get_args()
+    args = run_cli()
     si = service_instance.connect(args)
     content = si.RetrieveContent()
 

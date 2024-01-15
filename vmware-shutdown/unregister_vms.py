@@ -3,7 +3,7 @@
 # Written by Brian Leung
 #
 # Example script to unregister VMs
-
+from datacenter import run_cli
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -24,9 +24,7 @@ def unregister(vm_name, all_vms):
 
 
 def main():
-    parser = cli.Parser()
-    parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
-    args = parser.get_args()
+    args = run_cli()
     si = service_instance.connect(args)
     config_snapshot(si, args.datacenter_name)
     content = si.RetrieveContent()

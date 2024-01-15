@@ -4,10 +4,11 @@
 #
 # Example script to unmount/mount datastores
 
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datacenter import run_cli
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import time
 import csv
@@ -15,9 +16,7 @@ import json
 
 
 def main():
-    parser = cli.Parser()
-    parser.add_required_arguments(cli.Argument.MOUNT, cli.Argument.DATACENTER_NAME)
-    args = parser.get_args()
+    args = run_cli()
     csv_uuids = {}
     # Read .csv to get datastores being unmounted
     with open('datastore_list.csv') as csvfile:

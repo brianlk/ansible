@@ -10,6 +10,13 @@ from pyVmomi import vim
 
 import json
 
+
+def run_cli():
+    parser = cli.Parser()
+    parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
+    args = parser.get_args()
+    return args
+
 def config_snapshot(si, datacenter_name):
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
@@ -34,9 +41,7 @@ def config_snapshot(si, datacenter_name):
         
 
 def main():
-    parser = cli.Parser()
-    parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
-    args = parser.get_args()
+    args = run_cli()
     si = service_instance.connect(args)
     config_snapshot(si, args.datacenter_name)
 
