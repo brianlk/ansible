@@ -23,29 +23,11 @@ def power_on(vm_name, si, datacenter_name):
         if d['name'] == vm_name:
             print(d['name'], d['uuid'])
             vm = pchelper.get_obj(content, [vim.VirtualMachine], d['name'], DATACENTER.vmFolder, uuid=d['uuid'])
-            # print(vm)
-    # dc_all_vm = None
-    # try:
-    #     dc_all_vm = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
-    # except:
-    #     pass
-    
-    # if not dc_all_vm:
-    #     return False
-    
-    # for key, value in dc_all_vm.items():
-    #     if key.runtime.powerState != "poweredOff" and value == vm_name:
-    #         try:
-    #             print(f"Shutting down: {value}")
-    #             task = key.ShutdownGuest()
-    #             tasks.wait_for_tasks(si, [task])
-    #         except:
-    #             key.PowerOffVM_Task()
-    #         finally:
-    #             print(f"{value} is in {key.runtime.powerState}")
-    #             return True
-    return False
-    
+            esx_host = pchelper.get_obj(content, [vim.HostSystem], d['host'])
+            task = vm.PowerOnVM_Task(esx_host)
+            tasks.wait_for_tasks(si, [task])
+    return True
+        
 
 def shut_down(vm_name, si, datacenter_name):
     content = si.RetrieveContent()
