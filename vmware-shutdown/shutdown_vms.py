@@ -18,6 +18,7 @@ MAX_WORKERS_NUM = 10
 def power_on(vm_name, si, datacenter_name):
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
+    pchelper.get_obj(content, [vim.VirtualMachine], datacenter_name)
     dc_all_vm = None
     try:
         dc_all_vm = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
@@ -33,18 +34,6 @@ def power_on(vm_name, si, datacenter_name):
             esx_host = pchelper.get_obj(content, [vim.HostSystem], d['host'])
 
 
-    for key, value in dc_all_vm.items():
-        if key.runtime.powerState != "poweredOff" and value == vm_name:
-            try:
-                print(f"Powering on: {value}")
-                task = key.PowerOnVM_Task(esx_host)
-                tasks.wait_for_tasks(si, [task])
-            except:
-                pass
-                # key.PowerOffVM_Task()
-            finally:
-                print(f"{value} is in {key.runtime.powerState}")
-                return True
     return False
     
 
@@ -83,7 +72,7 @@ def main():
     count = 0
     # Parallel shutdown the VMs
     with ThreadPoolExecutor(max_workers=MAX_WORKERS_NUM) as executor:
-        results = [executor.submit(shut_down, vm.strip(), si, args.datacenter_name) for vm in VM_LIST if not vm.startswith('#')]
+        results = [executor.submit(power_on, vm.strip(), si, args.datacenter_name) for vm in VM_LIST if not vm.startswith('#')]
         for result in as_completed(results):
             if result._result:
                 count += 1
