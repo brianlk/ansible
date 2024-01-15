@@ -22,19 +22,26 @@ def unregister(vm_name, all_vms):
             return True
     return False
 
+def backup_cfg(si, args):
+    # backup is used by registration process later
+    try:
+        vm_config_backup(si, args.datacenter_name)
+    except:
+        print("Error: failed to create current VMs config backup results.json. Exit!")
+        exit()
+
 
 def main():
     args = run_cli(cli.Argument.DATACENTER_NAME)
     si = service_instance.connect(args)
-    # backup is used by registration process later
-    vm_config_backup(si, args.datacenter_name)
+
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
     # Read the VM names from vm_list file
-    vms = read_vm_list()
+    VM_LIST = read_vm_list()
 
     count = 0
-    for vm in vms:
+    for vm in VM_LIST:
         if unregister(vm, pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)):
             count += 1
     print(f"\n{count} VMs are unregistered.")

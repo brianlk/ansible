@@ -17,14 +17,14 @@ def shut_down(vm_name):
     si = service_instance.connect(args)
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
-    VM = None
+    dc_all_vm = None
     try:
-        VM = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
+        dc_all_vm = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
     except:
         pass
-    if not VM:
+    if not dc_all_vm:
         return False
-    for key, value in VM.items():
+    for key, value in dc_all_vm.items():
         if key.runtime.powerState != "poweredOff" and value == vm_name:
             try:
                 print(f"Shutting down: {value}")
@@ -40,11 +40,11 @@ def shut_down(vm_name):
 
 def main():
     # Read the VM names from hosts file
-    vms = read_vm_list()
+    VM_LIST = read_vm_list()
     count = 0
-
+    # Parallel shutdown the VMs
     with ThreadPoolExecutor(max_workers=10) as executor:
-        results = [executor.submit(shut_down, vm.strip()) for vm in vms if not vm.startswith('#')]
+        results = [executor.submit(shut_down, vm.strip()) for vm in VM_LIST if not vm.startswith('#')]
         for result in as_completed(results):
             if result._result:
                 count += 1

@@ -66,8 +66,8 @@ def main():
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
     fds = get_all_folders(content, DATACENTER)
 
-    vms = read_vm_list()
-    register_vm(content, DATACENTER, vms, fds, rps)
+    VM_LIST = read_vm_list()
+    register_vm(content, DATACENTER, VM_LIST, fds, rps)
 
 
 if __name__ == '__main__':
