@@ -19,8 +19,8 @@ def unregister(vm_name, all_vms):
         if key.runtime.powerState == "poweredOff" and value == vm_name:
             key.UnregisterVM()
             print(f"{vm_name} is unregistered.")
-            return True
-    return False
+
+    return True
 
 
 def backup_cfg(si, args):
