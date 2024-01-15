@@ -4,6 +4,7 @@
 #
 # Example script to unmount/mount datastores
 
+from datacenter import run_cli
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 
@@ -14,23 +15,10 @@ import csv
 import json
 
 
-def main():
-    parser = cli.Parser()
-    parser.add_required_arguments(cli.Argument.MOUNT, cli.Argument.DATACENTER_NAME)
-    args = parser.get_args()
-    csv_uuids = {}
-    # Read .csv to get datastores being unmounted
-    with open('datastore_list.csv') as csvfile:
-        rows = csv.DictReader(csvfile)
-        for row in rows:
-            csv_uuids[row['datastore_name']] = row['datastore_uuid']
-
+def find_all_vcenter_ds(content, datacenter):
     # Connect to Vcenter and find all datastores
     uuids = []
-    si = service_instance.connect(args)
-    content = si.RetrieveContent()
-    DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
-    host_view = content.viewManager.CreateContainerView(DATACENTER, [vim.HostSystem], True)
+    host_view = content.viewManager.CreateContainerView(datacenter, [vim.HostSystem], True)
     # Find all datastores in vcenter
     for host in host_view.view:
         # host.configManager.storageSystem.UnmountVmfsVolume(vmfsUuid="65976112-57b5c868-b7b1-005056af88ac")
@@ -38,11 +26,30 @@ def main():
         for m in mount_arr: 
             if m.volume.type == "VMFS":
                 uuids.append({'uuid': m.volume.uuid, 'name': m.volume.name, 'host': host})
-    
+    return uuids
+
+
+def read_ds_csv():
+    csv_uuids = {}
+    # Read .csv to get datastores being unmounted
+    with open('datastore_list.csv') as csvfile:
+        rows = csv.DictReader(csvfile)
+        for row in rows:
+            csv_uuids[row['datastore_name']] = row['datastore_uuid']
+    return csv_uuids
+
+
+def main():
+
+    args = run_cli(cli.Argument.MOUNT, cli.Argument.DATACENTER_NAME)
+    si = service_instance.connect(args)
+    content = si.RetrieveContent()
+    DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
+       
     results = []
     # Match the csv uuid with Vcenter uuid
-    for csv_name, csv_uuid in csv_uuids.items():
-        for u in uuids:
+    for csv_name, csv_uuid in read_ds_csv().items():
+        for u in find_all_vcenter_ds(content, DATACENTER):
             if u['uuid'] == csv_uuid and u['name'] == csv_name:
                 results.append(u)
     
