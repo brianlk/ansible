@@ -21,8 +21,11 @@ def power_on(vm_name, si, datacenter_name):
     dc_all_vm = None
     try:
         # dc_all_vm = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
-        dc_all_vm = pchelper.get_obj(content, [vim.VirtualMachine], "abc1", DATACENTER.vmFolder)
+        dc_all_vm = pchelper.get_obj(content, [vim.VirtualMachine], vm_name, DATACENTER.vmFolder)
         print(dc_all_vm)
+        # dc_all_vm = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
+        # for key, name in dc_all_vm.items():
+        #     print(key.config.uuid)
     except:
         pass
     

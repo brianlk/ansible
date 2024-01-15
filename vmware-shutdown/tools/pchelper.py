@@ -3,7 +3,7 @@ Property Collector helper module.
 """
 
 import pyVmomi
-
+from pyVmomi import vim
 
 # Shamelessly borrowed from:
 # https://github.com/dnaeon/py-vconnector/blob/master/src/vconnector/core.py
@@ -100,7 +100,7 @@ def get_container_view(si, obj_type, container=None):
     return view_ref
 
 
-def search_for_obj(content, vim_type, name, folder=None, recurse=True):
+def search_for_obj(content, vim_type, name, folder=None, recurse=True, uuid=None):
     """
     Search the managed object for the name and type specified
 
@@ -115,6 +115,10 @@ def search_for_obj(content, vim_type, name, folder=None, recurse=True):
     container = content.viewManager.CreateContainerView(folder, vim_type, recurse)
 
     for managed_object_ref in container.view:
+        if isinstance(managed_object_ref, vim.VirtualMachine):
+            if managed_object_ref.config.uuid == uuid:
+                obj = managed_object_ref
+                break
         if managed_object_ref.name == name:
             obj = managed_object_ref
             break
@@ -143,7 +147,7 @@ def get_all_obj(content, vim_type, folder=None, recurse=True):
     return obj
 
 
-def get_obj(content, vim_type, name, folder=None, recurse=True):
+def get_obj(content, vim_type, name, folder=None, recurse=True, uuid=None):
     """
     Retrieves the managed object for the name and type specified
     Throws an exception if of not found.
@@ -152,7 +156,7 @@ def get_obj(content, vim_type, name, folder=None, recurse=True):
 
     get_obj(content, [vim.Datastore], "Datastore Name")
     """
-    obj = search_for_obj(content, vim_type, name, folder, recurse)
+    obj = search_for_obj(content, vim_type, name, folder, recurse, uuid)
     if not obj:
         raise RuntimeError("Managed Object " + name + " not found.")
     return obj
