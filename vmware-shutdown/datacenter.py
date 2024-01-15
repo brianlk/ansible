@@ -11,6 +11,13 @@ from pyVmomi import vim
 import json
 
 
+def read_vm_list():
+    #Read the VM names from hosts file
+    with open("vm_list", "r") as file:
+        file_content = file.read()
+    return file_content.split('\n')
+
+
 def run_cli(*args):
     parser = cli.Parser()
     for a in args:

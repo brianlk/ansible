@@ -5,7 +5,7 @@
 # Example script to register VMs after DR
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datacenter import run_cli
+from datacenter import run_cli, read_vm_list
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 
@@ -26,16 +26,9 @@ def get_all_resource_pools(content):
     rps = {}
     all_folders = pchelper.get_all_obj(content, [vim.ResourcePool])
     for x in all_folders:
-        rp[str(x)] = x
+        rps[str(x)] = x
     # return a map rp['pool_name'] = pool object
     return rps
-
-
-def read_vm_list():
-    #Read the VM names from hosts file
-    with open("vm_list", "r") as file:
-        file_content = file.read()
-    return file_content.split('\n')
 
 
 def read_result_json():
@@ -48,6 +41,7 @@ def register_vm(content, DATACENTER, vms, fds, rps):
     for vm in vms:
         for d in read_result_json():
             if vm == d['name']:
+                # create host object for the vm before register
                 esx_host = pchelper.get_obj(content, [vim.HostSystem], d['host'])
                 if d['folder'] == str(DATACENTER.vmFolder):
                     # VM in datacenter root folder

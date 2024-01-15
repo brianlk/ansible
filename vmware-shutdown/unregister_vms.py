@@ -7,7 +7,7 @@
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datacenter import config_snapshot
+from datacenter import config_snapshot, read_vm_list
 
 import time
 
@@ -32,9 +32,7 @@ def main():
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
     # Read the VM names from hosts file
-    with open("vm_list", "r") as file:
-        file_content = file.read()
-    vms = file_content.split('\n')
+    vms = read_vm_list()
 
     count = 0
     for vm in vms:

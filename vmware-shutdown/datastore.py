@@ -14,6 +14,8 @@ import time
 import csv
 import json
 
+DATASTORE_LIST = "datastore_list.csv"
+
 
 def compare_csv_all_ds(content, datacenter):
     results = []
@@ -42,7 +44,7 @@ def find_all_vcenter_ds(content, datacenter):
 def read_ds_csv():
     csv_uuids = {}
     # Read .csv to get datastores being unmounted
-    with open('datastore_list.csv') as csvfile:
+    with open(DATASTORE_LIST) as csvfile:
         rows = csv.DictReader(csvfile)
         for row in rows:
             csv_uuids[row['datastore_name']] = row['datastore_uuid']

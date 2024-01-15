@@ -4,7 +4,7 @@
 #
 # Example script to shut down VMs
 
-from datacenter import run_cli
+from datacenter import run_cli, read_vm_list
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -40,9 +40,7 @@ def shut_down(vm_name):
 
 def main():
     # Read the VM names from hosts file
-    with open("vm_list", "r") as file:
-        file_content = file.read()
-    vms = file_content.split('\n')
+    vms = read_vm_list()
     count = 0
 
     with ThreadPoolExecutor(max_workers=10) as executor:
