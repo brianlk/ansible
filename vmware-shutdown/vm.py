@@ -51,32 +51,27 @@ def shut_down(vm_name, si, datacenter_name):
                 key.PowerOffVM_Task()
     
     return True
+
+
+def start_workers(action, si, args):
+    count = 0
+    VM_LIST = read_vm_list()
+    # Parallel shutdown the VMs
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS_NUM) as executor:
+        results = [executor.submit(action, vm.strip(), si, args.datacenter_name) for vm in VM_LIST if vm and not vm.startswith('#')]
+        for result in as_completed(results):
+            if result._result:
+                count += 1
+    print(f"\n{count} VMs are powered {args.power}.")
     
 
 def main():
     args = run_cli(cli.Argument.DATACENTER_NAME, cli.Argument.POWER)
     si = service_instance.connect(args)
-
-    # Read the VM names from hosts file
-    VM_LIST = read_vm_list()
-    count = 0
-
     if args.power == "on":
-        # Parallel shutdown the VMs
-        with ThreadPoolExecutor(max_workers=MAX_WORKERS_NUM) as executor:
-            results = [executor.submit(power_on, vm.strip(), si, args.datacenter_name) for vm in VM_LIST if vm and not vm.startswith('#')]
-            for result in as_completed(results):
-                if result._result:
-                    count += 1
-        print(f"\n{count} VMs are powered on.")
+        start_workers(power_on, si, args)
     else:
-        # Parallel shutdown the VMs
-        with ThreadPoolExecutor(max_workers=MAX_WORKERS_NUM) as executor:
-            results = [executor.submit(shut_down, vm.strip(), si, args.datacenter_name) for vm in VM_LIST if vm and not vm.startswith('#')]
-            for result in as_completed(results):
-                if result._result:
-                    count += 1
-        print(f"\n{count} VMs are powered off.")
+        start_workers(shut_down, si, args)
     
 
 if __name__ == '__main__':
