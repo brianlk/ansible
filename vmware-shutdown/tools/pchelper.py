@@ -115,7 +115,6 @@ def search_for_obj(content, vim_type, name, folder=None, recurse=True):
     container = content.viewManager.CreateContainerView(folder, vim_type, recurse)
 
     for managed_object_ref in container.view:
-        print(managed_object_ref.config)
         if managed_object_ref.name == name:
             obj = managed_object_ref
             break

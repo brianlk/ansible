@@ -4,7 +4,7 @@
 #
 # Example script to shut down VMs
 
-from datacenter import run_cli, read_vm_list, read_result_json
+from datacenter import run_cli, read_vm_list
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -18,22 +18,28 @@ MAX_WORKERS_NUM = 10
 def power_on(vm_name, si, datacenter_name):
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
-    pchelper.get_obj(content, [vim.VirtualMachine], datacenter_name)
     dc_all_vm = None
     try:
-        dc_all_vm = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
+        # dc_all_vm = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
+        dc_all_vm = pchelper.get_obj(content, [vim.VirtualMachine], "abc1", DATACENTER.vmFolder)
+        print(dc_all_vm)
     except:
         pass
     
-    if not dc_all_vm:
-        return False
+    # if not dc_all_vm:
+    #     return False
     
-    esx_host = None
-    for d in read_result_json():
-        if d['name'] == vm_name:
-            esx_host = pchelper.get_obj(content, [vim.HostSystem], d['host'])
-
-
+    # for key, value in dc_all_vm.items():
+    #     if key.runtime.powerState != "poweredOff" and value == vm_name:
+    #         try:
+    #             print(f"Shutting down: {value}")
+    #             task = key.ShutdownGuest()
+    #             tasks.wait_for_tasks(si, [task])
+    #         except:
+    #             key.PowerOffVM_Task()
+    #         finally:
+    #             print(f"{value} is in {key.runtime.powerState}")
+    #             return True
     return False
     
 
