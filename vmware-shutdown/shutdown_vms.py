@@ -25,8 +25,10 @@ def shut_down(vm_name):
         dc_all_vm = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
     except:
         pass
+    
     if not dc_all_vm:
         return False
+    
     for key, value in dc_all_vm.items():
         if key.runtime.powerState != "poweredOff" and value == vm_name:
             try:
