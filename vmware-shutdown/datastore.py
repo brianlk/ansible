@@ -75,9 +75,13 @@ def main():
     content = si.RetrieveContent()
     # Find datacenter name
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
-       
+
+    # datastore list 
+    # results = 
+    #  [{'uuid': '65976112-57b5c868-b7b1-005056af88ac', 'name': 'san-1', 
+    # 'host': 'vim.HostSystem:host-1391'},...]
     results = compare_csv_all_ds(content, DATACENTER)
-        
+
     # Mount or Unmount the datastores
     (count, state) = mount_or_umount_ds(args, results)
 
