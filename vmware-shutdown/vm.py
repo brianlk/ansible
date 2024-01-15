@@ -21,9 +21,9 @@ def power_on(vm_name, si, datacenter_name):
     for d in read_result_json():
 
         if d['name'] == vm_name:
-            print(d['name'], d['uuid'])
             vm = pchelper.get_obj(content, [vim.VirtualMachine], d['name'], DATACENTER.vmFolder, uuid=d['uuid'])
             esx_host = pchelper.get_obj(content, [vim.HostSystem], d['host'])
+            print(f"Powering on: {vm_name}")
             task = vm.PowerOnVM_Task(esx_host)
             tasks.wait_for_tasks(si, [task])
     return True
@@ -52,7 +52,7 @@ def shut_down(vm_name, si, datacenter_name):
             finally:
                 print(f"{value} is in {key.runtime.powerState}")
     
-    return False
+    return True
     
 
 def main():
@@ -62,14 +62,23 @@ def main():
     # Read the VM names from hosts file
     VM_LIST = read_vm_list()
     count = 0
-    # Parallel shutdown the VMs
-    print(args.power)
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS_NUM) as executor:
-        results = [executor.submit(power_on, vm.strip(), si, args.datacenter_name) for vm in VM_LIST if not vm.startswith('#')]
-        for result in as_completed(results):
-            if result._result:
-                count += 1
-    print(f"\n{count} VMs are powered off.")
+
+    if args.power == "on":
+        # Parallel shutdown the VMs
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS_NUM) as executor:
+            results = [executor.submit(power_on, vm.strip(), si, args.datacenter_name) for vm in VM_LIST if not vm.startswith('#')]
+            for result in as_completed(results):
+                if result._result:
+                    count += 1
+        print(f"\n{count} VMs are powered on.")
+    else:
+        # Parallel shutdown the VMs
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS_NUM) as executor:
+            results = [executor.submit(shut_down, vm.strip(), si, args.datacenter_name) for vm in VM_LIST if not vm.startswith('#')]
+            for result in as_completed(results):
+                if result._result:
+                    count += 1
+        print(f"\n{count} VMs are powered off.")
     
 
 if __name__ == '__main__':
