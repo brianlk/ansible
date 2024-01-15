@@ -115,8 +115,8 @@ def search_for_obj(content, vim_type, name, folder=None, recurse=True, uuid=None
     container = content.viewManager.CreateContainerView(folder, vim_type, recurse)
 
     for managed_object_ref in container.view:
-        if isinstance(managed_object_ref, vim.VirtualMachine):
-            if managed_object_ref.config.uuid == uuid:
+        if isinstance(managed_object_ref, vim.VirtualMachine) and uuid is not None:
+            if managed_object_ref.config.uuid == uuid and managed_object_ref.name == name:
                 obj = managed_object_ref
                 break
         if managed_object_ref.name == name:
