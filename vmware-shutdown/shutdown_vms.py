@@ -12,6 +12,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import time
 
 
+MAX_WORKERS_NUM = 10
+
+
 def shut_down(vm_name):
     args = run_cli(cli.Argument.DATACENTER_NAME)
     si = service_instance.connect(args)
@@ -43,7 +46,7 @@ def main():
     VM_LIST = read_vm_list()
     count = 0
     # Parallel shutdown the VMs
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS_NUM) as executor:
         results = [executor.submit(shut_down, vm.strip()) for vm in VM_LIST if not vm.startswith('#')]
         for result in as_completed(results):
             if result._result:
