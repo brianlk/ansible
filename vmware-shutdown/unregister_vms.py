@@ -7,7 +7,7 @@
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from datacenter import vm_config_backup, read_vm_list
+from datacenter import vm_config_backup, read_vm_list, run_cli
 
 import time
 
@@ -24,9 +24,7 @@ def unregister(vm_name, all_vms):
 
 
 def main():
-    parser = cli.Parser()
-    parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
-    args = parser.get_args()
+    args = run_cli(cli.Argument.DATACENTER_NAME)
     si = service_instance.connect(args)
     # backup is used by registration process later
     vm_config_backup(si, args.datacenter_name)
