@@ -4,19 +4,32 @@
 #
 # Example script to unmount/mount datastores
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from datacenter import run_cli
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import time
 import csv
 import json
 
 
-def find_all_vcenter_ds(content, DATACENTER):
+def main():
+    parser = cli.Parser()
+    parser.add_required_arguments(cli.Argument.MOUNT, cli.Argument.DATACENTER_NAME)
+    args = parser.get_args()
+    csv_uuids = {}
+    # Read .csv to get datastores being unmounted
+    with open('datastore_list.csv') as csvfile:
+        rows = csv.DictReader(csvfile)
+        for row in rows:
+            csv_uuids[row['datastore_name']] = row['datastore_uuid']
+
+    # Connect to Vcenter and find all datastores
     uuids = []
+    si = service_instance.connect(args)
+    content = si.RetrieveContent()
+    DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
     host_view = content.viewManager.CreateContainerView(DATACENTER, [vim.HostSystem], True)
     # Find all datastores in vcenter
     for host in host_view.view:
@@ -25,31 +38,6 @@ def find_all_vcenter_ds(content, DATACENTER):
         for m in mount_arr: 
             if m.volume.type == "VMFS":
                 uuids.append({'uuid': m.volume.uuid, 'name': m.volume.name, 'host': host})
-    return uuids
-
-
-def main():
-    args = run_cli()
-    csv_uuids = {}
-    # Read .csv to get datastores being unmounted
-    with open('datastore_list.csv') as csvfile:
-        rows = csv.DictReader(csvfile)
-        for row in rows:
-            csv_uuids[row['datastore_name']] = row['datastore_uuid']
-
-    si = service_instance.connect(args)
-    content = si.RetrieveContent()
-    DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
-    # Connect to Vcenter and find all datastores
-    uuids = find_all_vcenter_ds(content, DATACENTER)
-    # host_view = content.viewManager.CreateContainerView(DATACENTER, [vim.HostSystem], True)
-    # # Find all datastores in vcenter
-    # for host in host_view.view:
-    #     # host.configManager.storageSystem.UnmountVmfsVolume(vmfsUuid="65976112-57b5c868-b7b1-005056af88ac")
-    #     mount_arr = host.configManager.storageSystem.fileSystemVolumeInfo.mountInfo
-    #     for m in mount_arr: 
-    #         if m.volume.type == "VMFS":
-    #             uuids.append({'uuid': m.volume.uuid, 'name': m.volume.name, 'host': host})
     
     results = []
     # Match the csv uuid with Vcenter uuid

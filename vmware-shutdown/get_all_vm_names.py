@@ -15,7 +15,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-from datacenter import run_cli
 from tools import cli, service_instance, pchelper
 from pyVmomi import vim
 
@@ -58,7 +57,9 @@ def get_vms_in_dc(vm_name=None):
     Simple command-line program for listing the virtual machines on a host.
     """
 
-    args = run_cli()
+    parser = cli.Parser()
+    parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
+    args = parser.get_args()
     
     si = service_instance.connect(args)
 

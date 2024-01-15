@@ -11,11 +11,10 @@ from pyVmomi import vim
 import json
 
 
-def run_cli():
+def run_cli(*arg):
     parser = cli.Parser()
     parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
     args = parser.get_args()
-    return args
 
 def config_snapshot(si, datacenter_name):
     content = si.RetrieveContent()
@@ -41,7 +40,9 @@ def config_snapshot(si, datacenter_name):
         
 
 def main():
-    args = run_cli()
+    parser = cli.Parser()
+    parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
+    args = parser.get_args()
     si = service_instance.connect(args)
     config_snapshot(si, args.datacenter_name)
 
