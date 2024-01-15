@@ -13,8 +13,10 @@ import json
 
 def run_cli(*arg):
     parser = cli.Parser()
-    parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
+    for x in arg:
+        parser.add_required_arguments(x)
     args = parser.get_args()
+    return args
 
 def config_snapshot(si, datacenter_name):
     content = si.RetrieveContent()
@@ -40,11 +42,12 @@ def config_snapshot(si, datacenter_name):
         
 
 def main():
-    parser = cli.Parser()
-    parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
-    args = parser.get_args()
+    # parser = cli.Parser()
+    # parser.add_required_arguments(cli.Argument.DATACENTER_NAME)
+    # args = parser.get_args()
+    args = run_cli(cli.Argument.MOUNT, cli.Argument.DATACENTER_NAME)
     si = service_instance.connect(args)
-    config_snapshot(si, args.datacenter_name)
+    # config_snapshot(si, args.datacenter_name)
 
 
 if __name__ == '__main__':
