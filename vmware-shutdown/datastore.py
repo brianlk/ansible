@@ -15,6 +15,19 @@ import csv
 import json
 
 
+def find_all_vcenter_ds(content, DATACENTER):
+    uuids = []
+    host_view = content.viewManager.CreateContainerView(DATACENTER, [vim.HostSystem], True)
+    # Find all datastores in vcenter
+    for host in host_view.view:
+        # host.configManager.storageSystem.UnmountVmfsVolume(vmfsUuid="65976112-57b5c868-b7b1-005056af88ac")
+        mount_arr = host.configManager.storageSystem.fileSystemVolumeInfo.mountInfo
+        for m in mount_arr: 
+            if m.volume.type == "VMFS":
+                uuids.append({'uuid': m.volume.uuid, 'name': m.volume.name, 'host': host})
+    return uuids
+
+
 def main():
     args = run_cli()
     csv_uuids = {}
@@ -24,19 +37,19 @@ def main():
         for row in rows:
             csv_uuids[row['datastore_name']] = row['datastore_uuid']
 
-    # Connect to Vcenter and find all datastores
-    uuids = []
     si = service_instance.connect(args)
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
-    host_view = content.viewManager.CreateContainerView(DATACENTER, [vim.HostSystem], True)
-    # Find all datastores in vcenter
-    for host in host_view.view:
-        # host.configManager.storageSystem.UnmountVmfsVolume(vmfsUuid="65976112-57b5c868-b7b1-005056af88ac")
-        mount_arr = host.configManager.storageSystem.fileSystemVolumeInfo.mountInfo
-        for m in mount_arr: 
-            if m.volume.type == "VMFS":
-                uuids.append({'uuid': m.volume.uuid, 'name': m.volume.name, 'host': host})
+    # Connect to Vcenter and find all datastores
+    uuids = find_all_vcenter_ds(content, DATACENTER)
+    # host_view = content.viewManager.CreateContainerView(DATACENTER, [vim.HostSystem], True)
+    # # Find all datastores in vcenter
+    # for host in host_view.view:
+    #     # host.configManager.storageSystem.UnmountVmfsVolume(vmfsUuid="65976112-57b5c868-b7b1-005056af88ac")
+    #     mount_arr = host.configManager.storageSystem.fileSystemVolumeInfo.mountInfo
+    #     for m in mount_arr: 
+    #         if m.volume.type == "VMFS":
+    #             uuids.append({'uuid': m.volume.uuid, 'name': m.volume.name, 'host': host})
     
     results = []
     # Match the csv uuid with Vcenter uuid
