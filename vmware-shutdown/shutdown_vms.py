@@ -51,18 +51,19 @@ def shut_down(vm_name, si, datacenter_name):
                 key.PowerOffVM_Task()
             finally:
                 print(f"{value} is in {key.runtime.powerState}")
-                return True
+    
     return False
     
 
 def main():
-    args = run_cli(cli.Argument.DATACENTER_NAME)
+    args = run_cli(cli.Argument.DATACENTER_NAME, cli.Argument.POWER)
     si = service_instance.connect(args)
 
     # Read the VM names from hosts file
     VM_LIST = read_vm_list()
     count = 0
     # Parallel shutdown the VMs
+    print(args.power)
     with ThreadPoolExecutor(max_workers=MAX_WORKERS_NUM) as executor:
         results = [executor.submit(power_on, vm.strip(), si, args.datacenter_name) for vm in VM_LIST if not vm.startswith('#')]
         for result in as_completed(results):

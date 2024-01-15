@@ -147,6 +147,11 @@ class Argument:
         'options': {'action': 'store', 'choices': ['y', 'n'],
                     'help': 'Mount Vcenter datastores'}
     }
+    POWER = {
+        'name_or_flags': ['--power'],
+        'options': {'action': 'store', 'choices': ['on', 'off'],
+                    'help': 'Power on/off VMs'}
+    }
     UUID = {
         'name_or_flags': ['--uuid'],
         'options': {'action': 'store', 'help': 'UUID of an entity (VirtualMachine or HostSystem)'}
