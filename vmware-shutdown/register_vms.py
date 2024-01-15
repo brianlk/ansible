@@ -10,7 +10,33 @@ from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 
 import json
-import time
+
+
+def get_all_folders(content, DATACENTER):
+    fds = {}
+    all_folders = pchelper.get_all_obj(content, [vim.Folder], DATACENTER.vmFolder)
+
+    for f in all_folders:
+        fds[str(f)] = f
+    # return a map fds['folder_name'] = folder object        
+    return fds
+
+
+def get_all_resource_pools(content):
+    rp = {}
+    all_folders = pchelper.get_all_obj(content, [vim.ResourcePool])
+    for x in all_folders:
+        rp[str(x)] = x
+    # return a map rp['pool_name'] = pool object
+    return rp
+
+
+def read_vm_list():
+    #Read the VM names from hosts file
+    with open("vm_list", "r") as file:
+        file_content = file.read()
+
+    return file_content.split('\n')
 
 
 def main():
@@ -21,22 +47,12 @@ def main():
     with open("results.json", "r") as j:
         data = json.load(j)
 
-    rp = {}
-    all_folders = pchelper.get_all_obj(content, [vim.ResourcePool])
-    for x in all_folders:
-        rp[str(x)] = x
+    rp = get_all_resource_pools(content)
 
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
-    fds = {}
-    all_folders = pchelper.get_all_obj(content, [vim.Folder], DATACENTER.vmFolder)
+    fds = get_all_folders(content, DATACENTER)
 
-    for f in all_folders:
-        fds[str(f)] = f
-
-    #Read the VM names from hosts file
-    with open("vm_list", "r") as file:
-        file_content = file.read()
-    vms = file_content.split('\n')
+    vms = read_vm_list()
 
     for vm in vms:
         for d in data:
