@@ -23,20 +23,43 @@ def get_all_folders(content, DATACENTER):
 
 
 def get_all_resource_pools(content):
-    rp = {}
+    rps = {}
     all_folders = pchelper.get_all_obj(content, [vim.ResourcePool])
     for x in all_folders:
         rp[str(x)] = x
     # return a map rp['pool_name'] = pool object
-    return rp
+    return rps
 
 
 def read_vm_list():
     #Read the VM names from hosts file
     with open("vm_list", "r") as file:
         file_content = file.read()
-
     return file_content.split('\n')
+
+
+def read_result_json():
+    with open("results.json", "r") as j:
+        data = json.load(j)
+    return data
+
+
+def register_vm(content, DATACENTER, vms, fds, rps):
+    for vm in vms:
+        for d in read_result_json():
+            if vm == d['name']:
+                esx_host = pchelper.get_obj(content, [vim.HostSystem], d['host'])
+                if d['folder'] == str(DATACENTER.vmFolder):
+                    # VM in datacenter root folder
+                    DATACENTER.vmFolder.RegisterVM_Task(path=d['vm_path'], name=d['name'],
+                                                    asTemplate=False, 
+                                                    pool=rps[d['resource_pool']],
+                                                    host=esx_host)
+                else:
+                    fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'],
+                                                    asTemplate=False, 
+                                                    pool=rps[d['resource_pool']],
+                                                    host=esx_host)
 
 
 def main():
@@ -44,31 +67,13 @@ def main():
     si = service_instance.connect(args)
     content = si.RetrieveContent()
 
-    with open("results.json", "r") as j:
-        data = json.load(j)
-
-    rp = get_all_resource_pools(content)
+    rps = get_all_resource_pools(content)
 
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
     fds = get_all_folders(content, DATACENTER)
 
     vms = read_vm_list()
-
-    for vm in vms:
-        for d in data:
-            if vm == d['name']:
-                esx_host = pchelper.get_obj(content, [vim.HostSystem], d['host'])
-                if d['folder'] == str(DATACENTER.vmFolder):
-                    # VM in datacenter root folder
-                    DATACENTER.vmFolder.RegisterVM_Task(path=d['vm_path'], name=d['name'],
-                                                    asTemplate=False, 
-                                                    pool=rp[d['resource_pool']],
-                                                    host=esx_host)
-                else:
-                    fds[d['folder']].RegisterVM_Task(path=d['vm_path'], name=d['name'],
-                                                    asTemplate=False, 
-                                                    pool=rp[d['resource_pool']],
-                                                    host=esx_host)
+    register_vm(content, DATACENTER, vms, fds, rps)
 
 
 if __name__ == '__main__':
