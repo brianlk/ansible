@@ -17,8 +17,11 @@ def unregister(vm_name, all_vms):
 
     for key, value in all_vms.items():
         if key.runtime.powerState == "poweredOff" and value == vm_name:
-            key.UnregisterVM()
-            print(f"{vm_name} is unregistered.")
+            try:
+                key.UnregisterVM()
+                print(f"{vm_name} is unregistered.")
+            except:
+                return False
 
     return True
 
