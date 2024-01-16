@@ -59,7 +59,7 @@ def shut_down(vm_name, si, datacenter_name):
                 count += 1
                 key.ShutdownGuest()
             except Exception as e:
-                print(f"Powering off: {vm_name} {str(e)}")
+                print(f"Powering off: {vm_name} due to {e.msg}")
                 key.PowerOffVM_Task()
     
     return count
