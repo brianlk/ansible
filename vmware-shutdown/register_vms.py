@@ -40,17 +40,19 @@ def register_vm(content, DATACENTER, vms, fds, rps):
                 esx_host = pchelper.get_obj(content, [vim.HostSystem], d['host'])
                 if d['folder'] == str(DATACENTER.vmFolder):
                     # VM in datacenter root folder
-                    DATACENTER.vmFolder.RegisterVM_Task(path=d['vm_path'],
-                                                        name=d['name'],
-                                                        asTemplate=False, 
-                                                        pool=rps[d['resource_pool']],
-                                                        host=esx_host)
+                    folder_obj = DATACENTER.vmFolder
                 else:
-                    fds[d['folder']].RegisterVM_Task(path=d['vm_path'],
-                                                    name=d['name'],
-                                                    asTemplate=False, 
-                                                    pool=rps[d['resource_pool']],
-                                                    host=esx_host)
+                    folder_obj = fds[d['folder']]       
+                    # fds[d['folder']].RegisterVM_Task(path=d['vm_path'],
+                    #                                 name=d['name'],
+                    #                                 asTemplate=False, 
+                    #                                 pool=rps[d['resource_pool']],
+                    #                                 host=esx_host)
+                folder_obj.RegisterVM_Task(path=d['vm_path'],
+                                    name=d['name'],
+                                    asTemplate=False, 
+                                    pool=rps[d['resource_pool']],
+                                    host=esx_host)
                 count += 1
     return count
 
