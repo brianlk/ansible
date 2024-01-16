@@ -51,7 +51,7 @@ def register_vm(content, DATACENTER, vms, fds, rps):
                                                     asTemplate=False, 
                                                     pool=rps[d['resource_pool']],
                                                     host=esx_host)
-                    count += 1
+                count += 1
     return count
 
 def main():
