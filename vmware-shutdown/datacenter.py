@@ -11,7 +11,7 @@ from pyVmomi import vim
 import json
 
 
-VM_LIST_FILE = "vm_list"
+VM_LIST_FILE = "vm_list.txt"
 VM_CFG_BACKUP = "results.json"
 
 
