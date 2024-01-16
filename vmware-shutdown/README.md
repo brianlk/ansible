@@ -89,9 +89,4 @@ Output:
 
 Output:
 
-    abc2 is registered.
-    abc1 is registered.
 
-    2 VMs are registered.
-
-    
