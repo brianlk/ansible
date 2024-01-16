@@ -68,7 +68,7 @@ def shut_down(vm_name, si, datacenter_name):
 def start_workers(action, si, args):
     count = 0
     VM_LIST = read_vm_list()
-    # Parallel shutdown the VMs
+    # Parallel actions on the VMs
     with ThreadPoolExecutor(max_workers=MAX_WORKERS_NUM) as executor:
         results = [executor.submit(action, vm.strip(), si, args.datacenter_name) 
                    for vm in VM_LIST if vm and not vm.startswith('#')]
