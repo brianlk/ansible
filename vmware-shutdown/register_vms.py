@@ -32,6 +32,7 @@ def get_all_resource_pools(content):
 
 
 def register_vm(content, DATACENTER, vms, fds, rps):
+    count = 0
     for vm in vms:
         for d in read_result_json():
             if vm == d['name']:
@@ -50,7 +51,8 @@ def register_vm(content, DATACENTER, vms, fds, rps):
                                                     asTemplate=False, 
                                                     pool=rps[d['resource_pool']],
                                                     host=esx_host)
-
+                    count += 1
+    return count
 
 def main():
     args = run_cli(cli.Argument.DATACENTER_NAME)
@@ -63,7 +65,8 @@ def main():
     fds = get_all_folders(content, DATACENTER)
 
     VM_LIST = read_vm_list()
-    register_vm(content, DATACENTER, VM_LIST, fds, rps)
+    count = register_vm(content, DATACENTER, VM_LIST, fds, rps)
+    print(f"\n{count} VMs are registered.")
 
 
 if __name__ == '__main__':

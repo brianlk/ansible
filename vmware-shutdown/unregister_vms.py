@@ -43,8 +43,8 @@ def main():
         VM_LIST = read_vm_list()
 
         count = 0
-        for vm in VM_LIST:
-            if unregister(vm, pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)):
+        for vmname in VM_LIST:
+            if unregister(vmname, pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)):
                 count += 1
         print(f"\n{count} VMs are unregistered.")
     else:
