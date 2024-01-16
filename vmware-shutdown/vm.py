@@ -8,6 +8,7 @@ from datacenter import run_cli, read_vm_list
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Union
 
 import time
 
@@ -15,7 +16,7 @@ import time
 MAX_WORKERS_NUM = 10
 
 
-def power_on(vm_name, si, datacenter_name):
+def power_on(vm_name, si, datacenter_name) -> Union[int, bool]:
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
     dc_all_vm = None
@@ -39,7 +40,7 @@ def power_on(vm_name, si, datacenter_name):
     return count
         
 
-def shut_down(vm_name, si, datacenter_name):
+def shut_down(vm_name, si, datacenter_name) -> Union[int, bool]:
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
     dc_all_vm = None
