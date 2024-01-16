@@ -42,17 +42,12 @@ def register_vm(content, DATACENTER, vms, fds, rps):
                     # VM in datacenter root folder
                     folder_obj = DATACENTER.vmFolder
                 else:
-                    folder_obj = fds[d['folder']]       
-                    # fds[d['folder']].RegisterVM_Task(path=d['vm_path'],
-                    #                                 name=d['name'],
-                    #                                 asTemplate=False, 
-                    #                                 pool=rps[d['resource_pool']],
-                    #                                 host=esx_host)
-                folder_obj.RegisterVM_Task(path=d['vm_path'],
-                                    name=d['name'],
-                                    asTemplate=False, 
-                                    pool=rps[d['resource_pool']],
-                                    host=esx_host)
+                    folder_obj = fds[d['folder']]
+
+                folder_obj.RegisterVM_Task(path=d['vm_path'], name=d['name'], 
+                                           asTemplate=False, 
+                                           pool=rps[d['resource_pool']], 
+                                           host=esx_host)
                 count += 1
     return count
 
