@@ -29,20 +29,13 @@ def power_on(vm_name, si, datacenter_name):
     
     count = 0
     for key, value in dc_all_vm.items():
-        # if key.runtime.powerState == "poweredOff" and value == vm_name:
-        if value == vm_name:
-            # try:
+        if key.runtime.powerState == "poweredOff" and value == vm_name:
             print(f"Powering on: {value}")
-            esx_host = pchelper.get_obj(content, [vim.HostSystem], 
-                                        key.summary.runtime.host.name)
+            esx_host = pchelper.get_obj(content, [vim.HostSystem], key.summary.runtime.host.name)
             count += 1
-            raise Exception("i am ok")
-            # task = key.PowerOnVM_Task(esx_host)
-            # tasks.wait_for_tasks(si, [task])
-            # except:
-            #     print(f"Error: failed to power on {vm_name}")
-
-    
+            task = key.PowerOnVM_Task(esx_host)
+            tasks.wait_for_tasks(si, [task])
+                
     return count
         
 
@@ -80,11 +73,11 @@ def start_workers(action, si, args):
         results = [executor.submit(action, vm.strip(), si, args.datacenter_name) 
                    for vm in VM_LIST if vm and not vm.startswith('#')]
         for result in as_completed(results):
-            print(vars(result))
-            if result._result:
-                count += result._result
             if result._exception:
-                print(str(result._exception))
+                print(result._exception.msg)
+            else:
+                count += result._result
+
     print(f"\n{count} VMs are powered {args.power}.")
     
 
