@@ -33,7 +33,7 @@ def get_all_resource_pools(content):
 def register_vm(content, DATACENTER, vms, fds, rps):
     count = 0
     for vm in vms:
-        # Read the results.json before unregister
+        # Read the results.json which is created in unregister
         for d in read_result_json():
             if vm == d['name']:
                 # create host object for the vm before register

@@ -57,9 +57,9 @@ def shut_down(vm_name, si, datacenter_name):
             try:
                 print(f"Shutting down: {value}")
                 count += 1
-                task = key.ShutdownGuest()
-                tasks.wait_for_tasks(si, [task])
-            except:
+                key.ShutdownGuest()
+            except Exception as e:
+                print(f"Powering off: {vm_name} {str(e)}")
                 key.PowerOffVM_Task()
     
     return count
