@@ -90,16 +90,17 @@ Output:
 Output:
 
 
-
 **_Power on VMs in Vcenter_**
 
-./vm.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl --datacenter-name '_datacenter_name_' --power off
+./vm.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl --datacenter-name '_datacenter_name_' --power on
 
 Output:
 
-    Shutting down: abc1
-    Shutting down: abc2
-    abc1 is in poweredOff
-    abc2 is in poweredOff
+    Powering on: New Virtual Machine
+    Powering on: abc2
+    Powering on: abc4
+    Powering on: abc1
+    Powering on: abc3
+    Powering on: abc5
 
-    2 VMs are powered off.
+    6 VMs are powered on.
