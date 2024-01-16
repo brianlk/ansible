@@ -76,7 +76,7 @@ def main():
     # Find datacenter name
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
 
-    # datastore list. Example, 
+    # Datastore list. Example, 
     # results = 
     #  [{'uuid': '65976112-57b5c868-b7b1-005056af88ac', 'name': 'san-1', 
     # 'host': 'vim.HostSystem:host-1391'},...]

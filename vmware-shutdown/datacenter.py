@@ -36,7 +36,6 @@ def run_cli(*args):
     return parser.get_args()
 
 
-
 def vm_config_backup(si, datacenter_name):
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
