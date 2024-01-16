@@ -26,7 +26,7 @@ Add the vm names into file vm_list
 
 **_Shut down VMs in Vcenter_**
 
-./shutdown_vms.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl --datacenter-name '_datacenter_name_'
+./vm.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl --datacenter-name '_datacenter_name_' --power off
 
 Output:
 
@@ -81,3 +81,15 @@ Output:
     'vim.HostSystem:host-16' mounted datastore san-3 65976131-80086a28-d939-005056af88ac
 
     6 datastores are mounted.
+
+
+**_Register VMs in Vcenter_**
+
+./register_vms.py -s _vcenter-ip_ -u '_administrator@vsphere.local_' -p '_password_' -nossl --datacenter-name '_datacenter_name_'
+
+Output:
+
+    abc2 is registered.
+    abc1 is registered.
+
+    2 VMs are registered.
