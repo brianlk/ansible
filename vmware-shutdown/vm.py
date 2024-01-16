@@ -27,19 +27,21 @@ def power_on(vm_name, si, datacenter_name):
     if not dc_all_vm:
         return False
     
+    count = 0
     for key, value in dc_all_vm.items():
-        if key.runtime.powerState == "poweredOff" and value == vm_name:
-            try:
-                print(f"Powering on: {value}")
-                esx_host = pchelper.get_obj(content, [vim.HostSystem], 
-                                            key.summary.runtime.host.name)
-                task = key.PowerOnVM_Task(esx_host)
-                tasks.wait_for_tasks(si, [task])
-            except:
-                print(f"Error: failed to power on {vm_name}")
-                return False
+        # if key.runtime.powerState == "poweredOff" and value == vm_name:
+        try:
+            print(f"Powering on: {value}")
+            esx_host = pchelper.get_obj(content, [vim.HostSystem], 
+                                        key.summary.runtime.host.name)
+            count += 1
+            task = key.PowerOnVM_Task(esx_host)
+            tasks.wait_for_tasks(si, [task])
+        except:
+            print(f"Error: failed to power on {vm_name}")
+
     
-    return True
+    return count
         
 
 def shut_down(vm_name, si, datacenter_name):
@@ -53,17 +55,19 @@ def shut_down(vm_name, si, datacenter_name):
     
     if not dc_all_vm:
         return False
-    
+        
+    count = 0
     for key, value in dc_all_vm.items():
         if key.runtime.powerState != "poweredOff" and value == vm_name:
             try:
                 print(f"Shutting down: {value}")
+                count += 1
                 task = key.ShutdownGuest()
                 tasks.wait_for_tasks(si, [task])
             except:
                 key.PowerOffVM_Task()
     
-    return True
+    return count
 
 
 def start_workers(action, si, args):
@@ -71,10 +75,12 @@ def start_workers(action, si, args):
     VM_LIST = read_vm_list()
     # Parallel shutdown the VMs
     with ThreadPoolExecutor(max_workers=MAX_WORKERS_NUM) as executor:
-        results = [executor.submit(action, vm.strip(), si, args.datacenter_name) for vm in VM_LIST if vm and not vm.startswith('#')]
+        results = [executor.submit(action, vm.strip(), si, args.datacenter_name) 
+                   for vm in VM_LIST if vm and not vm.startswith('#')]
         for result in as_completed(results):
+            print(vars(result))
             if result._result:
-                count += 1
+                count += result._result
     print(f"\n{count} VMs are powered {args.power}.")
     
 
