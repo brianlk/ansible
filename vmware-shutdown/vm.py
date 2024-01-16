@@ -30,15 +30,17 @@ def power_on(vm_name, si, datacenter_name):
     count = 0
     for key, value in dc_all_vm.items():
         # if key.runtime.powerState == "poweredOff" and value == vm_name:
-        try:
+        if value == vm_name:
+            # try:
             print(f"Powering on: {value}")
             esx_host = pchelper.get_obj(content, [vim.HostSystem], 
                                         key.summary.runtime.host.name)
             count += 1
-            task = key.PowerOnVM_Task(esx_host)
-            tasks.wait_for_tasks(si, [task])
-        except:
-            print(f"Error: failed to power on {vm_name}")
+            raise Exception("")
+            # task = key.PowerOnVM_Task(esx_host)
+            # tasks.wait_for_tasks(si, [task])
+            # except:
+            #     print(f"Error: failed to power on {vm_name}")
 
     
     return count
