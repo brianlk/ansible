@@ -18,14 +18,27 @@ MAX_WORKERS_NUM = 10
 def power_on(vm_name, si, datacenter_name):
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
-    for d in read_result_json():
+    dc_all_vm = None
+    try:
+        dc_all_vm = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
+    except:
+        pass
 
-        if d['name'] == vm_name:
-            vm = pchelper.get_obj(content, [vim.VirtualMachine], d['name'], DATACENTER.vmFolder, uuid=d['uuid'])
-            esx_host = pchelper.get_obj(content, [vim.HostSystem], d['host'])
-            print(f"Powering on: {vm_name}")
-            task = vm.PowerOnVM_Task(esx_host)
-            tasks.wait_for_tasks(si, [task])
+    if not dc_all_vm:
+        return False
+    
+    for key, value in dc_all_vm.items():
+        if key.runtime.powerState == "poweredOff" and value == vm_name:
+            try:
+                print(f"Powering on: {value}")
+                esx_host = pchelper.get_obj(content, [vim.HostSystem], 
+                                            key.summary.runtime.host.name)
+                task = key.PowerOnVM_Task(esx_host)
+                tasks.wait_for_tasks(si, [task])
+            except:
+                print(f"Error: failed to power on {vm_name}")
+                return False
+    
     return True
         
 
