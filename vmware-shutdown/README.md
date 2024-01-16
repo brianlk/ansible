@@ -89,6 +89,8 @@ Output:
 
 Output:
 
+    6 VMs are registered.
+
 
 **_Power on VMs in Vcenter_**
 
