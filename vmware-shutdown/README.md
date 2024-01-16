@@ -93,3 +93,5 @@ Output:
     abc1 is registered.
 
     2 VMs are registered.
+
+    
