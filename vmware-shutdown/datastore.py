@@ -81,7 +81,12 @@ def main():
     results = compare_csv_all_ds(content, DATACENTER)
 
     # Mount or Unmount the datastores
-    (count, state) = mount_or_umount_ds(args, results)
+    try:
+        (count, state) = mount_or_umount_ds(args, results)
+    except Exception as e:
+        print(f"Error: failed to umount datastore {e.msg}")
+        print("Umount datastore aborted.")
+        exit()
 
     print(f"\n{count} datastores are {state}.")
 
