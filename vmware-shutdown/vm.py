@@ -4,7 +4,7 @@
 #
 # Example script to shut down VMs
 
-from datacenter import run_cli, read_vm_list, read_result_json
+from datacenter import run_cli, read_vm_list
 from tools import cli, service_instance, tasks, pchelper
 from pyVmomi import vim
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -73,10 +73,11 @@ def start_workers(action, si, args):
         results = [executor.submit(action, vm.strip(), si, args.datacenter_name) 
                    for vm in VM_LIST if vm and not vm.startswith('#')]
         for result in as_completed(results):
-            if result._exception:
-                print(result._exception.msg)
+            if result.exception():
+                # Print the exception from threads
+                print(result.exception())
             else:
-                count += result._result
+                count += result.result()
 
     print(f"\n{count} VMs are powered {args.power}.")
     

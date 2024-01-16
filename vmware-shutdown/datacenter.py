@@ -5,7 +5,7 @@
 # Example script to power off VMs
 
 
-from tools import cli, service_instance, tasks, pchelper
+from tools import cli, service_instance, pchelper
 from pyVmomi import vim
 
 import json

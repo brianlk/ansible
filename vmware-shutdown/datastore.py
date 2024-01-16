@@ -5,10 +5,8 @@
 # Example script to unmount/mount datastores
 
 from datacenter import run_cli
-from tools import cli, service_instance, tasks, pchelper
+from tools import cli, service_instance, pchelper
 from pyVmomi import vim
-
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import time
 import csv

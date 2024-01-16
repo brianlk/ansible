@@ -4,9 +4,8 @@
 #
 # Example script to register VMs after DR
 
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from datacenter import run_cli, read_vm_list, read_result_json
-from tools import cli, service_instance, tasks, pchelper
+from tools import cli, service_instance, pchelper
 from pyVmomi import vim
 
 import json
@@ -34,6 +33,7 @@ def get_all_resource_pools(content):
 def register_vm(content, DATACENTER, vms, fds, rps):
     count = 0
     for vm in vms:
+        # Read the results.json before unregister
         for d in read_result_json():
             if vm == d['name']:
                 # create host object for the vm before register
