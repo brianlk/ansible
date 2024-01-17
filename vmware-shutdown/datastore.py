@@ -84,7 +84,7 @@ def main():
     try:
         (count, state) = mount_or_umount_ds(args, results)
     except Exception as e:
-        print(f"Error: failed to umount datastore {e.msg}")
+        print(f"\nError: failed to umount datastore {e.msg}")
         print("Umount datastore aborted.")
         exit()
 
