@@ -67,6 +67,7 @@ def test_func(si, datacenter_name):
     folders = pchelper.get_all_obj(content, [vim.Folder], DATACENTER.vmFolder)
     for f in folders:
         print(f, f.name, f.parent, f.parent.name)
+    DATACENTER.vmFolder.CreateFolder(name="abc123")
     # folders = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
     # for f in folders:
     #     print(f, f.name, f.parent)
