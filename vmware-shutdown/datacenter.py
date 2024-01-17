@@ -48,6 +48,7 @@ def vm_config_backup(si, datacenter_name):
             obj = {}
             obj['name'] = v.name
             obj['uuid'] = v.config.uuid
+            obj['vm_obj'] = str(v)
             obj['folder'] = str(v.parent)
             obj['host'] = v.summary.runtime.host.name
             obj['vm_path'] = v.summary.config.vmPathName
