@@ -61,10 +61,12 @@ def vm_config_backup(si, datacenter_name):
 
 
 def test_func(si, datacenter_name):
-    content = si.RetrieveContent()
-    DATACENTER = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
-    print(DATACENTER.vmFolder)
-    folders = pchelper.get_all_obj(content, [vim.AboutInfo], DATACENTER.vmFolder)
+    content = si.content
+    print(content.rootFolder.childEntity[0].name)
+    # content = si.RetrieveContent()
+    # DATACENTER = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
+    # print(DATACENTER.vmFolder)
+    # folders = pchelper.get_all_obj(content, [vim.AboutInfo], DATACENTER.vmFolder)
     # for f in folders:
     #     print(f, f.name, f.parent, f.parent.name)
     # DATACENTER.vmFolder.CreateFolder(name="abc")
