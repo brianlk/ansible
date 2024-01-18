@@ -64,10 +64,10 @@ def test_func(si, datacenter_name):
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], datacenter_name)
     print(DATACENTER.vmFolder)
-    folders = pchelper.get_all_obj(content, [vim.Folder], DATACENTER.vmFolder)
-    for f in folders:
-        print(f, f.name, f.parent, f.parent.name)
-    DATACENTER.vmFolder.CreateFolder(name="abc123")
+    folders = pchelper.get_all_obj(content, [vim.AboutInfo], DATACENTER.vmFolder)
+    # for f in folders:
+    #     print(f, f.name, f.parent, f.parent.name)
+    # DATACENTER.vmFolder.CreateFolder(name="abc")
     # folders = pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
     # for f in folders:
     #     print(f, f.name, f.parent)
