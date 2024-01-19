@@ -1,0 +1,11 @@
+- name: VMWare DR
+  hosts: localhost
+  connection: local
+  
+  tasks:
+    - assert: 
+        that: action is defined
+        fail_msg: "Extra vars action is not found."
+
+    - include_role: 
+        name: vmware_dr

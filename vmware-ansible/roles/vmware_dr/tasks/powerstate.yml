@@ -1,0 +1,54 @@
+---
+- block:
+  - name: Shut down guest
+    vmware_guest_powerstate:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: False
+      name: "{{ item }}"
+      state: shutdown-guest
+      force: True
+    ignore_errors: true
+    delegate_to: localhost
+    # when: item.power_state != "poweredOff"
+    loop: "{{ vms }}"
+    register: sg
+
+  - name: Power off guest
+    vmware_guest_powerstate:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      validate_certs: False
+      name: "{{ item.item }}"
+      state: powered-off
+      force: True
+    delegate_to: localhost
+    when: item.failed
+    loop: "{{ sg.results }}"
+  when: state == "shutdown"
+
+
+- name: Power on guest
+  vmware_guest_powerstate:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: False
+    name: "{{ item }}"
+    state: powered-on
+    force: True
+  ignore_errors: true
+  delegate_to: localhost
+  # when: item.power_state != "poweredOff"
+  loop: "{{ vms }}"
+  register: sg
+  when: state == "poweron"
+
+
+# - set_fact:
+#     vm_meta: "{{ lookup('file','output.json') | from_json }}"
+
+# - debug:
+#     var: vm_meta

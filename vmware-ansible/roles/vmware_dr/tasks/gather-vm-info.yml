@@ -1,0 +1,43 @@
+---
+
+- name: Gather all registered virtual machines inside folders
+  vmware_vm_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+    validate_certs: False
+    vm_name: "{{ item }}"
+  delegate_to: localhost
+  loop: "{{ vms }}"
+  register: vminfo2
+
+- name: Gather disk info from virtual machine using moid
+  vmware_guest_disk_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ vcenter_datacenter }}"
+    validate_certs: False
+    moid: "{{ item.virtual_machines[0]['moid'] }}"
+  delegate_to: localhost
+  loop: "{{ vminfo2.results }}"
+  register: disk_info
+
+
+- set_fact:
+    vm_info_map: "{{ vm_info_map|default([]) + [{
+                                            'name':item.item.virtual_machines[0].guest_name, 
+                                            'filename':item.guest_disk_info['0'].backing_filename,
+                                            'folder':item.item.virtual_machines[0].folder,
+                                            'resource_pool':item.item.virtual_machines[0].resource_pool,
+                                            'uuid':item.item.virtual_machines[0].uuid,
+                                            'esxi_hostname':item.item.virtual_machines[0].esxi_hostname,
+                                            'moid':item.item.virtual_machines[0].moid
+                                            }] }}"
+  loop: "{{ disk_info.results }}"
+
+
+- name: Save the unregistered VM into output.json
+  template:
+    src: output.j2
+    dest: output.json

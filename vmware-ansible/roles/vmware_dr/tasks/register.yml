@@ -1,0 +1,21 @@
+---
+- set_fact:
+    vm_meta: "{{ lookup('file','output.json') | from_json }}"
+
+# - debug:
+#     var: vm_meta
+
+- name: Register VM from inventory
+  vmware_guest_register_operation:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: False
+    datacenter: "{{ vcenter_datacenter }}"
+    folder: "{{ item.folder }}"
+    resource_pool: "{{ item.resource_pool }}"
+    esxi_hostname: "{{ item.esxi_hostname }}"
+    name: "{{ item.name }}"
+    state: present
+    path: "{{ item.filename | replace('.vmdk', '.vmx') }}"
+  loop: "{{ vm_meta }}"

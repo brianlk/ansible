@@ -1,0 +1,31 @@
+---
+# - name: Gather all registered virtual machines inside folders
+#   community.vmware.vmware_vm_info:
+#     hostname: '{{ vcenter_hostname }}'
+#     username: '{{ vcenter_username }}'
+#     password: '{{ vcenter_password }}'
+#     validate_certs: False
+#     vm_name: "{{ item }}"
+#   delegate_to: localhost
+#   loop: "{{ vms }}"
+#   register: vminfo2
+
+- name: UnRegister VM from inventory
+  vmware_guest_register_operation:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: False
+    datacenter: "{{ vcenter_datacenter }}"
+    folder: "{{ item.virtual_machines[0]['folder'] }}"
+    esxi_hostname: "{{ item.virtual_machines[0]['esxi_hostname'] }}"
+    name: "{{ item.virtual_machines[0]['guest_name'] }}"
+    state: absent
+  when: item.virtual_machines[0]['power_state'] == "poweredOff"
+  loop: "{{ vminfo2.results }}"
+
+# - set_fact:
+#     vm_meta: "{{ lookup('file','output.json') | from_json }}"
+
+# - debug:
+#     var: vm_meta

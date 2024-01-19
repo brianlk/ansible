@@ -1,0 +1,8 @@
+[
+{% for v in vm_info_map %}
+  {"name":"{{v.name}}","esxi_hostname":"{{v.esxi_hostname}}", 
+  "folder":"{{v.folder}}","moid":"{{v.moid}}","resource_pool":"{{v.resource_pool}}",
+  "uuid":"{{v.uuid}}","filename":"{{v.filename}}"}
+  {% if not loop.last %},{% endif %}
+{% endfor %}
+]

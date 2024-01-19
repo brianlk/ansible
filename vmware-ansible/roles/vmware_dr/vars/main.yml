@@ -1,0 +1,12 @@
+---
+# vars file for vmware_dr
+vcenter_datacenter: "Datacenter brian"
+vcenter_hostname: '10.1.5.44'
+vcenter_username: 'administrator@vsphere.local'
+vcenter_password: 'P@ssw0rd'
+vms:
+  - "abc1"
+  - "abc2"
+  - "abc3"
+  - "abc4"
+  - "no-vmware-tools"

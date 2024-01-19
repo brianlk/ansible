@@ -1,0 +1,19 @@
+---
+
+- include_tasks: powerstate.yml
+  vars:
+    state: "shutdown"
+  when: action == "shutdown"
+
+- block:
+    - include_tasks: gather-vm-info.yml
+    - include_tasks: unregister.yml
+  when: action == "unregister"
+
+- include_tasks: register.yml
+  when: action == "register"
+
+- include_tasks: powerstate.yml
+  vars:
+    state: "poweron"
+  when: action == "poweron"
