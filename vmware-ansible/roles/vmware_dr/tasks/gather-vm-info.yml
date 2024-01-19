@@ -32,7 +32,8 @@
                                             'resource_pool':item.item.virtual_machines[0].resource_pool,
                                             'uuid':item.item.virtual_machines[0].uuid,
                                             'esxi_hostname':item.item.virtual_machines[0].esxi_hostname,
-                                            'moid':item.item.virtual_machines[0].moid
+                                            'moid':item.item.virtual_machines[0].moid,
+                                            'datastores': item.item.virtual_machines[0].datastore_url
                                             }] }}"
   loop: "{{ disk_info.results }}"
 

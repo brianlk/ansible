@@ -1,14 +1,4 @@
 ---
-# - name: Gather all registered virtual machines inside folders
-#   community.vmware.vmware_vm_info:
-#     hostname: '{{ vcenter_hostname }}'
-#     username: '{{ vcenter_username }}'
-#     password: '{{ vcenter_password }}'
-#     validate_certs: False
-#     vm_name: "{{ item }}"
-#   delegate_to: localhost
-#   loop: "{{ vms }}"
-#   register: vminfo2
 
 - name: UnRegister VM from inventory
   vmware_guest_register_operation:
