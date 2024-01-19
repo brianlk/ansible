@@ -18,7 +18,7 @@
     state: "poweron"
   when: action == "poweron"
 
-# - include_tasks: gather-vm-info.yml
+- include_tasks: gather-vm-info.yml
 
 # - name: Gather vmware host facts from vCenter
 #   community.vmware.vmware_host_facts:
