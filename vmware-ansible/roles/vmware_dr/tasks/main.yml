@@ -17,3 +17,16 @@
   vars:
     state: "poweron"
   when: action == "poweron"
+
+- name: Gather vmware host facts from vCenter
+  community.vmware.vmware_host_facts:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: False
+    esxi_hostname: "10.1.23.102"
+  register: host_facts
+  delegate_to: localhost
+
+- debug:
+    msg: "{{ host_facts }}"
