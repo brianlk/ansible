@@ -1,7 +1,0 @@
----
-- hosts: host
-  vars:
-    disk_map: []
-
-  tasks:
-    - include_tasks: checknewdisks.yml

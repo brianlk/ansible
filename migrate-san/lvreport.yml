@@ -1,8 +1,0 @@
----
-- name: Generate lvs report
-  command: "lvs {{ vgname }} --reportformat json"
-  register: report
-
-- name: Convert from json
-  set_fact:
-    jsondata: "{{ report.stdout | from_json }}"
