@@ -1,0 +1,21 @@
+---
+- name: Check if there is existing partiton
+  shell: |
+    lsblk {{ item }} | grep part
+  register: part
+  ignore_errors: true
+
+- name: Fail the playbook when partition exists in new devices
+  fail:
+    msg: "Fail the playbook when partition exists in new devices"
+  when: part.rc == 0
+  any_errors_fatal: true
+
+- name: Create partition on new device
+  shell: |
+    (echo n; echo p; echo 1; echo ; echo ; echo t; echo 8e; echo w) | fdisk {{ item }}
+  any_errors_fatal: true
+
+- name: Create PVs
+  command: "pvcreate --zero y {{ item | regex_replace('$', '1') }}"
+

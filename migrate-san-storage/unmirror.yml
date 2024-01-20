@@ -1,0 +1,28 @@
+---
+- hosts: host
+  vars:
+    old_dev: []
+
+  tasks:
+    - name: Read the old disks from file
+      command: "cat /var/tmp/old-disk"
+      register: disk
+
+    - set_fact:
+        old_disks: "{{ disk.stdout_lines | join(' ') }}"
+
+    - include_tasks: lvreport.yml
+
+    - include_tasks: get_lvs.yml
+
+    - fail:
+        msg: "{{ item.copy_percent }}" 
+      when: (item.copy_percent | int) != 100
+      loop: "{{ jsondata.report[0].lv }}"
+      any_errors_fatal: true
+
+    - command: "lvconvert -y -m 0 /dev/{{ vgname }}/{{ item }} {{ old_disks }}"
+      loop: "{{ lvs.stdout_lines }}"
+
+    - command: "vgreduce {{ vgname }} {{ old_disks }}"
+

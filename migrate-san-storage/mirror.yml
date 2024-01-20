@@ -1,0 +1,32 @@
+---
+- hosts: host
+  vars:
+    disk_map: []
+
+  tasks:
+    - include_tasks: backupvg.yml
+    
+    - include_tasks: checknewdisks.yml
+
+    - include_tasks: partition.yml
+      loop: "{{ new_dev }}"
+      
+    - name: Update devices into /dev/sdx1
+      set_fact:
+        new_dev: "{{ new_dev | map('regex_replace', '$', '1') | list }}"
+
+    - name: Extend volume group
+      command: "vgextend {{ vgname }} {{ new_dev | join(' ') }}"
+
+    - include_tasks: get_lvs.yml
+
+    - name: Mirror the LV
+      command: "lvconvert -y -m 1 /dev/{{ vgname }}/{{ item }} {{ new_dev | join(' ') }}"
+      loop: "{{ lvs.stdout_lines }}"
+
+    - include_tasks: lvreport.yml
+
+    - debug:
+        msg: "{{ item.lv_name }} => {{ item.copy_percent }}"
+      loop: "{{  jsondata.report[0].lv }}"
+

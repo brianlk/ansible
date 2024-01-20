@@ -1,0 +1,49 @@
+---
+- hosts: host
+  vars:
+    - disk_map: []
+    - new_dev: []
+    - disk1: "624a937075362d08f5bc46ca00014d59"
+
+
+  tasks:
+    - shell: |
+        parted -j /dev/sdd print 2>/dev/null
+      register: xxx
+
+    - set_fact:
+        aaa: "{{ xxx.stdout | from_json }}"
+      
+    - debug:
+        msg: "{{ aaa.disk }}"
+    #  failed_when: aaa.disk.partitions is defined
+    #  any_errors_fatal: true
+    # - name: Execute scsi rescan
+    #   shell: |
+    #     cd /sys/class/scsi_host
+    #     for s in `ls`
+    #     do
+    #       echo "- - -" > $s/scan
+    #     done
+
+    # - name: List lsscsi
+    #   shell: |
+    #     lsscsi -u
+    #   register: scsi
+    
+    # - name: xxxx
+    #   set_fact:
+    #     new_dev: "{{ new_dev + [item | regex_replace('.*\\s+disk\\s+(\\w+)\\s+.*','\\1') | lower] }}"
+    #   loop: "{{ scsi.stdout_lines }}"
+    #   when: '"disk" in item'
+
+    # - set_fact:
+    #     count: "{{ count | default(0) + 1 }}"
+    #   loop: "{{ new_dev }}"
+    #   when: (disk1 | lower) in item
+      
+
+    # - debug:
+    #     msg: "{{ count }}"
+- name: xxxxxx
+  import_playbook: checknewdisks.yml

@@ -1,0 +1,9 @@
+---
+- name: Split
+  set_fact:
+    arr: "{{ item | split }}"
+
+- set_fact:
+    #disk_map: "{{ disk_map | combine({arr[2]: arr[3]}) }}"
+    disk_map: "{{ disk_map + [{'lunid': arr[2], 'dev': arr[3]}] }}"
+  when: arr[3] is defined   # Redhat may return nothing for localdisk
