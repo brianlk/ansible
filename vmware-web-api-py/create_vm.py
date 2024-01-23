@@ -51,7 +51,7 @@ def create_vm(si, vm_name, datacenter_name, host_ip, datastore_name=None):
         print("VM name %s already exists." % vm_name, file=sys.stderr)
 
 
-def create_config_spec(datastore_name, name, memory=4, guest="otherGuest",
+def create_config_spec(datastore_name, name, memory=400, guest="otherGuest",
                        annotation="Sample", cpus=1):
     config = vim.vm.ConfigSpec()
     config.annotation = annotation
