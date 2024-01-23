@@ -29,9 +29,9 @@ def add_disk(si):
     content = si.RetrieveContent()
     datacenter = pchelper.get_obj(content, [vim.Datacenter], "Datacenter brian")
     vd = content.virtualDiskManager
-    print(vd)
-    # sp = vd.VirtualDiskSpec()
-    # vd.CreateVirtualDisk_Task(name="abcdisk1", datacenter=datacenter, spec=sp)
+    sp = vim.VirtualDiskManager.VirtualDiskSpec(adapterType="ide",diskType="thin")
+    x = vd.CreateVirtualDisk_Task(name="[Datastore] t1/abcdisk1", datacenter=datacenter, spec=sp)
+    print(x)
 
 
 def create_vm(si, vm_name, datacenter_name, host_ip, datastore_name=None):
