@@ -3,3 +3,6 @@ tools/__pycache__/*.pyc
 *.txt
 *.json
 *.bak
+dist/*
+build/*
+*.spec

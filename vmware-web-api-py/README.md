@@ -14,6 +14,12 @@ pip install pyvmomi
 
 source ~/venv/bin/activate
 
+# Build execuable
+
+pip install pyinstaller
+
+pyinstaller --onefile vm.py
+
 # DR steps
 
 **_List all VMs in Vcenter_**
