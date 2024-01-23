@@ -67,7 +67,7 @@ def create_config_spec(datastore_name, name, memory=4, guest="otherGuest",
 
 def main():
     parser = cli.Parser()
-    parser.add_optional_arguments(cli.Argument.VM_NAME, cli.Argument.DATACENTER_NAME,
+    parser.add_required_arguments(cli.Argument.VM_NAME, cli.Argument.DATACENTER_NAME,
                                   cli.Argument.DATASTORE_NAME, cli.Argument.ESX_IP)
     args = parser.get_args()
     si = service_instance.connect(args)
