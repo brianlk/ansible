@@ -27,9 +27,15 @@ from tools import cli, pchelper, service_instance
 
 def add_disk(si):
     content = si.RetrieveContent()
+
     datacenter = pchelper.get_obj(content, [vim.Datacenter], "Datacenter brian")
+    datastore = pchelper.get_obj(content, [vim.Datastore], "Datastore", datacenter)
     xxx = content.vStorageObjectManager
-    xxx.CreateDisk_Task(name="xxxxxxxxx")
+    xx = vim.vslm.CreateSpec.BackingSpec(datastore=datastore)
+    print(xx)
+    # dd = vim.vslm.CreateSpec(backingSpec=xx)
+    # spec = vim.vslm.CreateSpec(capacityInMB=1000, name="xxxxxxxxx", backingSpec=dd)
+    xxx.CreateDisk_Task(spec=dd)
     # xxx.HostCreateDisk_Task(capacityInMB=1000, name="xxxxxxxxx")
 
 def create_vm(si, vm_name, datacenter_name, host_ip, datastore_name=None):
