@@ -25,19 +25,6 @@ from pyVim.task import WaitForTask
 from tools import cli, pchelper, service_instance
 
 
-def add_disk(si):
-    content = si.RetrieveContent()
-
-    datacenter = pchelper.get_obj(content, [vim.Datacenter], "Datacenter brian")
-    datastore = pchelper.get_obj(content, [vim.Datastore], "Datastore")
-    xxx = content.vStorageObjectManager
-    xx = vim.vslm.CreateSpec.DiskFileBackingSpec(datastore=datastore, provisioningType="thin")
-    dd = vim.vslm.CreateSpec(capacityInMB=10000, backingSpec=xx, name="xxxxxxxxx")
-    # spec = vim.vslm.CreateSpec(capacityInMB=1000, name="xxxxxxxxx", backingSpec=dd)
-    o=xxx.CreateDisk_Task(spec=dd)
-    print(o.info)
-    # xxx.HostCreateDisk_Task(capacityInMB=1000, name="xxxxxxxxx")
-
 def create_vm(si, vm_name, datacenter_name, host_ip, datastore_name=None):
 
     content = si.RetrieveContent()
@@ -84,8 +71,7 @@ def main():
                                   cli.Argument.DATASTORE_NAME, cli.Argument.ESX_IP)
     args = parser.get_args()
     si = service_instance.connect(args)
-    add_disk(si)
-    # create_vm(si, args.vm_name, args.datacenter_name, args.esx_ip, args.datastore_name)
+    create_vm(si, args.vm_name, args.datacenter_name, args.esx_ip, args.datastore_name)
 
 
 # start this thing
