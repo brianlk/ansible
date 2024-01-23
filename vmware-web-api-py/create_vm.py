@@ -32,9 +32,10 @@ def add_disk(si):
     datastore = pchelper.get_obj(content, [vim.Datastore], "Datastore")
     xxx = content.vStorageObjectManager
     xx = vim.vslm.CreateSpec.DiskFileBackingSpec(datastore=datastore, provisioningType="thin")
-    dd = vim.vslm.CreateSpec(capacityInMB=1000, backingSpec=xx, name="xxxxxxxxx")
+    dd = vim.vslm.CreateSpec(capacityInMB=10000, backingSpec=xx, name="xxxxxxxxx")
     # spec = vim.vslm.CreateSpec(capacityInMB=1000, name="xxxxxxxxx", backingSpec=dd)
-    xxx.CreateDisk_Task(spec=dd)
+    o=xxx.CreateDisk_Task(spec=dd)
+    print(o.info)
     # xxx.HostCreateDisk_Task(capacityInMB=1000, name="xxxxxxxxx")
 
 def create_vm(si, vm_name, datacenter_name, host_ip, datastore_name=None):
