@@ -25,6 +25,14 @@ from pyVim.task import WaitForTask
 from tools import cli, pchelper, service_instance
 
 
+def add_disk(si):
+    content = si.RetrieveContent()
+    datacenter = pchelper.get_obj(content, [vim.Datacenter], "Datacenter brian")
+    vd = vim.VirtualDiskManager()
+    sp = vd.VirtualDiskSpec()
+    vd.CreateVirtualDisk_Task(name="abcdisk1", datacenter=datacenter, spec=sp)
+
+
 def create_vm(si, vm_name, datacenter_name, host_ip, datastore_name=None):
 
     content = si.RetrieveContent()
@@ -51,7 +59,7 @@ def create_vm(si, vm_name, datacenter_name, host_ip, datastore_name=None):
         print("VM name %s already exists." % vm_name, file=sys.stderr)
 
 
-def create_config_spec(datastore_name, name, memory=400, guest="otherGuest",
+def create_config_spec(datastore_name, name, memory=4, guest="otherGuest",
                        annotation="Sample", cpus=1):
     config = vim.vm.ConfigSpec()
     config.annotation = annotation
@@ -71,7 +79,8 @@ def main():
                                   cli.Argument.DATASTORE_NAME, cli.Argument.ESX_IP)
     args = parser.get_args()
     si = service_instance.connect(args)
-    create_vm(si, args.vm_name, args.datacenter_name, args.esx_ip, args.datastore_name)
+    add_disk(si)
+    # create_vm(si, args.vm_name, args.datacenter_name, args.esx_ip, args.datastore_name)
 
 
 # start this thing
