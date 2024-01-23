@@ -29,11 +29,10 @@ def add_disk(si):
     content = si.RetrieveContent()
 
     datacenter = pchelper.get_obj(content, [vim.Datacenter], "Datacenter brian")
-    datastore = pchelper.get_obj(content, [vim.Datastore], "Datastore", datacenter)
+    datastore = pchelper.get_obj(content, [vim.Datastore], "Datastore")
     xxx = content.vStorageObjectManager
-    xx = vim.vslm.CreateSpec.BackingSpec(datastore=datastore)
-    print(xx)
-    # dd = vim.vslm.CreateSpec(backingSpec=xx)
+    xx = vim.vslm.CreateSpec.DiskFileBackingSpec(datastore=datastore, provisioningType="thin")
+    dd = vim.vslm.CreateSpec(capacityInMB=1000, backingSpec=xx, name="xxxxxxxxx")
     # spec = vim.vslm.CreateSpec(capacityInMB=1000, name="xxxxxxxxx", backingSpec=dd)
     xxx.CreateDisk_Task(spec=dd)
     # xxx.HostCreateDisk_Task(capacityInMB=1000, name="xxxxxxxxx")
