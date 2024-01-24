@@ -18,7 +18,10 @@ def main():
     si = service_instance.connect(args)
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
-    pchelper.get_all_obj(content, [vim.VirtualMachine], DATACENTER.vmFolder)
+    abc1 = pchelper.get_obj(content, [vim.VirtualMachine], "abc1")
+    xxx = vim.vm.ConfigSpec(numCPUs=4)
+    
+    
 
 if __name__ == '__main__':
     main()
