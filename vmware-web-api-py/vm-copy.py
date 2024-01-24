@@ -19,8 +19,14 @@ def main():
     content = si.RetrieveContent()
     DATACENTER = pchelper.get_obj(content, [vim.Datacenter], args.datacenter_name)
     abc1 = pchelper.get_obj(content, [vim.VirtualMachine], "abc1")
-    xxx = vim.vm.ConfigSpec(numCPUs=4)
-    
+    print(abc1.config)
+    # xxx = vim.vm.ConfigSpec()
+    # xxx.memoryMB = 1000
+    # xxx.annotation = "Sample"
+    # xxx.guestId = "otherGuest"
+    # xxx.name = "abc1"
+    # xxx.numCPUs = 1
+    # print(xxx)
     
 
 if __name__ == '__main__':
