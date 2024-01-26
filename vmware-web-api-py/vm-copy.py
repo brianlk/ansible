@@ -45,10 +45,11 @@ def main():
         return -1
     
     controller_spec = vim.vm.device.VirtualDeviceSpec()
-    controller_spec.fileOperation = "create"
-    controller_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-    controller_spec.device = vim.vm.device.VirtualLsiLogicController()
-    controller_spec.device.key = 1001
+    controller_spec.fileOperation = "replace"
+    controller_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
+    # controller_spec.device = vim.vm.device.VirtualLsiLogicController()
+    controller_spec.device = controller
+    # controller_spec.device.key = 1001
     controller_desc = vim.Description()
     controller_desc.label = "SCSI controller 1"
     controller_desc.summary = "LSI Logic"
@@ -56,13 +57,13 @@ def main():
     # controller_slot = vim.vm.device.VirtualDevice.PciBusSlotInfo()
     # controller_slot.pciSlotNumber = 17
     # controller_spec.device.slotInfo = controller_slot
-    controller_spec.device.controllerKey = 100
-    controller_spec.device.unitNumber = 4
-    controller_spec.device.busNumber = 1
-    controller_spec.device.device = []
-    controller_spec.device.hotAddRemove = True
-    controller_spec.device.sharedBus = 'noSharing'
-    controller_spec.device.scsiCtlrUnitNumber = 7
+    # controller_spec.device.controllerKey = 100
+    # controller_spec.device.unitNumber = 4
+    # controller_spec.device.busNumber = 1
+    # controller_spec.device.device = []
+    # controller_spec.device.hotAddRemove = True
+    # controller_spec.device.sharedBus = 'noSharing'
+    # controller_spec.device.scsiCtlrUnitNumber = 7
     # add disk here
     dev_changes = []
     new_disk_kb = int(disk_size) * 1024 * 1024
@@ -84,17 +85,17 @@ def main():
     # pci_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.edit
     # pci_spec.device = pcislot
     # dev_changes.append(pci_spec)
-    # dev_changes.append(controller_spec)
-    pci_spec = vim.vm.device.VirtualDeviceSpec()
-    pci_spec.fileOperation = "create"
-    pci_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
-    pci_spec.device = vim.vm.device.VirtualPCIController()
-    pci_spec.device.key = 101
-    pci_spec.device.deviceInfo = vim.Description(label='PCI controller 1', summary='PCI controller 1')
-    pci_spec.device.busNumber = 0
-    pci_spec.device.device = []
+    dev_changes.append(controller_spec)
+    # pci_spec = vim.vm.device.VirtualDeviceSpec()
+    # pci_spec.fileOperation = "create"
+    # pci_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
+    # pci_spec.device = vim.vm.device.VirtualPCIController()
+    # pci_spec.device.key = 101
+    # pci_spec.device.deviceInfo = vim.Description(label='PCI controller 1', summary='PCI controller 1')
+    # pci_spec.device.busNumber = 0
+    # pci_spec.device.device = []
     
-    dev_changes.append(pci_spec)
+    # dev_changes.append(pci_spec)
     spec.deviceChange = dev_changes
     abc1.ReconfigVM_Task(spec=spec)
     
