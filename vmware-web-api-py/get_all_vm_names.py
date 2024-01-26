@@ -43,7 +43,7 @@ def print_vminfo(vm, depth=1):
         for child in vmlist:
             print_vminfo(child, depth+1)
         return
-
+    print(vm)
     summary = vm.summary
     if summary.config.name in vms:
         vmdup.append(summary.config.name)
