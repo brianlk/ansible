@@ -40,12 +40,26 @@ def main():
     if controller is None:
         print("Disk SCSI controller not found!")
         return -1
-    controller_spec = vim.vm.device.VirtualLsiLogicController()
+    
+    controller_spec = vim.vm.device.VirtualDeviceSpec()
+    controller_spec.fileOperation = "create"
+    controller_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
+    controller_spec.device = vim.vm.device.VirtualLsiLogicController()
+    controller_spec.device.key = 2999
     controller_desc = vim.Description()
     controller_desc.label = "SCSI controller 12"
     controller_desc.summary = "LSI Logic 12 12"
+    controller_spec.device.deviceInfo = controller_desc
     controller_slot = vim.vm.device.VirtualDevice.PciBusSlotInfo()
     controller_slot.pciSlotNumber = 17
+    controller_spec.device.slotInfo = controller_slot
+    controller_spec.device.controllerKey = 199
+    controller_spec.device.unitNumber = 4
+    controller_spec.device.busNumber = 1
+    controller_spec.device.device = []
+    controller_spec.device.hotAddRemove = True
+    controller_spec.device.sharedBus = 'noSharing'
+    controller_spec.device.scsiCtlrUnitNumber = 7
     # add disk here
     dev_changes = []
     new_disk_kb = int(disk_size) * 1024 * 1024
