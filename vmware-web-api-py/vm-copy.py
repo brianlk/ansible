@@ -23,10 +23,10 @@ def main():
     # get all disks on a VM, set unit_number to the next available
     unit_number = 0
     controller = None
-    disk_size = 5
+    disk_size = 2
     disk_type = "thin"
     for device in abc1.config.hardware.device:
-        print(device)
+        # print(device)
         if hasattr(device.backing, 'fileName'):
             unit_number = int(device.unitNumber) + 1
             # unit_number 7 reserved for scsi controller
@@ -40,6 +40,12 @@ def main():
     if controller is None:
         print("Disk SCSI controller not found!")
         return -1
+    controller_spec = vim.vm.device.VirtualLsiLogicController()
+    controller_desc = vim.Description()
+    controller_desc.label = "SCSI controller 12"
+    controller_desc.summary = "LSI Logic 12 12"
+    controller_slot = vim.vm.device.VirtualDevice.PciBusSlotInfo()
+    controller_slot.pciSlotNumber = 17
     # add disk here
     dev_changes = []
     new_disk_kb = int(disk_size) * 1024 * 1024
@@ -55,6 +61,7 @@ def main():
     disk_spec.device.unitNumber = unit_number
     disk_spec.device.capacityInKB = new_disk_kb
     disk_spec.device.controllerKey = controller.key
+    print(disk_spec.device.controllerKey)
     dev_changes.append(disk_spec)
     spec.deviceChange = dev_changes
     abc1.ReconfigVM_Task(spec=spec)
