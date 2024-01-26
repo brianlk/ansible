@@ -26,7 +26,7 @@ def main():
     disk_size = 2
     disk_type = "thin"
     for device in abc1.config.hardware.device:
-        # print(device)
+        print(device)
         if hasattr(device.backing, 'fileName'):
             unit_number = int(device.unitNumber) + 1
             # unit_number 7 reserved for scsi controller
@@ -45,15 +45,15 @@ def main():
     controller_spec.fileOperation = "create"
     controller_spec.operation = vim.vm.device.VirtualDeviceSpec.Operation.add
     controller_spec.device = vim.vm.device.VirtualLsiLogicController()
-    controller_spec.device.key = 2999
+    controller_spec.device.key = 1001
     controller_desc = vim.Description()
-    controller_desc.label = "SCSI controller 12"
-    controller_desc.summary = "LSI Logic 12 12"
+    controller_desc.label = "SCSI controller 1"
+    controller_desc.summary = "LSI Logic"
     controller_spec.device.deviceInfo = controller_desc
     controller_slot = vim.vm.device.VirtualDevice.PciBusSlotInfo()
     controller_slot.pciSlotNumber = 17
     controller_spec.device.slotInfo = controller_slot
-    controller_spec.device.controllerKey = 199
+    controller_spec.device.controllerKey = 100
     controller_spec.device.unitNumber = 4
     controller_spec.device.busNumber = 1
     controller_spec.device.device = []
@@ -77,7 +77,8 @@ def main():
     disk_spec.device.controllerKey = controller.key
     print(disk_spec.device.controllerKey)
     dev_changes.append(disk_spec)
-    spec.deviceChange = dev_changes
+    dev_changes.append(controller_spec)
+    # spec.deviceChange = dev_changes
     abc1.ReconfigVM_Task(spec=spec)
     
 
