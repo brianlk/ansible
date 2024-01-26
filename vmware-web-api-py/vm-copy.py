@@ -26,6 +26,7 @@ def main():
     disk_size = 5
     disk_type = "thin"
     for device in abc1.config.hardware.device:
+        print(device)
         if hasattr(device.backing, 'fileName'):
             unit_number = int(device.unitNumber) + 1
             # unit_number 7 reserved for scsi controller
