@@ -50,9 +50,9 @@ def main():
     controller_desc.label = "SCSI controller 1"
     controller_desc.summary = "LSI Logic"
     controller_spec.device.deviceInfo = controller_desc
-    controller_slot = vim.vm.device.VirtualDevice.PciBusSlotInfo()
-    controller_slot.pciSlotNumber = 17
-    controller_spec.device.slotInfo = controller_slot
+    # controller_slot = vim.vm.device.VirtualDevice.PciBusSlotInfo()
+    # controller_slot.pciSlotNumber = 17
+    # controller_spec.device.slotInfo = controller_slot
     controller_spec.device.controllerKey = 100
     controller_spec.device.unitNumber = 4
     controller_spec.device.busNumber = 1
@@ -75,11 +75,11 @@ def main():
     disk_spec.device.unitNumber = unit_number
     disk_spec.device.capacityInKB = new_disk_kb
     disk_spec.device.controllerKey = controller.key
-    print(disk_spec.device.controllerKey)
-    dev_changes.append(disk_spec)
+    # dev_changes.append(disk_spec)
     dev_changes.append(controller_spec)
-    # spec.deviceChange = dev_changes
+    spec.deviceChange = dev_changes
     abc1.ReconfigVM_Task(spec=spec)
+    # print(controller_spec.device)
     
 
 if __name__ == '__main__':
