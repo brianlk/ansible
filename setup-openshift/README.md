@@ -1,4 +1,4 @@
-## Setup the haproxy and bootstrap for Openshift installation
+## Setup the haproxy and bootstrap config for Openshift installation
 
 source venv/bin/activate
 
