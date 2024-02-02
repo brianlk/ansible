@@ -1,6 +1,4 @@
-# setup-mysql-repl
-
-
+# Setup MySQL replication
 
 ## Getting started
 

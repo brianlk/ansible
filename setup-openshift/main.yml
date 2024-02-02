@@ -36,7 +36,7 @@
 
     - name: Download OCP installer
       ansible.builtin.get_url:
-        url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable-{{ ocp_version }}/{{ item }}"
+        url: "{{ ocp_download_url }}/{{ ocp_version }}/{{ item }}"
         dest: /tmp
         mode: '0644'
       loop: "{{ ocp_installers }}"
