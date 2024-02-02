@@ -9,6 +9,13 @@
   #   - include_tasks: pre-tasks.yml
 
   tasks:
+    - name: Check all fqdn for OCP
+      ansible.builtin.include_tasks:
+        file: check_fqdn.yml
+      loop: "{{ apis }}"
+
+    - fail:
+
     - name: Install haproxy package
       ansible.builtin.yum:
         name: haproxy
@@ -107,3 +114,4 @@
           --ignition-url=http://10.1.23.131:8080/ocp/bootstrap.ign \
           --copy-network
           "
+

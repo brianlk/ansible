@@ -1,4 +1,4 @@
-domain: oc.exmaple
+domain: oc.example
 cluster_name: clus1
 masters: {"master0": 10.1.23.121, "master1": 10.1.23.122, "master2": 10.1.23.123}
 workers: {"worker0": 10.1.23.124, "worker1": 10.1.23.125, "worker2": 10.1.23.126}
@@ -8,3 +8,4 @@ haproxy_ip: 10.1.23.131
 ocp_version: "stable-4.10"
 ocp_installers: ['openshift-client-linux.tar.gz', 'openshift-install-linux.tar.gz']
 ocp_download_url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp"
+apis: ["api", "api-int", "console-openshift-console.apps"]
