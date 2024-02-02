@@ -25,6 +25,8 @@
     mode: '0644'
   register: output
 
+- fail:
+
 - name: Generate Kubernetes manifests for the cluster
   ansible.builtin.shell: |
     cd installer
