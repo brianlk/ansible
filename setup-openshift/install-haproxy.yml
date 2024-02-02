@@ -1,8 +1,23 @@
 ---
+- name: Open firewall ports
+  ansible.posix.firewalld:
+    port: "{{ item }}/tcp"
+    permanent: true
+    state: enabled
+  loop: "{{ haproxy_fw_ports }}"
+
+- name: Reload firewalld rules
+  ansible.builtin.command: 
+    cmd: "firewall-cmd --reload"
+
 - name: Install haproxy package
   ansible.builtin.yum:
     name: haproxy
     state: present
+
+- ansible.builtin.fail:
+    msg: "Variable ssh_pub_key is not defined."
+  when: ssh_pub_key is defined
 
 - name: Update haproxy.cfg
   ansible.builtin.template:
@@ -19,13 +34,3 @@
     state: restarted
     enabled: true
 
-- name: Open firewall ports
-  ansible.posix.firewalld:
-    port: "{{ item }}/tcp"
-    permanent: true
-    state: enabled
-  loop: "{{ haproxy_fw_ports }}"
-
-- name: Reload firewalld rules
-  ansible.builtin.command: 
-    cmd: "firewall-cmd --reload"

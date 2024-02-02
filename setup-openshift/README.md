@@ -33,17 +33,23 @@ sudo coreos-installer install /dev/sda --insecure-ignition \
           --ignition-url=http://{{ haproxy_ip }}:8080/ocp/bootstrap.ign \
           --copy-network
 
+sudo reboot
+
 In master nodes:
 
 sudo coreos-installer install /dev/sda --insecure-ignition \
           --ignition-url=http://{{ haproxy_ip }}:8080/ocp/master.ign \
           --copy-network
 
+sudo reboot
+
 In worker nodes:
 
 sudo coreos-installer install /dev/sda --insecure-ignition \
           --ignition-url=http://{{ haproxy_ip }}:8080/ocp/worker.ign \
           --copy-network
+
+sudo reboot
 
 ## Approve CSR
 

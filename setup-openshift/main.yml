@@ -6,9 +6,12 @@
   gather_facts: true
 
   tasks:
+    - fail:
+      when: ssh_pub_key is not defined
+
     - name: Generate ssh key pair in haproxy
-      ansible.builtin.command:
-        cmd: "ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa <<< y"
+      ansible.builtin.shell: |
+        ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa <<< y
 
     - name: Get the public key
       ansible.builtin.set_fact:

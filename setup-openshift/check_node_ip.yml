@@ -1,6 +1,6 @@
 ---
 - name: Check ip address of the fqdn
-  shell: |
+  ansible.builtin.shell: |
     ip_addr=$(nslookup {{ row.key }}.{{ cluster_name }}.{{ domain }} | grep Address |tail -1 | awk -F' ' '{print $2}')
     # echo "$ip_addr" "{{ row.value }}"
     if [ "$ip_addr" != "{{ row.value }}" ]
@@ -12,6 +12,3 @@
   loop: "{{ item }}"
   loop_control:
     loop_var: row
-
-# - debug:
-#     msg: "{{ shell_out.results }}"
