@@ -1,4 +1,5 @@
 ---
+# Backup vg config and current SAN disk info
 - name: Backup config
   shell: |
     D=$(date +"%s")

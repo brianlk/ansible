@@ -1,6 +1,9 @@
+domain: oc.exmaple
+cluster_name: clus1
 masters: {"master0": 10.1.23.121, "master1": 10.1.23.122, "master2": 10.1.23.123}
 workers: {"worker0": 10.1.23.124, "worker1": 10.1.23.125, "worker2": 10.1.23.126}
 bootstrap: 10.1.23.120
 haproxy_fw_ports: [443, 80, 6443, 22623, 8080]
+haproxy_ip: 10.1.23.131
 ocp_version: "4.10"
 ocp_installers: ['openshift-client-linux.tar.gz', 'openshift-install-linux.tar.gz']

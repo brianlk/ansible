@@ -1,4 +1,9 @@
 # Migrate data to new SAN devices by LVM
+## Define the new LUNs
+Edit hosts.ini
+
+Add the new LUNs is in variable new_luns
+
 ## Check the new SAN devices
 Edit the variable luns in hosts.ini and put the new LUN id in it
 

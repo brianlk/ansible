@@ -9,6 +9,7 @@
   command: "vgdisplay {{ vgname }}"
   any_errors_fatal: true
 
+# Scan new SAN disks
 - name: Execute scsi rescan
   shell: |
     cd /sys/class/scsi_host
@@ -28,6 +29,7 @@
   loop: "{{ scsi.stdout_lines }}"
 
 # Extract /dev/sdx of new device from nested loop
+# according to the variable new_luns
 - set_fact:
     new_dev: "{{ new_dev | default([])  + [item.1.dev] }}"
     new_lunids: "{{ new_lunids | default([])  + [{'dev': item.1.dev, 'id': item.1.lunid}] }}"
