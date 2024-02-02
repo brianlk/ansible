@@ -6,6 +6,14 @@
   gather_facts: true
 
   tasks:
+    - name: Generate ssh key pair in haproxy
+      ansible.builtin.command:
+        cmd: "ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa <<< y"
+
+    - name: Get the public key
+      set_fact:
+        ssh_pub_key: "{{lookup('file', '~/.ssh/id_rsa.pub') }}"
+
     - name: Install haproxy
       ansible.builtin.include_tasks:
         file: install-haproxy.yml
