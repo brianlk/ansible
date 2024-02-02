@@ -1,4 +1,9 @@
 ---
+- name: Install bind utils
+  ansible.builtin.yum:
+    name: bind-utils
+    state: present
+
 - name: Check ip address of the fqdn
   ansible.builtin.command: "nslookup {{ item }}.{{ cluster_name }}.{{ domain }}"
   register: cmd_output

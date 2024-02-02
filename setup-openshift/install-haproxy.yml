@@ -25,3 +25,7 @@
     permanent: true
     state: enabled
   loop: "{{ haproxy_fw_ports }}"
+
+- name: Reload firewalld rules
+  ansible.builtin.command: 
+    cmd: "firewall-cmd --reload"

@@ -1,0 +1,79 @@
+---
+- name: Download OCP installer
+  ansible.builtin.get_url:
+    url: "{{ ocp_download_url }}/{{ ocp_version }}/{{ item }}"
+    dest: /tmp
+    mode: '0644'
+  loop: "{{ ocp_installers }}"
+
+- name: Install tar
+  ansible.builtin.yum:
+    name: tar
+    state: present
+
+- name: Decompress the OCP installer
+  ansible.builtin.shell: |
+      mkdir -p installer/ocp
+      cd installer
+      tar xzf /tmp/{{ item }}
+  loop: "{{ ocp_installers }}"
+
+- name: Copy install-config.yaml template
+  ansible.builtin.template:
+    src: install-config.yaml.j2
+    dest: installer/ocp/install-config.yaml
+    mode: '0644'
+  register: output
+
+- name: Generate Kubernetes manifests for the cluster
+  ansible.builtin.shell: |
+    cd installer
+    ./openshift-install create manifests --dir ocp
+
+- name: Replace a localhost entry with our own
+  ansible.builtin.lineinfile:
+    path: installer/ocp/manifests/cluster-scheduler-02-config.yml
+    regexp: '^(\s+mastersSchedulable:\s+)true'
+    line: '\g<1>false'
+    mode: '0644'
+    backrefs: true
+
+- name: Create the Ignition configuration files
+  ansible.builtin.shell: |
+    cd installer
+    ./openshift-install create ignition-configs --dir ocp
+
+- name: Install httpd package
+  ansible.builtin.yum:
+    name: httpd
+    state: present
+
+- name: Copy files to httpd folder
+  ansible.builtin.copy:
+    src: installer/ocp
+    dest: /var/www/html
+    owner: apache
+    group: apache
+    mode: '0755'
+    remote_src: true
+
+- name: Replace a localhost entry with our own
+  ansible.builtin.lineinfile:
+    path: /etc/httpd/conf/httpd.conf
+    regexp: '^(Listen\s+)80'
+    line: '\g<1>8080'
+    mode: '0644'
+    backrefs: true
+
+- name: Set SELinux for httpd
+  ansible.builtin.shell: |
+    setsebool -P httpd_can_network_connect 1
+    chcon -R -t httpd_sys_content_t /var/www/html/ocp
+      
+- name: Start httpd service
+  ansible.builtin.service:
+    name: httpd
+    state: restarted
+    enabled: true
+
+
