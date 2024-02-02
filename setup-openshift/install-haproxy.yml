@@ -1,0 +1,27 @@
+---
+- name: Install haproxy package
+  ansible.builtin.yum:
+    name: haproxy
+    state: present
+
+- name: Update haproxy.cfg
+  ansible.builtin.template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    mode: '0644'
+
+- name: Update SELinux
+  command: "setsebool -P haproxy_connect_any=1"
+
+- name: Start haproxy service
+  ansible.builtin.service:
+    name: haproxy
+    state: restarted
+    enabled: true
+
+- name: Open firewall ports
+  ansible.posix.firewalld:
+    port: "{{ item }}/tcp"
+    permanent: true
+    state: enabled
+  loop: "{{ haproxy_fw_ports }}"
