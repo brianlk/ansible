@@ -16,6 +16,3 @@
 - fail:
     msg: "{{ item }}.{{ cluster_name }}.{{ domain }} should equal to the haproxy ip address."
   when: ipip != haproxy_ip
-
-
-

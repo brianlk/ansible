@@ -1,0 +1,5 @@
+---
+- name: Check ip address of the fqdn
+  shell: |
+    echo {{ item.key }}
+  loop: "{{ item }}"
