@@ -11,9 +11,11 @@
 
 - name: Check the ip address of fqdn
   ansible.builtin.set_fact:
-    ipip: "{{ cmd_output.stdout_lines[-1] | regex_replace('^(Server:\\t+)([0-9]+\\..*)$', '\\2') }}"
+    ipip: "{{ cmd_output.stdout_lines[-1] | regex_replace('^(Address:\\s+)([0-9]+\\..*)$', '\\2') }}"
 
 - fail:
-    msg: "{{ haproxy_ip | type_debug }}"
+    msg: "{{ item }}.{{ cluster_name }}.{{ domain }} should equal to the haproxy ip address."
+  when: ipip != haproxy_ip
+
 
 
