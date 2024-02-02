@@ -9,16 +9,6 @@
   #   - include_tasks: pre-tasks.yml
 
   tasks:
-          
-    - name: Check ip address of nodes
-      ansible.builtin.include_tasks:
-        file: check_node_ip.yml
-      loop:
-        - "{{ masters | dict2items  }}"
-        - "{{ workers | dict2items  }}"
-
-    - fail:
-
     - name: Install haproxy package
       ansible.builtin.yum:
         name: haproxy
@@ -129,3 +119,4 @@
       loop:
         - "{{ masters | dict2items  }}"
         - "{{ workers | dict2items  }}"
+        - "{{ bootstrap | dict2items }}"

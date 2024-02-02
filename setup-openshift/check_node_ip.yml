@@ -1,5 +1,17 @@
 ---
 - name: Check ip address of the fqdn
   shell: |
-    echo {{ item.key }}
+    ip_addr=$(nslookup {{ row.key }}.{{ cluster_name }}.{{ domain }} | grep Address |tail -1 | awk -F' ' '{print $2}')
+    # echo "$ip_addr" "{{ row.value }}"
+    if [ "$ip_addr" != "{{ row.value }}" ]
+    then
+      echo "{{ row.key }}.{{ cluster_name }}.{{ domain }} ip address is not correct."
+      exit 1
+    fi
+  register: shell_out
   loop: "{{ item }}"
+  loop_control:
+    loop_var: row
+
+# - debug:
+#     msg: "{{ shell_out.results }}"
