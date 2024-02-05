@@ -15,10 +15,10 @@
     name: haproxy
     state: present
 
-- name: Fail the task when ssh public key is not defined
-  ansible.builtin.fail:
-    msg: "Variable ssh_pub_key is not defined."
-  when: ssh_pub_key is defined
+# - name: Fail the task when ssh public key is not defined
+#   ansible.builtin.fail:
+#     msg: "Variable ssh_pub_key is not defined."
+#   when: ssh_pub_key is not defined
 
 - name: Update haproxy.cfg
   ansible.builtin.template:

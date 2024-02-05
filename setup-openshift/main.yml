@@ -6,13 +6,20 @@
   gather_facts: true
 
   tasks:
+    # The key is passed to the Red Hat Enterprise Linux CoreOS (RHCOS) nodes through 
+    # their Ignition config files and is used to authenticate SSH access to the nodes. 
+    # The key is added to the ~/.ssh/authorized_keys list for the core user on each node, 
+    # which enables password-less authentication.
     - name: Fail the task when ssh public key is not defined
       ansible.builtin.fail:
       when: ssh_pub_key is not defined
+      ignore_errors: true
 
+    # haproxy is the node which can redirect the traffic to master and worker nodes
     - name: Generate ssh key pair in haproxy
       ansible.builtin.shell: |
         ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa <<< y
+      when: ssh_pub_key is not defined
 
     - name: Get the public key
       ansible.builtin.set_fact:

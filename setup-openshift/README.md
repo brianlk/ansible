@@ -1,6 +1,10 @@
 ## Setup the haproxy and bootstrap config for Openshift installation
 
-# Edit vars.yml
+# Edit the inventory
+
+Update ip address of haproxy
+
+# Edit the variables in vars.yml
 Update variable domain
 
 Update variable cluster_name
@@ -13,7 +17,7 @@ Update ip address in variables bootstrap
 
 Update variable haproxy_ip
 
-Update variable ocp_version (Optional)
+Update variable ocp_version
 
 ## Run the playbook to generate OCP config in httpd server before installation
 
