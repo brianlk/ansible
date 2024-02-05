@@ -78,3 +78,7 @@ export KUBECONFIG=~/installer/ocp/auth/kubeconfig
     openshift-monitoring       grafana             grafana-openshift-monitoring.apps.clus1.oc.example                    grafana             https   reencrypt/Redirect     None
     openshift-monitoring       prometheus-k8s      prometheus-k8s-openshift-monitoring.apps.clus1.oc.example             prometheus-k8s      web     reencrypt/Redirect     None
     openshift-monitoring       thanos-querier      thanos-querier-openshift-monitoring.apps.clus1.oc.example      /api   thanos-querier      web     reencrypt/Redirect     None
+
+## Access the GUI console
+
+https://console-openshift-console.apps.clus1.oc.example
