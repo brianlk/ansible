@@ -1,9 +1,9 @@
 ---
 - name: Install OCP
   hosts: haproxy
+  gather_facts: true
   vars_files:
     - vars.yml
-  gather_facts: true
 
   tasks:
     # The key is passed to the Red Hat Enterprise Linux CoreOS (RHCOS) nodes through 

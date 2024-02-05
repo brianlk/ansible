@@ -23,8 +23,6 @@ Update ip address in variables workers
 
 Update ip address in variables bootstrap
 
-Update variable haproxy_ip
-
 Update variable ocp_version
 
 ## Run the playbook to configure haproxy and generate OCP install config in httpd server
