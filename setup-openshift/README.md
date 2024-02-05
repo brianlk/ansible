@@ -63,6 +63,12 @@ sudo reboot
 
 ## Approve CSR
 
+In haproxy node, keep running commands
+
+oc get nodes
+
+Until all masters are ready, keep running commands to approve workers to join the k8s cluster
+
 oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs oc adm certificate approve
 
 ## Result
