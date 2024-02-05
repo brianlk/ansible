@@ -6,7 +6,8 @@
   gather_facts: true
 
   tasks:
-    - fail:
+    - name: Fail the task when ssh public key is not defined
+      ansible.builtin.fail:
       when: ssh_pub_key is not defined
 
     - name: Generate ssh key pair in haproxy
@@ -15,7 +16,7 @@
 
     - name: Get the public key
       ansible.builtin.set_fact:
-        ssh_pub_key: "{{lookup('file', '~/.ssh/id_rsa.pub') }}"
+        ssh_pub_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
 
     - name: Install haproxy
       ansible.builtin.include_tasks:
@@ -27,12 +28,10 @@
 
     - name: Print the url for node installation
       ansible.builtin.debug:
-        msg: "
-          coreos-installer install /dev/sda --insecure-ignition \
+        msg: "coreos-installer install /dev/sda --insecure-ignition \
           --ignition-url=http://{{ haproxy_ip }}:8080/ocp/bootstrap.ign \
-          --copy-network
-          "
-          
+          --copy-network"
+
     - name: Check all fqdn for OCP
       ansible.builtin.include_tasks:
         file: check_fqdn.yml
@@ -42,6 +41,6 @@
       ansible.builtin.include_tasks:
         file: check_node_ip.yml
       loop:
-        - "{{ masters | dict2items  }}"
-        - "{{ workers | dict2items  }}"
+        - "{{ masters | dict2items }}"
+        - "{{ workers | dict2items }}"
         - "{{ bootstrap | dict2items }}"

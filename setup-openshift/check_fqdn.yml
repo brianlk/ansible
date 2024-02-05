@@ -18,6 +18,7 @@
   ansible.builtin.set_fact:
     ipip: "{{ cmd_output.stdout_lines[-1] | regex_replace('^(Address:\\s+)([0-9]+\\..*)$', '\\2') }}"
 
-- ansible.builtin.fail:
+- name: Fail the task when ip address of api is not equal to haproxy
+  ansible.builtin.fail:
     msg: "{{ item }}.{{ cluster_name }}.{{ domain }} should equal to the haproxy ip address."
   when: ipip != haproxy_ip

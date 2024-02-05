@@ -69,11 +69,9 @@
   ansible.builtin.shell: |
     setsebool -P httpd_can_network_connect 1
     chcon -R -t httpd_sys_content_t /var/www/html/ocp
-      
+
 - name: Start httpd service
   ansible.builtin.service:
     name: httpd
     state: restarted
     enabled: true
-
-

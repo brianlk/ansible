@@ -7,7 +7,7 @@
   loop: "{{ haproxy_fw_ports }}"
 
 - name: Reload firewalld rules
-  ansible.builtin.command: 
+  ansible.builtin.command:
     cmd: "firewall-cmd --reload"
 
 - name: Install haproxy package
@@ -15,7 +15,8 @@
     name: haproxy
     state: present
 
-- ansible.builtin.fail:
+- name: Fail the task when ssh public key is not defined
+  ansible.builtin.fail:
     msg: "Variable ssh_pub_key is not defined."
   when: ssh_pub_key is defined
 
@@ -33,4 +34,3 @@
     name: haproxy
     state: restarted
     enabled: true
-
