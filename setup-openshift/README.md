@@ -1,9 +1,17 @@
 ## Setup the haproxy and bootstrap config for Openshift installation
 
+## Requirements:
+
+Rocky Linux for haprxy x 1
+
+Red Hat Enterprise Linux CoreOS (RHCOS) for k8s master nodes x 3
+
+Red Hat Enterprise Linux CoreOS (RHCOS) for k8s worker nodes x 3
+
 # Edit the inventory
 
-Update ip address of haproxy
-
+Update ip address of haproxy in inventory
+ 
 # Edit the variables in vars.yml
 Update variable domain
 
@@ -19,7 +27,7 @@ Update variable haproxy_ip
 
 Update variable ocp_version
 
-## Run the playbook to generate OCP config in httpd server before installation
+## Run the playbook to configure haproxy and generate OCP install config in httpd server
 
 source venv/bin/activate
 
@@ -29,9 +37,9 @@ ansible-playbook -i inventory main.yml
 
 Boot up the nodes with RHCOS ISO
 
-Run sudo nmtui to change ip addresses
+Run sudo nmtui to change ip addresses which should be equal to the ones in vars.yml
 
-In bootstrap node:
+Install bootstrap node:
 
 sudo coreos-installer install /dev/sda --insecure-ignition \
           --ignition-url=http://{{ haproxy_ip }}:8080/ocp/bootstrap.ign \
@@ -39,7 +47,7 @@ sudo coreos-installer install /dev/sda --insecure-ignition \
 
 sudo reboot
 
-In master nodes:
+Install master nodes:
 
 sudo coreos-installer install /dev/sda --insecure-ignition \
           --ignition-url=http://{{ haproxy_ip }}:8080/ocp/master.ign \
@@ -47,7 +55,7 @@ sudo coreos-installer install /dev/sda --insecure-ignition \
 
 sudo reboot
 
-In worker nodes:
+Install worker nodes:
 
 sudo coreos-installer install /dev/sda --insecure-ignition \
           --ignition-url=http://{{ haproxy_ip }}:8080/ocp/worker.ign \
@@ -85,4 +93,4 @@ export KUBECONFIG=~/installer/ocp/auth/kubeconfig
 
 ## Access the GUI console
 
-https://console-openshift-console.apps.clus1.oc.example
+For example, https://console-openshift-console.apps.clus1.oc.example
