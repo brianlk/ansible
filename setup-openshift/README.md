@@ -92,3 +92,7 @@ export KUBECONFIG=~/installer/ocp/auth/kubeconfig
 ## Access the GUI console
 
 For example, https://console-openshift-console.apps.clus1.oc.example
+
+Username: kubeadmin
+
+Password: `cat ~/installer/ocp/auth/kubeadmin-password`
