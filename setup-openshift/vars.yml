@@ -5,7 +5,7 @@ workers: {"worker0": 10.1.23.124, "worker1": 10.1.23.125, "worker2": 10.1.23.126
 bootstrap: {"bootstrap": 10.1.23.120}
 haproxy_fw_ports: [443, 80, 6443, 22623, 8080]
 haproxy_ip: 10.1.23.132
-ocp_version: "stable-4.11"
+ocp_version: "stable-4.12"
 ocp_installers: ['openshift-client-linux.tar.gz', 'openshift-install-linux.tar.gz']
 ocp_download_url: "https://mirror.openshift.com/pub/openshift-v4/clients/ocp"
 apis: ["api", "api-int", "console-openshift-console.apps"]

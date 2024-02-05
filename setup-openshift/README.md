@@ -2,11 +2,16 @@
 
 ## Requirements:
 
-Rocky Linux for haprxy x 1
+Rocky Linux for haproxy x 1
 
 Red Hat Enterprise Linux CoreOS (RHCOS) for k8s master nodes x 3
 
 Red Hat Enterprise Linux CoreOS (RHCOS) for k8s worker nodes x 3
+
+    Machine             OS      CPU     RAM     Storage
+    Bootstrap           RHCOS   4       16GB    100GB
+    Control plane       RHCOS   4       16GB    100GB
+    Compute             RHCOS   2       8GB     100GB
 
 # Edit the inventory
 
