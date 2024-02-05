@@ -18,12 +18,29 @@
       tar xzf /tmp/{{ item }}
   loop: "{{ ocp_installers }}"
 
+- name: Copy command oc and kubectl to /usr/local/bin
+  ansible.builtin.copy:
+    src: ~/installer/{{ item }}
+    dest: /usr/local/bin
+    mode: '0755'
+    remote_src: true
+  loop:
+    - oc
+    - kubectl
+
 - name: Copy install-config.yaml template
   ansible.builtin.template:
     src: install-config.yaml.j2
-    dest: installer/ocp/install-config.yaml
+    dest: installer/install-config.yaml
     mode: '0644'
   register: output
+
+- name: Copy install-config.yaml to installer folder
+  ansible.builtin.copy:
+    src: ~/installer/install-config.yaml
+    dest: ~/installer/ocp/
+    mode: '0755'
+    remote_src: true
 
 - name: Generate Kubernetes manifests for the cluster
   ansible.builtin.shell: |
@@ -82,13 +99,4 @@
     line: export KUBECONFIG=~/installer/ocp/auth/kubeconfig
     create: yes
 
-- name: Copy command oc and kubectl to /usr/local/bin
-  ansible.builtin.copy:
-    src: ~/installer/{{ item }}
-    dest: /usr/local/bin
-    mode: '0755'
-    remote_src: true
-  loop:
-    - oc
-    - kubectl
 
