@@ -50,5 +50,5 @@
 
 - debug:
     msg: 
-      - "New LUNs:"
+      - "New LUNs are discovered:"
       - "{{ new_lunids }}"

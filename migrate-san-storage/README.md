@@ -4,7 +4,7 @@ Edit hosts.ini
 
 Add the new LUNs is in variable new_luns
 
-## Check the new SAN devices
+## Discover the new SAN devices
 Edit the variable luns in hosts.ini and put the new LUN id in it
 
 ansible-playbook -i hosts.ini check.yml
