@@ -2,7 +2,7 @@
 
 edit vars.yml
 
-ansible-playbook -i inventory build-dns.yml
+ansible-playbook -i inventory deploy-dns.yml
 
 ## Add Zone in DNS
 
