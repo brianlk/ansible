@@ -1,0 +1,35 @@
+---
+- hosts: ds
+  vars_files:
+    - vars.yml
+
+  tasks:
+  - name: check OS version
+    fail:
+    when: 
+    - ansible_distribution_major_version != '8'
+    - ansible_distribution_major_version != '9'
+
+  - name: Generate own CA certificate
+    shell: |
+      cd /etc/ssl
+      openssl req -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout rootCA.key \ 
+      -out rootCA.crt -nodes -subj \
+       "/C=US/ST=New Work/L=New Work/O=My own CA Inc/OU=Own CA/CN=ca.example.com/emailAddress=dev@ca.example.com"
+
+  - name: Generate FQDN key and csr
+    shell: |
+      cd /etc/ssl
+      openssl req -newkey rsa:2048 -keyout domain.key -out domain.csr -nodes \
+      -subj "/C=US/ST=New Work/L=New Work/O=Self Signed Inc/OU=Self Signed/CN={{ fqdn }}/emailAddress=dev@{{ fqdn }}"
+
+  - name: Copy template to /etc/ssl
+    template:
+      src: domain.ext.j2
+      dest: /etc/ssl/domain.ext
+
+  - name: Sign the cert with own CA
+    shell: |
+      cd /etc/ssl
+      openssl x509 -req -CA rootCA.crt -CAkey rootCA.key -in domain.csr -out domain.crt \
+      -days {{ cert_valid_years }} -CAcreateserial -extfile domain.ext
