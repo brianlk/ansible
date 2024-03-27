@@ -1,0 +1,25 @@
+---
+- hosts: ds
+  vars_files:
+    - vars.yml
+
+  tasks:
+  - name: check OS version
+    fail:
+    when: 
+    - ansible_distribution_major_version != '8'
+    - ansible_distribution_major_version != '9'
+
+  - name: Check ldap server status
+    ansible.builtin.command: "dsctl {{ instance_name }} status"
+    register: output
+
+  - debug:
+      msg: "{{ output }}"
+
+  - name: Delete instance
+    ansible.builtin.command: "dsctl {{ instance_name }} remove --do-it"
+    register: output
+
+  - debug:
+      msg: "{{ output }}"

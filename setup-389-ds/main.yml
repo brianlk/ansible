@@ -53,8 +53,16 @@
       dest: "{{ home }}/.dsrc"
 
   - name: Check ldap server status
-    ansible.builtin.command: "dsctl localhost status"
+    ansible.builtin.command: "dsctl {{ instance_name }} status"
     register: output
 
   - debug:
+      msg: "{{ output }}"
+
+  - name: List ldap users
+    ansible.builtin.command: "dsidm {{ instance_name }} user list"
+    register: output
+
+  - name: List ldap users
+    debug:
       msg: "{{ output }}"
