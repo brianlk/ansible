@@ -1,0 +1,2 @@
+[ds]
+10.1.23.153 ansible_user=root ansible_python_interpreter=/usr/bin/python3

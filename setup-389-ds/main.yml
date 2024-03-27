@@ -1,0 +1,60 @@
+---
+- hosts: ds
+  vars_files:
+    - vars.yml
+
+  tasks:
+  - name: check OS version
+    fail:
+    when: 
+    - ansible_distribution_major_version != '8'
+    - ansible_distribution_major_version != '9'
+
+  - name: Enable project 389 Directory Server
+    ansible.builtin.shell: |
+      dnf -y copr enable @389ds/389-directory-server
+
+  - name: Install 389 DS package
+    ansible.builtin.yum:
+      name: 389-ds-base
+      state: present
+
+  - name: Create template for instance
+    ansible.builtin.template:
+      src: instance.inf.j2
+      dest: /tmp/instance.inf
+
+  - name: Create ldap instance
+    shell: |
+      dscreate from-file /tmp/instance.inf
+
+  - name: Permit traffic in default zone on port 389 and 636
+    ansible.posix.firewalld:
+      port: "{{ item}}/tcp"
+      permanent: true
+      state: enabled
+    loop:
+      - 389
+      - 636
+  
+  - name: Reload the firewalld
+    ansible.builtin.shell: |
+      firewall-cmd --reload
+
+  - name: Enable service dirsrv
+    ansible.builtin.service:
+      name: dirsrv.target
+      state: started
+      enabled: true
+
+  - name: Create template for instance
+    ansible.builtin.template:
+      src: dsrc.j2
+      dest: "{{ home }}/.dsrc"
+
+  - name: Check ldap server status
+    ansible.builtin.command: "dsctl localhost status"
+    register: output
+
+  - debug:
+      msg: "{{ output }}"
