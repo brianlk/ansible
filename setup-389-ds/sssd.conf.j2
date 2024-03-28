@@ -1,0 +1,24 @@
+[sssd]
+config_file_version = 2
+services = nss, pam,autofs
+domains = default
+
+[nss]
+homedir_substring = /home
+
+[pam]
+
+[domain/default]
+id_provider = ldap
+autofs_provider = ldap
+auth_provider = ldap
+chpass_provider = ldap
+ldap_uri = ldap://{{ fqdn }}
+ldap_search_base = {{ ldap_suffix }}
+ldap_id_use_start_tls = True
+ldap_tls_cacertdir = /etc/openldap/certs
+cache_credentials = True
+ldap_tls_reqcert = allow
+ldap_default_bind_dn = {{ binddn }}
+ldap_default_authtok_type = password
+ldap_default_authtok = {{ password }}

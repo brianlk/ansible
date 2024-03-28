@@ -20,3 +20,23 @@
       - sssd-ldap 
       - oddjob-mkhomedir 
       - openssl-perl
+
+  - name: Add sssd.conf
+    template:
+      src: sssd.conf.j2
+      dest: /etc/sssd/sssd.conf
+      mode: 0600
+      owner: root
+      group: root
+
+  - name: Copy template to ldap.conf
+    template:
+      src: ldap.conf.j2
+      dest: /etc/openldap/ldap.conf
+
+  - name: Run commands
+    shell: |
+      authselect select sssd with-mkhomedir --force
+      systemctl enable sssd.service --now
+      systemctl enable oddjobd.service --now
+  
