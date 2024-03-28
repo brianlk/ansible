@@ -72,11 +72,41 @@
   - name: Import the server certificate issued by the CA to the NSS database
     command: "dsctl localhost tls import-server-key-cert /etc/ssl/domain.crt /etc/ssl/domain.key"
 
-  - name: Add password in file
-    shell: |
-      echo {{ password }} > /tmp/abcd.txt
-
   - name: Import the CA certificate to the NSS database
     shell: |
-      dsconf -D "cn=Directory Manager" ldap://{{ fqdn }} security \
-      ca-certificate add --file /etc/ssl/rootCA.crt --name "Example CA" --pwd-file /tmp/abcd.txt
+      dsconf -D "cn=Directory Manager" -w {{ password }} ldap://{{ fqdn }} security \
+      ca-certificate add --file /etc/ssl/rootCA.crt --name "Example CA"
+
+  - name: Set the trust flags of the CA certificate
+    shell: |
+      dsconf -D "cn=Directory Manager" -w {{ password }} ldap://{{ fqdn }} security \
+      ca-certificate set-trust-flags "Example CA" --flags "CT,,"
+
+  - name: Enable TLS and set the LDAPS port
+    shell: |
+      dsconf -D "cn=Directory Manager" -w {{ password }} ldap://{{ fqdn }} config replace \
+      nsslapd-securePort=636 nsslapd-security=on
+
+  - name: Open firewall ports
+    shell: |
+      firewall-cmd --permanent --add-port=636/tcp --add-port=389/tcp
+      firewall-cmd --reload
+
+  - name: Enable the RSA cipher family, set the NSS database security device, and the server certificate name
+    shell: |
+      dsconf -D "cn=Directory Manager" -w {{ password }} ldap://{{ fqdn }} security rsa \
+      set --tls-allow-rsa-certificates on --nss-token "internal (software)" --nss-cert-name Server-Cert
+
+  - name: Disable the plain text LDAP port
+    shell: |
+      dsconf {{ instance }} security disable_plain_port
+
+  - name: Restart DS instance
+    shell: |
+      dsctl {{ instance_name }} restart
+
+  - name:
+    shell: |
+      cp /etc/ssl/rootCA.crt /etc/pki/ca-trust/source/anchors/
+      update-ca-trust
+    
