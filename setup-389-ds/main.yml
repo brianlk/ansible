@@ -97,16 +97,15 @@
       dsconf -D "cn=Directory Manager" -w {{ password }} ldap://{{ fqdn }} security rsa \
       set --tls-allow-rsa-certificates on --nss-token "internal (software)" --nss-cert-name Server-Cert
 
-  - name: Disable the plain text LDAP port
-    shell: |
-      dsconf {{ instance }} security disable_plain_port
-
-  - name: Restart DS instance
-    shell: |
-      dsctl {{ instance_name }} restart
+  # - name: Disable the plain text LDAP port
+  #   shell: |
+  #     dsconf {{ instance_nameds }} security disable_plain_port
 
   - name:
     shell: |
       cp /etc/ssl/rootCA.crt /etc/pki/ca-trust/source/anchors/
       update-ca-trust
-    
+
+  - name: Restart DS instance
+    shell: |
+      dsctl {{ instance_name }} restart

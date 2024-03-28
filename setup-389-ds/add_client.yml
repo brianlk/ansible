@@ -1,0 +1,22 @@
+---
+- hosts: clients
+  vars_files:
+    - vars.yml
+
+  tasks:
+  - name: check OS version
+    fail:
+    when: 
+    - ansible_distribution_major_version != '8'
+    - ansible_distribution_major_version != '9'
+
+  - name: Install the necessary packages for LDAP client setup
+    yum:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - openldap-clients 
+      - sssd 
+      - sssd-ldap 
+      - oddjob-mkhomedir 
+      - openssl-perl
