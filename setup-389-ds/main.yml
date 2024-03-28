@@ -71,3 +71,12 @@
 
   - name: Import the server certificate issued by the CA to the NSS database
     command: "dsctl localhost tls import-server-key-cert /etc/ssl/domain.crt /etc/ssl/domain.key"
+
+  - name: Add password in file
+    shell: |
+      echo {{ password }} > /tmp/abcd.txt
+
+  - name: Import the CA certificate to the NSS database
+    shell: |
+      dsconf -D "cn=Directory Manager" ldap://{{ fqdn }} security \
+      ca-certificate add --file /etc/ssl/rootCA.crt --name "Example CA" --pwd-file /tmp/abcd.txt
