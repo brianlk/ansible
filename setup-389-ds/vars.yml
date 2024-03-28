@@ -1,5 +1,5 @@
 password: "P@ssw0rd"
-ldap_suffix: "dc=example,dc=com"
+ldap_suffix: "dc=oc,dc=example"
 binddn: "cn=Directory Manager"
 home: "{{ lookup('env', 'HOME') }}"
 instance_name: "localhost"
