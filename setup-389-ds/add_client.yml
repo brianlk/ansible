@@ -41,4 +41,11 @@
       authselect select sssd with-mkhomedir --force
       systemctl enable sssd.service --now
       systemctl enable oddjobd.service --now
-  
+
+  - name: Verify the LDAP connection
+    shell: |
+      ldapsearch -H ldaps://{{ fqdn }}:636 -D "{{ binddn }}" -w "{{ password }}" -b "{{ ldap_suffix }}"
+    register: ldap_search
+
+  - debug:
+      msg: "{{ ldap_search }}"

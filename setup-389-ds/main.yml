@@ -13,6 +13,9 @@
   # Generate the self-signed certificate
   - ansible.builtin.include_tasks: server/create-self-signed.yml
 
+  - fail:
+      msg: "Exit!"
+
   - name: Enable project 389 Directory Server
     ansible.builtin.shell: |
       dnf -y copr enable @389ds/389-directory-server

@@ -22,4 +22,11 @@
       cd /etc/ssl
       openssl x509 -req -CA rootCA.crt -CAkey rootCA.key -in domain.csr -out domain.crt \
       -days {{ cert_valid_years }} -CAcreateserial -extfile domain.ext
+
+  - name: Download the root CA file
+    ansible.builtin.fetch:
+      src: /etc/ssl/rootCA.crt
+      dest: rootCA.crt
+      flat: yes
+  
   
