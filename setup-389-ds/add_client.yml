@@ -1,5 +1,7 @@
+# Configure RHEL 8, 9 as an LDAP Client using SSSD
+# https://access.redhat.com/solutions/4356441
 ---
-- hosts: clients
+- hosts: dir_clients
   vars_files:
     - vars.yml
 
