@@ -23,7 +23,7 @@
 
   - name: Add sssd.conf
     template:
-      src: sssd.conf.j2
+      src: client/sssd.conf.j2
       dest: /etc/sssd/sssd.conf
       mode: 0600
       owner: root
@@ -31,7 +31,7 @@
 
   - name: Copy template to ldap.conf
     template:
-      src: ldap.conf.j2
+      src: client/ldap.conf.j2
       dest: /etc/openldap/ldap.conf
 
   - name: Run commands

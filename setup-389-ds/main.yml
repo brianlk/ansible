@@ -23,7 +23,7 @@
 
   - name: Create template for instance
     ansible.builtin.template:
-      src: instance.inf.j2
+      src: server/instance.inf.j2
       dest: /tmp/instance.inf
 
   - name: Create ldap instance
@@ -51,7 +51,7 @@
 
   - name: Create template for instance
     ansible.builtin.template:
-      src: dsrc.j2
+      src: server/dsrc.j2
       dest: "{{ home }}/.dsrc"
 
   - name: Check ldap server status

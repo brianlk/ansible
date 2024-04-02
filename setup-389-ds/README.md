@@ -4,6 +4,10 @@
 
 	ansible-playbook -i inventory main.yml
 
+## LDAP client setup
+
+	ansible-playbook -i inventory add_client.yml
+
 ## Delete instance
 
 	ansible-playbook -i inventory delete_instance.yml

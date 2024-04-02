@@ -14,7 +14,7 @@
 
   - name: Copy template to /etc/ssl
     template:
-      src: domain.ext.j2
+      src: server/domain.ext.j2
       dest: /etc/ssl/domain.ext
 
   - name: Sign the cert with own CA
