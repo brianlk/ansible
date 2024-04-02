@@ -10,7 +10,8 @@
     - ansible_distribution_major_version != '8'
     - ansible_distribution_major_version != '9'
 
-  - ansible.builtin.include_tasks: create-self-signed.yml
+  # Generate the self-signed certificate
+  - ansible.builtin.include_tasks: server/create-self-signed.yml
 
   - name: Enable project 389 Directory Server
     ansible.builtin.shell: |
