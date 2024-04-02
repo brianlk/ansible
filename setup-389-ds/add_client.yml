@@ -12,6 +12,17 @@
     - ansible_distribution_major_version != '8'
     - ansible_distribution_major_version != '9'
 
+  - name: Check if root CA exists or not in ansible managed node
+    ansible.builtin.stat:
+      path: rootCA.crt
+    delegate_to: 127.0.0.1
+    register: stat_result
+
+  - debug:
+      msg: "{{ stat_result }}"
+
+  - fail:
+
   - name: Install the necessary packages for LDAP client setup
     yum:
       name: "{{ item }}"
