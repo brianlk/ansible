@@ -36,6 +36,13 @@
       src: client/ldap.conf.j2
       dest: /etc/openldap/ldap.conf
 
+  - ansible.builtin.file:
+      path: "{{ item }}"
+      state: directory
+    loop:
+      - /etc/openldap
+      - /etc/openldap/certs
+
   - name: Copy root CA certificate to /etc/openldap/certs
     ansible.builtin.copy:
       src: rootCA.crt
@@ -55,5 +62,7 @@
       ldapsearch -H ldaps://{{ fqdn }}:636 -D "{{ binddn }}" -w "{{ password }}" -b "{{ ldap_suffix }}"
     register: ldap_search
 
-  - debug:
-      msg: "{{ ldap_search }}"
+  - name: LDAP veriification output
+    fail:
+      msg: "LDAP connection is not okay."
+    when: ldap_search.rc != 0
