@@ -1,0 +1,11 @@
+---
+- hosts: winhost
+
+  tasks:
+    - name: Install only particular updates based on the KB numbers
+      ansible.windows.win_service_info:
+      register: service_info
+
+    - name: print service info
+      debug:
+        msg: "{{ service_info }}"
