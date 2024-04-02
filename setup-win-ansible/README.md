@@ -1,4 +1,4 @@
-# Setup an ansible managed node to manage Windows clients
+## Setup an ansible managed node to manage Windows clients
 
 ### Run the command in control node to configure kerberos for AD:
 
