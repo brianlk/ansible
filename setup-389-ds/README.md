@@ -10,7 +10,7 @@
 
 	ansible-playbook -i inventory add_client.yml
 
-## Delete instance
+## Delete LDAP instance
 
 	ansible-playbook -i inventory delete_instance.yml
 

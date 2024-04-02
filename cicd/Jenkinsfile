@@ -1,0 +1,46 @@
+/* Requires the Docker Pipeline plugin */
+pipeline {
+    agent none
+    stages {
+        stage("Checkout") {
+            agent any
+            steps {
+                checkout scm
+            }
+        }
+        stage('Build and Test') {
+            agent { 
+                docker { 
+                    image 'python:3.12.0-alpine3.18'
+                    //args '-u root --privileged' */
+                    label 'docker'
+                    //customWorkspace  '/var/tmp/jenkins'
+                } 
+            }            
+            steps {
+                sh """
+                ls -lt
+                """
+                sh '''
+                python -m venv venv
+                source venv/bin/activate
+                pip install -r requirements.txt
+                pytest tests
+                '''
+            }
+        }
+        stage('Deploy') {
+            agent {
+                node {
+                    label 'docker'
+                }
+            }
+            steps {
+                sh """
+                docker build -t xxx .
+                """
+                cleanWs()
+            }
+        }
+    }
+}
