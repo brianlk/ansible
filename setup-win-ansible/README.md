@@ -7,7 +7,7 @@
 ### Inventory hosts.ini is generated and kerberos is configured
 
 ### Run the command in ansible control node to test ansible-win connection
-    ansible -m win_ping -i hosts.ini winhost
+    ansible -m win_ping -i inventory winhost
 
     win2016pdc.TEST.LOC | SUCCESS => {
         "changed": false,

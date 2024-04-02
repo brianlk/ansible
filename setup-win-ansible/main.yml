@@ -55,8 +55,8 @@
     - name: Create ansible inventory of the windows clients
       template:
         src: hosts.ini.j2
-        dest: hosts.ini
+        dest: inventory
         backup: yes
 
     - debug:
-        msg: "Try to run: 'ansible -m win_ping -i hosts.ini winhost' to verify the connection"
+        msg: "Try to run: 'ansible -m win_ping -i inventory winhost' to verify the connection"
