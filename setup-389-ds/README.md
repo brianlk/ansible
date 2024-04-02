@@ -4,7 +4,7 @@
 
 ## Install 389 directory and create instance
 
-	ansible-playbook -i inventory main.yml
+	ansible-playbook -i inventory install_server.yml
 
 ## LDAP client setup
 

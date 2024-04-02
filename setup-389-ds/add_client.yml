@@ -36,6 +36,14 @@
       src: client/ldap.conf.j2
       dest: /etc/openldap/ldap.conf
 
+  - name: Copy root CA certificate to /etc/openldap/certs
+    ansible.builtin.copy:
+      src: rootCA.crt
+      dest: /etc/openldap/certs
+
+  - name: Rehash the certificate
+    ansible.builtin.command: "openssl rehash /etc/openldap/certs"
+
   - name: Run commands
     shell: |
       authselect select sssd with-mkhomedir --force
