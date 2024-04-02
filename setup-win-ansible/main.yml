@@ -52,7 +52,7 @@
         dest: /etc/krb5.conf
         backup: yes
 
-    - name: Copy inventory template 
+    - name: Create ansible inventory of the windows clients
       template:
         src: hosts.ini.j2
         dest: hosts.ini

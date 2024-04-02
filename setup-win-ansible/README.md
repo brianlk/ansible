@@ -1,8 +1,5 @@
-# setup-win-ansible
+# Setup an ansible managed node to manage Windows clients
 
-
-
-## Getting started
 ### Run the command in control node to configure kerberos for AD:
 
 ansible-playbook main.yml
