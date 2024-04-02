@@ -2,7 +2,7 @@
 
 ## Set the variables in vars.yml
 
-## Install 389 directory and create instance
+## Install 389 directory server and create instance
 
 	ansible-playbook -i inventory install_server.yml
 

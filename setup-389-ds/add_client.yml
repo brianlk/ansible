@@ -18,10 +18,9 @@
     delegate_to: 127.0.0.1
     register: stat_result
 
-  - debug:
-      msg: "{{ stat_result }}"
-
   - fail:
+      msg: "root CA does not exist."
+    when: not stat_result.stat.exists
 
   - name: Install the necessary packages for LDAP client setup
     yum:
