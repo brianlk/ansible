@@ -53,6 +53,9 @@
       - /etc/openldap
       - /etc/openldap/certs
 
+  # OS level root CA
+  # /etc/pki/ca-trust/source/anchors/
+  # update-ca-trust
   - name: Copy root CA certificate to /etc/openldap/certs
     ansible.builtin.copy:
       src: rootCA.crt
