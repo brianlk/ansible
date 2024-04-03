@@ -1,0 +1,49 @@
+$TTL    60
+@       IN      SOA     ns1.okd.example. contact.okd.example. (
+                  1     ; Serial
+             604800     ; Refresh
+              86400     ; Retry
+            2419200     ; Expire
+             604800     ; Minimum
+)
+
+	IN      NS      ns1.oc.example.
+
+
+$ORIGIN 23.1.10.in-addr.arpa.
+
+
+110 IN  PTR nfs.oc.example.
+119 IN  PTR ns1.oc.example.
+132 IN  PTR api.clus1.oc.example.
+132 IN  PTR api-int.clus1.oc.example.
+120 IN  PTR bootstrap.clus1.oc.example.
+121 IN  PTR master0.clus1.oc.example.
+122 IN  PTR master1.clus1.oc.example.
+123 IN  PTR master2.clus1.oc.example.
+124 IN  PTR worker0.clus1.oc.example.
+125 IN  PTR worker1.clus1.oc.example.
+126 IN  PTR worker2.clus1.oc.example.
+132 IN  PTR haproxy.clus1.oc.example.
+;;
+;$ORIGIN 3.1.10.in-addr.arpa.
+;;
+130 IN  PTR api.clus2.oc.example.
+130 IN  PTR api-int.clus2.oc.example.
+130 IN  PTR bootstrap.clus1.oc.example.
+130 IN  PTR master0.clus1.oc.example.
+
+153 IN  PTR kdc.oc.example.
+
+
+230 IN  PTR ovm1.oc.example.
+231 IN  PTR ovm2.oc.example.
+240 IN  PTR ovm3.oc.example.
+232 IN  PTR manager.oc.example.
+233 IN  PTR ovm-fence-proxy.oc.example.
+
+235 IN  PTR olvm1.oc.example.
+236 IN  PTR manager2.oc.example.
+
+$ORIGIN 4.1.10.in-addr.arpa.
+119 IN  PTR ctrl.oc.example.
