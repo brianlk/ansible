@@ -2,7 +2,7 @@
   - name: Generate own CA certificate
     shell: |
       cd /etc/ssl
-      openssl req -x509 -sha256 -days 1825 -newkey rsa:2048 -keyout rootCA.key \ 
+      openssl req -x509 -sha256 -days {{ cert_valid_years }} -newkey rsa:2048 -keyout rootCA.key \ 
       -out rootCA.crt -nodes -subj \
        "/C=US/ST=New Work/L=New Work/O=My own CA Inc/OU=Own CA/CN=ca.example.com/emailAddress=dev@ca.example.com"
 
