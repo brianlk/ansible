@@ -1,0 +1,20 @@
+$TTL   60
+@       IN      SOA   ns1.oc.example.   contact.oc.example. (
+                10      ; Serial
+                1h      ; Refresh
+              86400     ; Retry
+            2419200     ; Expire
+             604800     ; Minimum
+)
+
+                        IN      NS      ns1.oc.example.
+
+$ORIGIN oc.example.
+
+_kerberos       IN  TXT "OC.EXAMPLE"
+_kerbesos.kdc   IN  TXT "OC.EXAMPLE"
+_kerberos._udp.OC.EXAMPLE.  IN SRV 1 0 88 kdc.oc.example.
+_kerberos._tcp.OC.EXAMPLE.  IN SRV 1 0 88 kdc.oc.example.
+_kerberos-adm._tcp.OC.EXAMPLE.  IN SRV 1 0 749 kdc.oc.example.
+_kpasswd._udp.OC.EXAMPLE.  IN SRV 1 0 464 kdc.oc.example.
+
