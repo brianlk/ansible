@@ -6,7 +6,7 @@
 
 - include_tasks: setup_containerd.yml
 
-- include_tasks: disable_fw.yml # rebooting vm in disable_fw.yml
+- include_tasks: manage_fw.yml # rebooting vm in disable_fw.yml
 
 - include_tasks: install_k8s.yml
 
