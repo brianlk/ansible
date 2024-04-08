@@ -1,12 +1,12 @@
 ---
 - name: create k8s yum repo
   template:
-    src: templates/k8s.repo
+    src: templates/k8s.repo.new
     dest: "/etc/yum.repos.d/k8s.repo"
 
 - name: yum install kubelet kubeadm kubectl
   yum:
-    name: "{{ item }}-{{ k8s_ver }}"
+    name: "{{ item }}"
     state: present
   loop: [ "kubelet", "kubeadm", "kubectl" ]
 

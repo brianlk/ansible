@@ -2,10 +2,6 @@
 10.1.23.250 ansible_user=root
 10.1.23.251 ansible_user=root
 10.1.23.252 ansible_user=root
-10.1.23.253 ansible_user=root
-#10.1.24.5 ansible_user=root
-#10.1.23.134 ansible_node=10.1.23.134 ansible_user=root
-#10.1.23.133 ansible_node=10.1.23.133 ansible_user=root
 
 [masters]
 10.1.23.250 ansible_user=root
@@ -14,4 +10,4 @@
 [workers]
 10.1.23.251 ansible_user=root
 10.1.23.252 ansible_user=root
-10.1.23.253 ansible_user=root
+
