@@ -98,9 +98,9 @@
       dsconf -D "cn=Directory Manager" -w {{ password }} ldap://{{ fqdn }} security rsa \
       set --tls-allow-rsa-certificates on --nss-token "internal (software)" --nss-cert-name Server-Cert
 
-  - name: Disable the plain text LDAP port
-    shell: |
-      dsconf {{ instance_name }} security disable_plain_port
+  # - name: Disable the plain text LDAP port
+  #   shell: |
+  #     dsconf {{ instance_name }} security disable_plain_port
 
   - name:
     shell: |
@@ -110,3 +110,7 @@
   - name: Restart DS instance
     shell: |
       dsctl {{ instance_name }} restart
+
+  - name: Disable plain port
+    debug:
+      msg: "Disble palin port using command: dsconf {{ instance_name }} security disable_plain_port"
