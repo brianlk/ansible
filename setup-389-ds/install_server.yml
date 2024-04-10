@@ -102,7 +102,7 @@
   #   shell: |
   #     dsconf {{ instance_name }} security disable_plain_port
 
-  - name:
+  - name: Adding the CA certificate used by Directory Server to the trust store of Red Hat Enterprise Linux
     shell: |
       cp /etc/ssl/rootCA.crt /etc/pki/ca-trust/source/anchors/
       update-ca-trust
