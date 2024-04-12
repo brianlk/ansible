@@ -1,0 +1,68 @@
+---
+- hosts: replication_group
+  vars_files:
+    - vars.yml
+
+  tasks:
+  - name: check OS version
+    fail:
+    when: 
+    - ansible_distribution_major_version != '8'
+    - ansible_distribution_major_version != '9'
+
+  - name: print inventory name
+    debug:
+      msg: "{{ inventory_hostname }}"
+
+  - name: Enable replication
+    ansible.builtin.shell: |
+      dsconf -D "{{ binddn }}" -w "{{ password }}" ldap://{{ ldap.consumer_fqdn }} replication \
+      enable --suffix "{{ ldap_suffix }}" --role "consumer" --bind-dn \
+      "{{ repl_user }}" --bind-passwd "{{ repl_password }}"
+    when: inventory_hostname == "consumer"
+
+  - name: Display the replication configuration
+    ansible.builtin.shell: |
+      dsconf -D "{{ binddn }}" -w "{{ password }}" ldap://{{ repl.consumer_fqdn }} replication get \
+      --suffix "{{ ldap_suffix }}"
+    register: repl_config
+    when: inventory_hostname == "consumer"
+
+  - debug:
+      msg: "{{ repl_config }}"
+
+  - name: Prepare the supplier
+    ansible.builtin.shell: |
+      dsconf -D "{{ binddn }}" -w "{{ password }}" ldap://{{ fqdn }} replication enable \
+      --suffix "{{ ldap_suffix }}" --role "supplier" --replica-id 1
+    when: inventory_hostname == "supplier"
+
+  - name: Add the replication agreement and initialize the consumer
+    ansible.builtin.shell: |
+      dsconf -D "{{ binddn }}" -w "{{ password }}" ldap://{{ fqdn }} repl-agmt create \
+      --suffix "{{ ldap_suffix }}" --host "{{ repl.consumer_fqdn }}" --port 389 \
+      --conn-protocol=LDAP --bind-dn "{{ repl_user }}" \
+      --bind-passwd "{{ repl_password }}" --bind-method=SIMPLE --init example-agreement
+    when: inventory_hostname == "supplier"
+
+  - name: Display the replication configuration
+    ansible.builtin.shell: |
+      dsconf -D "{{ binddn }}" -w "{{ password }}" ldap://{{ fqdn }} replication \
+      get --suffix "{{ ldap_suffix }}"
+    register: repl_config
+    when: inventory_hostname == "supplier"
+
+  - debug:
+      msg: "{{ repl_config }}"
+
+  - name: Verify whether the initialization was successful
+    ansible.builtin.shell: |
+      dsconf -D "{{ binddn }}" -w "{{ password }}" ldap://{{ fqdn }} repl-agmt init-status \
+      --suffix "{{ ldap_suffix }}" example-agreement
+    when: inventory_hostname == "supplier"
+  
+  - name: Display the replication status
+    ansible.builtin.shell: |
+      dsconf -D "{{ binddn }}" -w "{{ password }}" ldap://{{ fqdn }} repl-agmt status \
+      --suffix "{{ ldap_suffix }}" example-agreement
+    when: inventory_hostname == "supplier"

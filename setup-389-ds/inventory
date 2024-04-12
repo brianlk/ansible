@@ -1,5 +1,6 @@
 [ds]
-10.1.23.153 ansible_user=root ansible_python_interpreter=/usr/bin/python3
+suppier ansible_host=10.1.23.153 ansible_user=root ansible_python_interpreter=/usr/bin/python3
+consumer ansible_host=10.1.23.154 ansible_user=root ansible_python_interpreter=/usr/bin/python3
 
-[dir_clients]
-10.1.23.154 ansible_user=root ansible_python_interpreter=/usr/bin/python3
+[replication_group:children]
+ds

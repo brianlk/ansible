@@ -5,3 +5,8 @@ home: "{{ lookup('env', 'HOME') }}"
 instance_name: "localhost"
 fqdn: "ldap.oc.example"
 cert_valid_years: 3650
+
+repl:
+  consumer_fqdn: "ldap2.oc.example"
+  repl_user: "cn=replication manager,cn=config"
+  repl_password: "password"
