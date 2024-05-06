@@ -16,9 +16,9 @@
 
   - name: Enable replication
     ansible.builtin.shell: |
-      dsconf -D "{{ binddn }}" -w "{{ password }}" ldap://{{ ldap.consumer_fqdn }} replication \
+      dsconf -D "{{ binddn }}" -w "{{ password }}" ldap://{{ repl.consumer_fqdn }} replication \
       enable --suffix "{{ ldap_suffix }}" --role "consumer" --bind-dn \
-      "{{ repl_user }}" --bind-passwd "{{ repl_password }}"
+      "{{ repl.repl_user }}" --bind-passwd "{{ repl.repl_password }}"
     when: inventory_hostname == "consumer"
 
   - name: Display the replication configuration
@@ -41,8 +41,8 @@
     ansible.builtin.shell: |
       dsconf -D "{{ binddn }}" -w "{{ password }}" ldap://{{ fqdn }} repl-agmt create \
       --suffix "{{ ldap_suffix }}" --host "{{ repl.consumer_fqdn }}" --port 389 \
-      --conn-protocol=LDAP --bind-dn "{{ repl_user }}" \
-      --bind-passwd "{{ repl_password }}" --bind-method=SIMPLE --init example-agreement
+      --conn-protocol=LDAP --bind-dn "{{ repl.repl_user }}" \
+      --bind-passwd "{{ repl.repl_password }}" --bind-method=SIMPLE --init example-agreement
     when: inventory_hostname == "supplier"
 
   - name: Display the replication configuration

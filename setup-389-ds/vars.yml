@@ -3,7 +3,7 @@ ldap_suffix: "dc=oc,dc=example"
 binddn: "cn=Directory Manager"
 home: "{{ lookup('env', 'HOME') }}"
 instance_name: "localhost"
-fqdn: "ldap.oc.example"
+# fqdn: "ldap.oc.example"
 cert_valid_years: 3650
 
 repl:

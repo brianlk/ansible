@@ -1,6 +1,15 @@
-[ds]
-suppier ansible_host=10.1.23.153 ansible_user=root ansible_python_interpreter=/usr/bin/python3
+[ds1]
+supplier ansible_host=10.1.23.153 ansible_user=root ansible_python_interpreter=/usr/bin/python3
+
+[ds1:vars]
+fqdn=ldap.oc.example
+
+[ds2]
 consumer ansible_host=10.1.23.154 ansible_user=root ansible_python_interpreter=/usr/bin/python3
 
+[ds2:vars]
+fqdn=ldap2.oc.example
+
 [replication_group:children]
-ds
+ds1
+ds2
